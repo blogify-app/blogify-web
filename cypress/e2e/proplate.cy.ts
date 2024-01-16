@@ -5,6 +5,6 @@ describe("Proplate generated e2e testing", () => {
 
   it("Should bootstrap the project correctly", () => {
     // 'blogify-web' being a dynamic var
-    cy.contains("blogify-web works");
+    cy.getByTestid("typo0").contains("blogify-web works");
   });
 });
