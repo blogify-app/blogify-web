@@ -1,7 +1,7 @@
 import {FC} from "react";
 import {useAuthStore} from "@/features/auth";
 
-export const Home: FC = () => {
+export const HomePage: FC = () => {
   const auth = useAuthStore();
   return (
     <div>
