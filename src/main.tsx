@@ -2,12 +2,18 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import {RouterProvider, createBrowserRouter} from "react-router-dom";
 import {Home} from "./pages/home";
+import {LoginPage} from "@/pages/auth";
 import "./index.css";
 
+// eslint-disable-next-line react-refresh/only-export-components
 const ROUTER = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
   },
 ]);
 
