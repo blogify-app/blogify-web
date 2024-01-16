@@ -5,9 +5,11 @@ import {useAuthStore} from "@/features/auth";
 import {basic, BasicPayload} from "@/features/auth/schema.ts";
 import {AuthProvider, ProviderCtor} from "@/services/auth_provider.ts";
 import {GoogleAuthProvider} from "firebase/auth";
+import {useNavigate} from "react-router-dom";
 
 export const Login: FC = () => {
   const store = useAuthStore();
+  const navigate = useNavigate();
   // TODO: use register with inputs
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {register: _register, handleSubmit} = useForm<BasicPayload>({
@@ -25,6 +27,7 @@ export const Login: FC = () => {
         password
       );
       store.setUser(user.username);
+      navigate("/");
     } catch (e) {
       // TODO: notify err [shadcn-ui]
     }
@@ -36,6 +39,7 @@ export const Login: FC = () => {
       try {
         const user = await AuthProvider.signInWithProvider(providerCtor);
         store.setUser(user.username);
+        navigate("/");
       } catch (e) {
         // TODO: notify err [shadcn-ui]
       }
