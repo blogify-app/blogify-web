@@ -63,6 +63,7 @@ export const LazyReader: FC<LazyReaderProps> = ({
   return (
     <div
       className={`markdown-view p-4 text-gray-800 ${className}`}
+      data-testid="markdown-viewer"
       ref={containerRef}
     ></div>
   );
@@ -77,6 +78,7 @@ export const Reader: FC<ReaderProps> = ({children: __html, className = ""}) => {
   return (
     <div
       className={`markdown-view p-4 text-gray-800 ${className}`}
+      data-testid="markdown-viewer"
       dangerouslySetInnerHTML={{__html}}
     ></div>
   );
