@@ -32,7 +32,7 @@ export interface LazyReaderProps extends ReaderProps {
 }
 
 /**
- * Processes then renders raw markdown
+ * Processes raw markdown then renders pretty html
  */
 export const LazyReader: FC<LazyReaderProps> = ({
   children,
