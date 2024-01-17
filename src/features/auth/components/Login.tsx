@@ -20,7 +20,6 @@ export const Login: FC = () => {
     email,
     password,
   }) => {
-    // use **AuthProvider** to create the _onProvider_
     try {
       const user = await AuthProvider.signInWithEmailAndPassword(
         email,
@@ -33,7 +32,7 @@ export const Login: FC = () => {
     }
   };
 
-  // HOC, but you can also have a callback on **onClick** instead and call onProvider(...) as usual
+  // HOC, to make onClick callback look prettier, but you can do it as usual too
   const onProvider = (providerCtor: ProviderCtor) => {
     return async () => {
       try {

@@ -1,6 +1,7 @@
 import {
   type AuthProvider as _AuthProvider,
-  UserCredential,
+  type UserCredential,
+  type User,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -40,7 +41,8 @@ export interface AuthProvider {
     payload: DummyUser
   ): Promise<DummyUser>;
 
-  signOut(): Promise<void>;
+  logOut(): Promise<void>;
+  getCurrentUser(): Promise<User | null>;
 }
 
 /**
@@ -81,8 +83,18 @@ export const AuthProvider = new (class implements AuthProvider {
     return this.signUp(payload, credential);
   }
 
-  signOut(): Promise<void> {
+  logOut(): Promise<void> {
     return signOut(auth);
+  }
+
+  // TODO: Ensure it is always resolved on **auth.onAuthStateChanged**
+  getCurrentUser(): Promise<User | null> {
+    return new Promise((resolve) => {
+      const unsub = auth.onAuthStateChanged((user) => {
+        unsub();
+        resolve(user);
+      });
+    });
   }
 
   private signIn(credential: UserCredential): Promise<DummyUser> {

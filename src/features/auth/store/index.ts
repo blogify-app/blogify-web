@@ -2,15 +2,15 @@ import {create} from "zustand";
 import {createJSONStorage, persist} from "zustand/middleware";
 
 export interface AuthStore {
-  user: string;
-  setUser(user: string): void;
+  user: string | null;
+  setUser(user: string | null): void;
 }
 
 export const useAuthStore = create<AuthStore>()(
   persist(
     (set) => ({
       user: "",
-      setUser(user: string) {
+      setUser(user: string | null) {
         set({user});
       },
     }),
