@@ -2,6 +2,9 @@ import {FC, useEffect, useRef} from "react";
 import {NOOP_FN} from "@/lib/noop.ts";
 import {processRaw} from "@/features/wisiwig/process_md.ts";
 
+// md typo
+import "./style.css";
+
 // theme
 import "@/features/wisiwig/themes/poimandres.css";
 
@@ -11,9 +14,6 @@ import "prismjs/components/prism-java";
 import "prismjs/components/prism-python";
 import "prismjs/components/prism-json";
 import "prismjs/components/prism-yaml";
-
-// md typo
-import "./style.css";
 
 export interface ReaderProps {
   // raw markdown

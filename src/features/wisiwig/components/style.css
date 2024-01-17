@@ -11,7 +11,7 @@
   @apply rounded-md;
 }
 .markdown-view pre {
-  @apply overflow-x-auto;
+  @apply w-2/3 overflow-x-auto;
 }
 .markdown-view strong {
   @apply font-semibold;
@@ -29,7 +29,8 @@
 /* headings */
 .markdown-view h1,
 .markdown-view h2 {
-  @apply border-b border-b-gray-200;
+  /* TOO markdown-like */
+  /* @apply border-b border-b-gray-200; */
 }
 .markdown-view h1,
 .markdown-view h2,
