@@ -1,7 +1,7 @@
 export declare global {
   namespace Cypress {
-    interface Chainable<Subject = any> {
-      getByTestid(testid: string): Chainable<Subject>;
+    interface Chainable {
+      getByTestid<Subject>(testid: string): Chainable<Subject>;
     }
   }
 }
