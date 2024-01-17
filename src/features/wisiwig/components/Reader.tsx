@@ -15,13 +15,13 @@ import "prismjs/components/prism-python";
 import "prismjs/components/prism-json";
 import "prismjs/components/prism-yaml";
 
-export interface ReaderProps {
+export interface BaseReaderProps {
   // raw markdown
   children: string;
   className?: string;
 }
 
-export interface LazyReaderProps extends ReaderProps {
+export interface ReaderProps extends BaseReaderProps {
   // loaded
   onProcessed?(): void;
 
@@ -34,7 +34,7 @@ export interface LazyReaderProps extends ReaderProps {
 /**
  * Processes raw markdown then renders pretty html
  */
-export const LazyReader: FC<LazyReaderProps> = ({
+export const Reader: FC<ReaderProps> = ({
   children,
   className = "",
   onProcessed = NOOP_FN,
@@ -72,9 +72,12 @@ export const LazyReader: FC<LazyReaderProps> = ({
 /**
  * Renders processed markdown
  *
- * **[unsafe]** as it hasn't been sanitized
+ * **[unsafe]** Vulnerable to XSS attack
  */
-export const Reader: FC<ReaderProps> = ({children: __html, className = ""}) => {
+export const UnsafeReader: FC<BaseReaderProps> = ({
+  children: __html,
+  className = "",
+}) => {
   return (
     <div
       className={`markdown-view p-4 text-gray-800 ${className}`}

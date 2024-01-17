@@ -1,4 +1,4 @@
-import {LazyReader, LazyReaderProps, Reader} from "@/features/wisiwig";
+import {Reader, ReaderProps, UnsafeReader} from "@/features/wisiwig";
 import {
   safe1,
   safe1_rendered,
@@ -12,7 +12,7 @@ describe("Markdown Reader", () => {
   const dom = new DOMParser();
 
   const expectRawToEqual = (
-    Cmp: ComponentType<LazyReaderProps>,
+    Cmp: ComponentType<ReaderProps>,
     raw: string,
     expectedHtml: string
   ) => {
@@ -36,17 +36,21 @@ describe("Markdown Reader", () => {
   };
 
   it("(LAZY) should render html from raw md", () => {
-    expectRawToEqual(LazyReader, safe1(), safe1_rendered());
+    expectRawToEqual(Reader, safe1(), safe1_rendered());
   });
 
   it("(LAZY) should sanitize md before rendering [XSS-free]", () => {
-    expectRawToEqual(LazyReader, unsafe1(), unsafe1_sanitized());
+    expectRawToEqual(Reader, unsafe1(), unsafe1_sanitized());
   });
 
   // <Reader /> can render the html directly... let's test how unsafe it is ... lol
   it("(UNSAFE) should render html without preprocessing [XSS attack]", () => {
     // Content stays as is
-    expectRawToEqual(Reader, unsafe1_unsanitized(), unsafe1_unsanitized());
+    expectRawToEqual(
+      UnsafeReader,
+      unsafe1_unsanitized(),
+      unsafe1_unsanitized()
+    );
 
     // when the unsanitized html gets executed
     cy.getByTestid("markdown-viewer").invoke("html", unsafe1_unsanitized());
