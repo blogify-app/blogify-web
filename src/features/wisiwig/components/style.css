@@ -1,0 +1,59 @@
+.markdown-view p,
+.markdown-view blockquote,
+.markdown-view table,
+.markdown-view details,
+.markdown-view ol,
+.markdown-view ul,
+.markdown-view dl {
+  @apply mb-5 mt-0;
+}
+.markdown-view code {
+  @apply rounded-md;
+}
+.markdown-view pre {
+  @apply overflow-x-auto;
+}
+.markdown-view strong {
+  @apply font-semibold;
+}
+.markdown-view a {
+  @apply text-blue-500 hover:underline;
+}
+.markdown-view ul {
+  @apply ml-5 list-disc pl-3.5;
+}
+.markdown-view a code {
+  @apply text-sm;
+}
+
+/* headings */
+.markdown-view h1,
+.markdown-view h2 {
+  @apply border-b border-b-gray-200;
+}
+.markdown-view h1,
+.markdown-view h2,
+.markdown-view h3,
+.markdown-view h4,
+.markdown-view h5,
+.markdown-view h6 {
+  @apply mb-2.5 pb-1.5 font-semibold;
+}
+.markdown-view h1 {
+  font-size: 2em;
+}
+.markdown-view h2 {
+  font-size: 1.5em;
+}
+.markdown-view h3 {
+  font-size: 1.25em;
+}
+.markdown-view h4 {
+  font-size: 1em;
+}
+.markdown-view h5 {
+  font-size: 0.875em;
+}
+.markdown-view h6 {
+  font-size: 0.85em;
+}
