@@ -3,10 +3,15 @@ import profilepic from "../../assets/profile.jpg";
 import { Button } from "@/common/button";
 import { Error } from "@/common/error";
 import { useParams } from "react-router-dom";
+import { InlineMenu } from "@/common/inline-menu";
 
 export const Profile : FC = ()=>{
-    const [posts, setPosts] = useState([]);
+    const [posts, setPosts] = useState<any>([]);
     const { id } = useParams()
+    
+    function increment() {
+        setPosts([...posts, 1])
+    }
 
     useEffect(()=>{
         console.log(id); //Get user by id
@@ -21,6 +26,7 @@ export const Profile : FC = ()=>{
                 <div>
                     <h1 className="font-bold text-3xl">Ny Hasina VAGNO</h1>
                     <p className="text-sm text-light">@hasnyvagno</p>
+                    <p className="text-xs text-light text-gray-500">Donne vie a tes idees</p>
                     <p className="text-sm text-light">En savoir plus sur cette chaine</p>
                     <div className="flex justify-between">
                         <Button classNameAttr="text-xs bg-gray-800 hover:bg-gray-600 my-3 text-sm text-white py-2 px-4 rounded-[25px]"
@@ -36,7 +42,8 @@ export const Profile : FC = ()=>{
                     </div>
                 </div>
             </div>
-            <hr />
+            <InlineMenu action={increment}/>
+            <hr className="mx-12"/>
             {
                 posts.length == 0 && <div className="grid grid-cols-3 gap-4">
                 <div className="col-start-2 row-start-10 text-center text-xs">
