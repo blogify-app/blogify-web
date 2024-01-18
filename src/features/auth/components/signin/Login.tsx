@@ -4,8 +4,13 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {GoogleAuthProvider} from "firebase/auth";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useAuthStore} from "@/features/auth";
-import {basic, BasicPayload} from "@/features/auth/schema.ts";
-import {AuthProvider, ProviderCtor} from "@/services/security";
+import {BasicPayload, login} from "@/features/auth/schema.ts";
+import {AuthProvider, ProviderCtor} from "@/services/auth_provider.ts";
+import {GoogleAuthProvider} from "firebase/auth";
+import {useNavigate} from "react-router-dom";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/shadcn-ui/form";
+import { z } from "zod";
+import { Input } from "@/components/shadcn-ui/input";
 
 export const Login: FC = () => {
   const store = useAuthStore();
@@ -13,7 +18,7 @@ export const Login: FC = () => {
   // TODO: use register with inputs
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {register: _register, handleSubmit} = useForm<BasicPayload>({
-    resolver: zodResolver(basic),
+    resolver: zodResolver(login),
   });
 
   const onEmailAndPassword: SubmitHandler<BasicPayload> = async ({
@@ -45,12 +50,45 @@ export const Login: FC = () => {
     };
   };
 
+  const form = useForm<z.infer<typeof login>>({
+    resolver: zodResolver(login),
+    defaultValues: {
+      email: "",
+      password: ""
+    },
+  })
+
   // TODO: build the ui
   // register email and password input
   return (
-    <form onSubmit={handleSubmit(onEmailAndPassword)}>
-      {/* TODO: form inputs */}
+    <Form {...form}>
+      <form onSubmit={handleSubmit(onEmailAndPassword)}>
+      <FormField
+        control={form.control}
+        name="password"
+        render={({field}) => (
+          <FormItem>
+            <FormLabel>email</FormLabel>
+            <FormControl>
+              <Input placeholder="email" {...field}/>
+            </FormControl>
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="password"
+        render={({field}) => (
+          <FormItem>
+            <FormLabel>email</FormLabel>
+            <FormControl>
+              <Input type="password" placeholder="password" {...field}/>
+            </FormControl>
+          </FormItem>
+        )}
+      />
       <button onClick={onProvider(GoogleAuthProvider)}>google</button>
     </form>
+    </Form>
   );
 };

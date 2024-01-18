@@ -1,8 +1,16 @@
 import {z} from "zod";
 
-export const basic = z.object({
+export const login = z.object({
   email: z.string().email(),
   password: z.string().min(8),
 });
 
-export type BasicPayload = z.infer<typeof basic>;
+export const user = z.object({
+  email: z.string().email(),
+  username: z.string(),
+  firstname: z.string(),
+  lastname: z.string(),
+  bio: z.string() 
+})
+
+export type BasicPayload = z.infer<typeof login>;
