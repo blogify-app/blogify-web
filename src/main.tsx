@@ -6,6 +6,7 @@ import {LoginPage} from "@/pages/auth";
 import {Authenticated} from "@/features/auth";
 import {AuthProvider} from "@/services/auth_provider.ts";
 import "./index.css";
+import {PostCreationPage} from "@/pages/post";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const ROUTER = createBrowserRouter([
@@ -16,6 +17,10 @@ const ROUTER = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/posts/new",
+    element: <PostCreationPage />,
   },
   {
     path: "/protected",
