@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
+    "axios": "^0.21.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "lucide-react": "^0.309.0",
