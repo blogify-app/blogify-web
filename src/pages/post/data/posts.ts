@@ -1,6 +1,23 @@
-export const posts = [
+export enum Status {
+    ARCHIVED, ENABLED, DRAFT
+}
+
+export interface Post {
+    id: string,
+    picture_url: string,
+    description: string,
+    content: string,
+    title: string,
+    creation_datetime: string,
+    reaction_count: number,
+    updated_at: string,
+    user_id: string,
+    status: Status
+}
+
+export const posts: Post[] = [
     {
-        id: "string",
+        id: "post_1",
         picture_url: "https://fr.freepik.com/photos-gratuite/vue-dessus-fraises-rouges-fraiches-bol-belles-fleurs-comme-tulipe-roses-fond-bois_12430572.htm#page=2&query=fleurs%20frais&position=18&from_view=keyword&track=ais&uuid=b0faa139-22de-4811-b57d-361006be8eae",
         description: "Lorem Lorem Description",
         content: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo dolore voluptatibus facere nulla quam ipsa quibusdam, voluptatem laborum iure repellat suscipit fuga provident voluptas dolor dignissimos aperiam possimus officia incidunt.
@@ -23,11 +40,11 @@ export const posts = [
         Numquam, assumenda quas aliquam accusantium doloribus cupiditate, ullam reiciendis esse optio vitae a accusamus natus cumque? Rem earum quidem quibusdam laudantium, sunt commodi, quae saepe facilis exercitationem enim molestiae totam.
         Ducimus temporibus assumenda reprehenderit repellat ex quaerat velit molestiae, magni, eum harum tenetur veniam? Fugiat ratione cum beatae saepe repellat fuga veritatis ducimus maxime vel eos. Quasi vitae sed culpa.
         Provident ut at aliquam repellat, deserunt placeat nesciunt harum nulla nam ipsam. Debitis reprehenderit enim deleniti aliquam accusamus iusto maxime assumenda aspernatur! Nihil corrupti ab rem, saepe laborum temporibus nostrum?`,
-        title: "orem ipsum dolor sit amet consectetur",
+        title: "Lorem ipsum dolor sit amet consectetur",
         creation_datetime: "2024-01-19T11:04:05.337Z",
         reaction_count: 10,
         updated_at: "2024-01-19T11:04:05.337Z",
-        user_id: "string",
-        status: "ARCHIVED"
+        user_id: "user_1",
+        status: Status.ARCHIVED
     }
 ]
