@@ -10,8 +10,8 @@ export const registerUser = z.object({
   username: z.string(),
   firstname: z.string().optional(),
   lastname: z.string().optional(),
-  bio: z.string().optional() 
-})
+  bio: z.string().optional(),
+});
 
 export type LoginUser = z.infer<typeof loginUser>;
 export type RegisterUser = z.infer<typeof registerUser>;
