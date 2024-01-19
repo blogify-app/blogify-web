@@ -16,6 +16,9 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        'dancing-script': ['Dancing Script']
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
