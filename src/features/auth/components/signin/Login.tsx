@@ -66,9 +66,10 @@ export const Login: FC = () => {
   // TODO: build the ui
   // register email and password input
   return (
-    <div 
-    style={{'--image-url': `url(${IMAGES.signinBackground})`}}
-    className="flex h-screen w-full items-center justify-center bg-[image:var(--image-url)]">
+    <div
+      style={{"--image-url": `url(${IMAGES.signinBackground})`}}
+      className="flex h-screen w-full items-center justify-center bg-[image:var(--image-url)]"
+    >
       <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-4 shadow dark:border-gray-700 dark:bg-gray-800 sm:p-6 md:p-8">
         <Form {...form}>
           <form
@@ -76,7 +77,13 @@ export const Login: FC = () => {
             className="space-y-6 justify-self-center"
           >
             <h5 className="text-xl font-medium text-gray-900 dark:text-white">
-              Sign in to <label htmlFor="" className="font-dancing-script text-3xl font-bold">Blogify</label>
+              Sign in to{" "}
+              <label
+                htmlFor=""
+                className="font-dancing-script text-3xl font-bold"
+              >
+                Blogify
+              </label>
             </h5>
             <FormField
               control={form.control}
