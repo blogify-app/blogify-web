@@ -6,7 +6,7 @@ import {LoginPage} from "@/pages/auth";
 import {Authenticated} from "@/features/auth";
 import {AuthProvider} from "@/services/auth_provider.ts";
 import "./index.css";
-import { Post } from "./pages/post";
+import {Post} from "./pages/post";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const ROUTER = createBrowserRouter([

@@ -14,7 +14,7 @@ import blankUserProfile from "../../assets/noun-user-picture.svg";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {posts} from "./data/posts";
 import {users} from "./data/user";
-import {calculateReadTime} from "./utils/get_reading_time";
+import {calculateReadTime} from "../../lib/get_reading_time";
 
 const BADGES = ["lorem", "ipsum", "hello"];
 

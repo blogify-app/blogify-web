@@ -5,7 +5,7 @@ export const calculateReadTime = (text: string) => {
 
   // Calculate the minutes and seconds
   let minutes = Math.floor(wordCount / 200);
-  let seconds = Math.round(((wordCount % 200) / 200) * 60);
+  const seconds = Math.round(((wordCount % 200) / 200) * 60);
 
   // Round up to the next minute if seconds are greater than 30
   if (seconds > 30) {
