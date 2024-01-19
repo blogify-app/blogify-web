@@ -1,23 +1,24 @@
-import { Status } from "./posts"
+import {Status} from "./posts";
 
 export enum Sex {
-  M,F
+  M,
+  F,
 }
 
 export interface User {
-  last_name: string,
-  first_name: string,
-  birth_date: Date,
-  email: string,
-  id: string,
-  photo_url: string,
-  bio: string,
-  profile_banner_url: string,
-  username: string,
-  about: string,
-  status: Status,
-  sex: Sex,
-  entrance_datetime: string
+  last_name: string;
+  first_name: string;
+  birth_date: Date;
+  email: string;
+  id: string;
+  photo_url: string;
+  bio: string;
+  profile_banner_url: string;
+  username: string;
+  about: string;
+  status: Status;
+  sex: Sex;
+  entrance_datetime: string;
 }
 
 export const users: User[] = [
@@ -31,9 +32,10 @@ export const users: User[] = [
     bio: "Lorem Bio",
     profile_banner_url: "string",
     username: "John Doe",
-    about: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Molestias totam recusandae a reiciendis quas ducimus at tempora neque quasi eveniet, magni deleniti sapiente voluptas tenetur labore ad quod vero dignissimos?",
+    about:
+      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Molestias totam recusandae a reiciendis quas ducimus at tempora neque quasi eveniet, magni deleniti sapiente voluptas tenetur labore ad quod vero dignissimos?",
     status: Status.ENABLED,
     sex: Sex.M,
-    entrance_datetime: "2024-01-19T11:09:59.342Z"
-  }
-]
+    entrance_datetime: "2024-01-19T11:09:59.342Z",
+  },
+];
