@@ -1,0 +1,18 @@
+{
+  "all": true,
+  "extends": "@istanbuljs/nyc-config-typescript",
+  "check-coverage": true,
+  "include": ["src/**/*.tsx"],
+  "exclude": [
+    "cypress/**/*.*",
+    "**/*.d.ts",
+    "**/*.cy.tsx",
+    "**/*.cy.ts",
+
+    "// generated",
+    "src/components/shadcn-ui/**/*",
+    "src/services/gen/**/*",
+    "// config mod",
+    "src/config"
+  ]
+}

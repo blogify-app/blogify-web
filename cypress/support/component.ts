@@ -16,6 +16,9 @@
 // Import commands.js using ES2015 syntax:
 import "./commands";
 
+// Add cc support for component testing
+import "@cypress/code-coverage/support.js";
+
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 

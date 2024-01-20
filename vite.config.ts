@@ -1,12 +1,21 @@
 import path from "path";
 import {defineConfig, loadEnv} from "vite";
 import react from "@vitejs/plugin-react";
+import istanbul from "vite-plugin-istanbul";
 
 // https://vitejs.dev/config/
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, process.cwd(), "");
   return {
-    plugins: [react()],
+    plugins: [
+      react(),
+      istanbul({
+        requireEnv: false,
+        // Instruments the code for cypress runs
+        cypress: true,
+        forceBuildInstrument: true,
+      }),
+    ],
     define: {
       "process.env": env,
     },
