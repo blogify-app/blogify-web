@@ -1,21 +1,4 @@
-export enum Status {
-  ARCHIVED,
-  ENABLED,
-  DRAFT,
-}
-
-export interface Post {
-  id: string;
-  picture_url: string;
-  description: string;
-  content: string;
-  title: string;
-  creation_datetime: string;
-  reaction_count: number;
-  updated_at: string;
-  user_id: string;
-  status: Status;
-}
+import {Post, PostStatus} from "@/services/gen";
 
 export const posts: Post[] = [
   {
@@ -44,10 +27,10 @@ export const posts: Post[] = [
       Ducimus temporibus assumenda reprehenderit repellat ex quaerat velit molestiae, magni, eum harum tenetur veniam? Fugiat ratione cum beatae saepe repellat fuga veritatis ducimus maxime vel eos. Quasi vitae sed culpa.
       Provident ut at aliquam repellat, deserunt placeat nesciunt harum nulla nam ipsam. Debitis reprehenderit enim deleniti aliquam accusamus iusto maxime assumenda aspernatur! Nihil corrupti ab rem, saepe laborum temporibus nostrum?`,
     title: "Lorem ipsum dolor sit amet consectetur",
-    creation_datetime: "2024-01-19T11:04:05.337Z",
+    creation_datetime: new Date("2024-01-19"),
     reaction_count: 10,
-    updated_at: "2024-01-19T11:04:05.337Z",
+    updated_at: new Date("2024-01-19"),
     user_id: "user_1",
-    status: Status.ARCHIVED,
+    status: PostStatus.ARCHIVED,
   },
 ];
