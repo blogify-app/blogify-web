@@ -13,6 +13,7 @@ export const registerUser = z.object({
   bio: z.string().optional(),
   sex: z.string(),
   birthdate: z.date(),
+  password: z.string(),
 });
 
 export type LoginUser = z.infer<typeof loginUser>;

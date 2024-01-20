@@ -1,12 +1,11 @@
 import {Form, FormField} from "@/components/shadcn-ui/form";
 import {FC} from "react";
-import {useForm} from "react-hook-form";
+import {SubmitHandler, useForm} from "react-hook-form";
 import {RegisterUser, registerUser} from "../schema";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
 
 export const Signup: FC = () => {
-  /*
   const {register, handleSubmit} = useForm<RegisterUser>({
     defaultValues: {
       firstname: "",
@@ -17,7 +16,8 @@ export const Signup: FC = () => {
       username: "",
     },
   });
-  */
+
+  const onSubmit: SubmitHandler<RegisterUser> = () => {};
 
   const form = useForm<z.infer<typeof registerUser>>({
     resolver: zodResolver(registerUser),
@@ -34,7 +34,10 @@ export const Signup: FC = () => {
   return (
     <div className="flex h-screen w-full items-center justify-center">
       <Form {...form}>
-        <form className="space-y-6 justify-self-center">
+        <form
+          className="space-y-6 justify-self-center"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <h5>
             Welcome to{" "}
             <label
@@ -47,11 +50,11 @@ export const Signup: FC = () => {
           <div className="group relative z-0 mb-5 w-full">
             <input
               type="email"
-              name="floating_email"
               id="floating_email"
               className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
               placeholder=" "
               required
+              {...register("email")}
             />
             <label className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4">
               Email address
@@ -60,11 +63,11 @@ export const Signup: FC = () => {
           <div className="group relative z-0 mb-5 w-full">
             <input
               type="password"
-              name="floating_password"
               id="floating_password"
               className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
               placeholder=" "
               required
+              {...register("password")}
             />
             <label className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:translate-x-1/4">
               Password
@@ -73,11 +76,11 @@ export const Signup: FC = () => {
           <div className="group relative z-0 mb-5 w-full">
             <input
               type="password"
-              name="repeat_password"
               id="floating_repeat_password"
               className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
               placeholder=" "
               required
+              {...register("password")}
             />
             <label className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:translate-x-1/4">
               Confirm password
@@ -87,11 +90,11 @@ export const Signup: FC = () => {
             <div className="group relative z-0 mb-5 w-full">
               <input
                 type="text"
-                name="floating_first_name"
                 id="floating_first_name"
                 className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
                 placeholder=" "
                 required
+                {...register("firstname")}
               />
               <label className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:translate-x-1/4">
                 First name
@@ -100,15 +103,75 @@ export const Signup: FC = () => {
             <div className="group relative z-0 mb-5 w-full">
               <input
                 type="text"
-                name="floating_last_name"
                 id="floating_last_name"
                 className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
                 placeholder=" "
                 required
+                {...register("lastname")}
               />
               <label className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:translate-x-1/4">
                 Last name
               </label>
+            </div>
+            <div className="group relative z-0 mb-5 w-full">
+              <input
+                type="text"
+                id="floating_username"
+                className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+                placeholder=" "
+                required
+                {...register("username")}
+              />
+              <label className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:translate-x-1/4">
+                Username
+              </label>
+            </div>
+            <div className="group relative z-0 mb-5 w-full">
+              <div className="mb-4 flex items-center">
+                <input
+                  id="country-option-1"
+                  type="radio"
+                  name="countries"
+                  value="USA"
+                  className="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:focus:bg-blue-600 dark:focus:ring-blue-600"
+                  checked
+                />
+                <label className="ms-2 block  text-sm font-medium text-gray-900 dark:text-gray-300">
+                  Man
+                </label>
+              </div>
+
+              <div className="mb-4 flex items-center">
+                <input
+                  id="country-option-2"
+                  type="radio"
+                  name="countries"
+                  value="Germany"
+                  className="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:focus:bg-blue-600 dark:focus:ring-blue-600"
+                />
+                <label className="ms-2 block text-sm font-medium text-gray-900 dark:text-gray-300">
+                  Girl
+                </label>
+              </div>
+            </div>
+
+            <div className="relative max-w-sm">
+              <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3.5">
+                <svg
+                  className="h-4 w-4 text-gray-500 dark:text-gray-400"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                </svg>
+              </div>
+              <input
+                type="text"
+                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 ps-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                placeholder="Birthdate"
+              />
             </div>
           </div>
           <button
