@@ -1,5 +1,14 @@
 on: [push, pull_request]
 
+env:
+  FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+  FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+  FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+  FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+  FIREBASE_MESSAGING_SENDERID: ${{ secrets.FIREBASE_MESSAGING_SENDERID }}
+  FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+  FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
+
 jobs:
   style:
     runs-on: ubuntu-latest
@@ -7,7 +16,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: actions/setup-yarn@v2
+      - name: Setup node
+        uses: actions/setup-node@v4
         with:
           node-version: 18.19.0
 
@@ -29,8 +39,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          build: yarn build
-          start: yarn preview
+          start: yarn dev
 
   test-it:
     timeout-minutes: 15
