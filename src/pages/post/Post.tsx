@@ -28,7 +28,7 @@ import blankUserProfile from "@/assets/noun-user-picture.svg";
 
 const NavBar: FC = () => {
   return (
-    <div className="fixed grid w-screen grid-cols-10 gap-3 bg-white px-10 py-5 shadow-md shadow-slate-200">
+    <div className="fixed grid w-screen grid-cols-10 gap-3 border-b border-black bg-white px-10 py-5">
       <div className="logo w-30 h-15 col-span-1">
         <Link to="/" className="font-logo text-2xl font-bold">
           BLOGIFY
@@ -119,7 +119,7 @@ export const Post: FC = () => {
       <div className="my-5 grid grid-cols-8">
         <div className="col-span-1 h-[18.75rem]"></div>
         <div className="col-span-6 grid grid-cols-8 gap-5">
-          <div className="col-span-8 h-[18.75rem]">
+          <div className="col-span-8 h-[30rem]">
             <img src={banner_image} className="h-full w-full object-cover" />
           </div>
           <div className="col-span-2 p-4">
