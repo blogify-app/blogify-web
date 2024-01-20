@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import {RouterProvider, createBrowserRouter} from "react-router-dom";
 import {HomePage} from "@/pages/home";
 import {LoginPage} from "@/pages/auth";
-import {Authenticated} from "@/features/auth";
+import {Authenticated, Signup} from "@/features/auth";
 import {AuthProvider} from "@/services/auth_provider.ts";
 import "./index.css";
 
@@ -16,6 +16,10 @@ const ROUTER = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
   },
   {
     path: "/protected",

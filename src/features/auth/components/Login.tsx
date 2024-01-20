@@ -5,7 +5,7 @@ import {useAuthStore} from "@/features/auth";
 import {LoginUser, loginUser} from "@/features/auth/schema.ts";
 import {AuthProvider, ProviderCtor} from "@/services/auth_provider.ts";
 import {GoogleAuthProvider} from "firebase/auth";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {
   Form,
   FormControl,
@@ -62,12 +62,14 @@ export const Login: FC = () => {
     },
   });
 
+  const moveToCreateAccount = () => {
+    navigate("/signup");
+  };
+
   // TODO: build the ui
   // register email and password input
   return (
-    <div
-      className="flex h-screen w-full items-center justify-center bg-[image:var(--image-url)]"
-    >
+    <div className="flex h-screen w-full items-center justify-center">
       <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-4 shadow dark:border-gray-700 dark:bg-gray-800 sm:p-6 md:p-8">
         <Form {...form}>
           <form
@@ -126,6 +128,13 @@ export const Login: FC = () => {
             >
               Sign-in
             </button>
+            <Link
+              to="/signup"
+              onClick={moveToCreateAccount}
+              className="me-2 ml-2 inline-flex items-center justify-center rounded border border-blue-400 bg-blue-100 px-2.5 py-0.5 text-sm font-medium text-blue-800 hover:bg-blue-200 dark:bg-gray-700 dark:text-blue-400 rtl:ml-0"
+            >
+              create account ?
+            </Link>
           </form>
         </Form>
       </div>
