@@ -17,7 +17,6 @@ import {
 } from "@/components/shadcn-ui/form";
 import {z} from "zod";
 import {Input} from "@/components/shadcn-ui/input";
-import IMAGES from "@/images/image";
 
 export const Login: FC = () => {
   const store = useAuthStore();
@@ -69,7 +68,6 @@ export const Login: FC = () => {
   // register email and password input
   return (
     <div
-      style={{"--image-url": `url(${IMAGES.signinBackground})`}}
       className="flex h-screen w-full items-center justify-center bg-[image:var(--image-url)]"
     >
       <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-4 shadow dark:border-gray-700 dark:bg-gray-800 sm:p-6 md:p-8">
