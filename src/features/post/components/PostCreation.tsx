@@ -32,6 +32,7 @@ export const PostCreation: FC = () => {
     resolver: zodResolver(post),
   });
 
+  // TODO: implement post creation provider here
   const onSubmit = (data: PostData) => {
     console.log({
       id: postId,
@@ -41,6 +42,7 @@ export const PostCreation: FC = () => {
     });
   };
 
+  // TODO: implement better design for post creation form
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-white">
       <div className="h-4/5 w-full rounded bg-white p-8  shadow-lg md:w-2/3">
