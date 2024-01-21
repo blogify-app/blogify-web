@@ -2,6 +2,7 @@ import {FC} from "react";
 import {Button} from "@/components/shadcn-ui/button";
 import {Textarea} from "@/components/shadcn-ui/textarea";
 import {useParams} from "react-router-dom";
+import {useForm} from "react-hook-form";
 import {
   Select,
   SelectContent,
@@ -10,16 +11,46 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn-ui/select";
+import {zodResolver} from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+interface PostData {
+  category: string;
+  content: string;
+}
+
+const postSchema = z.object({
+  category: z.string().min(1, {message: "Veuillez sélectionner une catégorie"}),
+  content: z
+    .string()
+    .min(1, {message: "Le contenu du post ne peut pas être vide"}),
+});
 
 export const PostCreationPage: FC = () => {
   const {postId} = useParams();
+
+  const {
+    register,
+    handleSubmit,
+    formState: {errors},
+  } = useForm<PostData>({
+    resolver: zodResolver(postSchema),
+  });
+
+  const onSubmit = (data: PostData) => {
+    console.log({
+      id: postId,
+      category: data.category,
+      content: data.content,
+    });
+  };
 
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100">
       <div className="w-96 rounded bg-white p-8 shadow-lg">
         <h2 className="mb-4 text-2xl font-semibold">Créer un Post</h2>
         <div className="mb-4">
-          <Select>
+          <Select {...register("category")}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Sélectionner une catégorie" />
             </SelectTrigger>
@@ -33,14 +64,25 @@ export const PostCreationPage: FC = () => {
               </SelectGroup>
             </SelectContent>
           </Select>
+          {errors.category && (
+            <p className="text-red-300">{errors.category.message}</p>
+          )}
         </div>
         <div className="mb-4">
           <Textarea
             placeholder="Que voulez-vous partager ?"
             className="w-full"
+            {...register("content")}
           />
+          {errors.content && (
+            <p className="text-red-300">{errors.content.message}</p>
+          )}
         </div>
-        <Button variant="outline" className="w-full">
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={handleSubmit(onSubmit)}
+        >
           Publier
         </Button>
       </div>
