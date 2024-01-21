@@ -1,8 +1,7 @@
-import {FC, useEffect} from "react";
+import {FC} from "react";
 import {Button} from "@/components/shadcn-ui/button";
 import {Textarea} from "@/components/shadcn-ui/textarea";
-import {useNavigate} from "react-router-dom";
-import {v4 as uuidv4} from "uuid";
+import {useParams} from "react-router-dom";
 import {
   Select,
   SelectContent,
@@ -13,13 +12,7 @@ import {
 } from "@/components/shadcn-ui/select";
 
 export const PostCreationPage: FC = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    const postId = uuidv4() as string;
-    navigate(`/posts/new/${postId}`);
-  }, [navigate]);
+  const {postId} = useParams();
 
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100">

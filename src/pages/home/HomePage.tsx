@@ -3,10 +3,12 @@ import {useAuthStore} from "@/features/auth";
 import {Reader} from "@/features/wisiwig";
 import {Button} from "@/components/shadcn-ui/button";
 import {AuthProvider} from "@/services/auth_provider";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
+import {v4 as uuidv4} from "uuid";
 
 export const HomePage: FC = () => {
   const auth = useAuthStore();
+  const navigate = useNavigate();
 
   // NOTE: @example
   const logout = async () => {
@@ -16,6 +18,11 @@ export const HomePage: FC = () => {
     } catch (e) {
       /* TODO: handle err */
     }
+  };
+
+  const createNewPost = () => {
+    const newPostId = uuidv4();
+    navigate(`/posts/new/${newPostId}`);
   };
 
   return (
@@ -47,9 +54,7 @@ export const HomePage: FC = () => {
         <NavLink to="/login">
           <Button variant="link">Login</Button>
         </NavLink>
-        <NavLink to="/posts/new">
-          <Button variant="link">New Post</Button>
-        </NavLink>
+        <Button onClick={createNewPost}>New Post</Button>
       </div>
     </div>
   );
