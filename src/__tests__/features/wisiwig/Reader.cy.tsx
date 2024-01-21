@@ -5,7 +5,7 @@ import {
   unsafe1,
   unsafe1_sanitized,
   unsafe1_unsanitized,
-} from "@/tests/features/wisiwig/fixtures/mocks.ts";
+} from "@/__tests__/features/wisiwig/fixtures/mocks.ts";
 import {ComponentType} from "react";
 
 describe("Markdown Reader", () => {
