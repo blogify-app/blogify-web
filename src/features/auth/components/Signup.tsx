@@ -1,4 +1,4 @@
-import {Form, FormField} from "@/components/shadcn-ui/form";
+import {Form} from "@/components/shadcn-ui/form";
 import {FC} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {RegisterUser, registerUser} from "../schema";
@@ -17,7 +17,9 @@ export const Signup: FC = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<RegisterUser> = () => {};
+  const onSubmit: SubmitHandler<RegisterUser> = (data) => {};
+
+  //TODO: create new user via google firebase ?
 
   const form = useForm<z.infer<typeof registerUser>>({
     resolver: zodResolver(registerUser),
@@ -168,7 +170,7 @@ export const Signup: FC = () => {
                 </svg>
               </div>
               <input
-                type="text"
+                type="date"
                 className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 ps-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                 placeholder="Birthdate"
               />
