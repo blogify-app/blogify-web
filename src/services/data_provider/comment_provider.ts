@@ -7,8 +7,8 @@ import {
 
 export type CommentProvider = DataProvider<Comment>;
 
-export const commentProvider: CommentProvider = {
-  async getById(_id: string): Promise<Comment> {
+export const CommentProvider: CommentProvider = {
+  getById(_id: string): Promise<Comment> {
     // TODO(spec): id is defined twice... for no good reason
     throw new Error("Function not implemented.");
   },
@@ -23,7 +23,7 @@ export const commentProvider: CommentProvider = {
     ).data;
   },
 
-  async crupdateById(_id: string, _user: Comment): Promise<Comment> {
+  crupdateById(_id: string, _user: Comment): Promise<Comment> {
     // TODO(spec): shouldn't ask for post[]
     throw new Error("Function not implemented.");
   },

@@ -7,15 +7,15 @@ import {
 } from "@/services/data_provider";
 
 export interface FollowingProvider extends DataProvider<User> {
+  followUserById(uid: string): Promise<User>;
+  unfollowUserById(uid: string): Promise<User>;
   getUserFollowers(
     uid: string,
     filter: Filter<{followerName?: string}>
   ): Promise<User[]>;
-  followUserById(uid: string): Promise<User>;
-  unfollowUserById(uid: string): Promise<User>;
 }
 
-export const followingProvider: FollowingProvider = {
+export const FollowingProvider: FollowingProvider = {
   async getUserFollowers(
     uid: string,
     filter = DEFAULT_FILTER

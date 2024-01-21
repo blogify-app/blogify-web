@@ -9,7 +9,7 @@ export interface PostProvider extends DataProvider<Post> {
   reactToPostById(id: string, type: ReactionType): Promise<Reaction>;
 }
 
-export const postProvider: PostProvider = {
+export const PostProvider: PostProvider = {
   async getById(id: string): Promise<Post> {
     return (await postingApi().getPostById(id)).data;
   },

@@ -7,7 +7,7 @@ export interface SecurityProvider {
   whoami(): Promise<Whoami>;
 }
 
-export const securityProvider: SecurityProvider = {
+export const SecurityProvider: SecurityProvider = {
   async signIn(payload: SignIn): Promise<Whoami> {
     return (await securityApi().signIn(payload)).data;
   },

@@ -1,10 +1,10 @@
-export interface Filter<F> {
+export interface Filter<R> {
   page: number;
   pageSize: number;
-  query: F;
+  query: R;
 }
 
-// explici
+// intentionally type query record as 'any' so it is compatible with any filter
 export const DEFAULT_FILTER: Filter<any> = {
   page: 0,
   pageSize: 500,
@@ -13,8 +13,9 @@ export const DEFAULT_FILTER: Filter<any> = {
 
 /**
  * Base data provider interface that needs to be implemented by every data providers.
- * @template R Resource
- * @template F Filter
+ *
+ * @template R - Resource type
+ * @template F - Filter record
  */
 export interface DataProvider<R = any, F = Record<string, string>> {
   getById(id: string): Promise<R>;

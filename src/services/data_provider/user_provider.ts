@@ -3,7 +3,7 @@ import {userApi, DataProvider, DEFAULT_FILTER} from "@/services/data_provider";
 
 export type UserProvider = DataProvider<User>;
 
-export const userProvider: UserProvider = {
+export const UserProvider: UserProvider = {
   async getById(id: string): Promise<User> {
     return (await userApi().getUserById(id)).data;
   },
