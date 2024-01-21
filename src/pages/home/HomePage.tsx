@@ -1,9 +1,9 @@
 import {FC} from "react";
+import {NavLink} from "react-router-dom";
+import {Button} from "@/components/shadcn-ui/button";
 import {useAuthStore} from "@/features/auth";
 import {Reader} from "@/features/wisiwig";
-import {Button} from "@/components/shadcn-ui/button";
-import {AuthProvider} from "@/services/auth_provider";
-import {NavLink} from "react-router-dom";
+import {AuthProvider} from "@/services/security";
 
 export const HomePage: FC = () => {
   const auth = useAuthStore();

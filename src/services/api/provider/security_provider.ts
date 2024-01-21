@@ -1,5 +1,5 @@
-import {User, Whoami, SignUp, LoginInUser as SignIn} from "@/services/gen";
-import {securityApi} from "@/services/data_provider";
+import {User, Whoami, SignUp, LoginInUser as SignIn} from "@/services/api/gen";
+import {securityApi} from "@/services/api";
 
 export interface SecurityProvider {
   signIn(payload: SignIn): Promise<Whoami>;

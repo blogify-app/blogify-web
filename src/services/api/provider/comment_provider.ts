@@ -1,9 +1,5 @@
-import {Comment} from "@/services/gen";
-import {
-  commentApi,
-  DataProvider,
-  DEFAULT_FILTER,
-} from "@/services/data_provider";
+import {Comment} from "@/services/api/gen";
+import {commentApi, DataProvider, DEFAULT_FILTER} from "@/services/api";
 
 export type CommentProvider = DataProvider<Comment>;
 

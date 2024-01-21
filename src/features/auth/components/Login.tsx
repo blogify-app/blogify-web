@@ -1,11 +1,11 @@
 import {FC} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
+import {GoogleAuthProvider} from "firebase/auth";
+import {useNavigate} from "react-router-dom";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useAuthStore} from "@/features/auth";
 import {basic, BasicPayload} from "@/features/auth/schema.ts";
-import {AuthProvider, ProviderCtor} from "@/services/auth_provider.ts";
-import {GoogleAuthProvider} from "firebase/auth";
-import {useNavigate} from "react-router-dom";
+import {AuthProvider, ProviderCtor} from "@/services/security";
 
 export const Login: FC = () => {
   const store = useAuthStore();

@@ -12,8 +12,8 @@
  * Do not edit the class manually.
  */
 
-import {Configuration} from "./configuration";
-import {RequiredError, RequestArgs} from "./base";
+import {Configuration} from "./configuration.ts";
+import {RequiredError, RequestArgs} from "./base.ts";
 import {AxiosInstance, AxiosResponse} from "axios";
 
 /**

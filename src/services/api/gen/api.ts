@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import {Configuration} from "./configuration";
+import {Configuration} from "./configuration.ts";
 import globalAxios, {
   AxiosPromise,
   AxiosInstance,
@@ -28,9 +28,9 @@ import {
   serializeDataIfNeeded,
   toPathString,
   createRequestFunction,
-} from "./common";
+} from "./common.ts";
 // @ts-ignore
-import {BASE_PATH, RequestArgs, BaseAPI} from "./base";
+import {BASE_PATH, RequestArgs, BaseAPI} from "./base.ts";
 
 /**
  *

@@ -1,5 +1,5 @@
-import {User} from "@/services/gen";
-import {userApi, DataProvider, DEFAULT_FILTER} from "@/services/data_provider";
+import {User} from "@/services/api/gen";
+import {userApi, DataProvider, DEFAULT_FILTER} from "@/services/api";
 
 export type UserProvider = DataProvider<User>;
 

@@ -1,9 +1,5 @@
-import {Post, Reaction, ReactionType} from "@/services/gen";
-import {
-  postingApi,
-  DataProvider,
-  DEFAULT_FILTER,
-} from "@/services/data_provider";
+import {Post, Reaction, ReactionType} from "@/services/api/gen";
+import {postingApi, DataProvider, DEFAULT_FILTER} from "@/services/api";
 
 export interface PostProvider extends DataProvider<Post> {
   reactToPostById(id: string, type: ReactionType): Promise<Reaction>;

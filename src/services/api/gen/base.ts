@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import {Configuration} from "./configuration";
+import {Configuration} from "./configuration.ts";
 // Some imports not used depending on template conditions
 // @ts-ignore
 import globalAxios, {AxiosInstance, AxiosRequestConfig} from "axios";

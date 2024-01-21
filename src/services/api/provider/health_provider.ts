@@ -1,4 +1,4 @@
-import {healthApi} from "@/services/data_provider";
+import {healthApi} from "@/services/api";
 
 export interface HealthProvider {
   ping(): Promise<string>;

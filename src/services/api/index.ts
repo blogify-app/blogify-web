@@ -5,7 +5,7 @@ import {
   CommentsApi,
   HealthApi,
   SecurityApi,
-} from "@/services/gen";
+} from "@/services/api/gen";
 
 // TODO: pass auth_config
 
@@ -20,3 +20,5 @@ export const commentApi = () => new CommentsApi();
 export const healthApi = () => new HealthApi();
 
 export const securityApi = () => new SecurityApi();
+
+export * from "./provider";

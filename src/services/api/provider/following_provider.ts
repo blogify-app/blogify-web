@@ -1,10 +1,10 @@
-import {User} from "@/services/gen";
+import {User} from "@/services/api/gen";
 import {
   followingApi,
   DataProvider,
   Filter,
   DEFAULT_FILTER,
-} from "@/services/data_provider";
+} from "@/services/api";
 
 export interface FollowingProvider extends DataProvider<User> {
   followUserById(uid: string): Promise<User>;
