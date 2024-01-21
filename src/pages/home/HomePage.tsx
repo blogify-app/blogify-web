@@ -47,6 +47,9 @@ export const HomePage: FC = () => {
         <NavLink to="/login">
           <Button variant="link">Login</Button>
         </NavLink>
+        <NavLink to="/posts/new">
+          <Button variant="link">New Post</Button>
+        </NavLink>
       </div>
     </div>
   );

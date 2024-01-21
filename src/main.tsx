@@ -23,6 +23,10 @@ const ROUTER = createBrowserRouter([
     element: <PostCreationPage />,
   },
   {
+    path: "/posts/new/:postId",
+    element: <PostCreationPage />,
+  },
+  {
     path: "/protected",
     element: (
       <Authenticated>
