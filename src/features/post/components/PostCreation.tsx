@@ -15,6 +15,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {post} from "../schema";
 
 interface PostData {
+  title: string;
   category: string;
   content: string;
 }
