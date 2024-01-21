@@ -19,10 +19,6 @@ const ROUTER = createBrowserRouter([
     element: <LoginPage />,
   },
   {
-    path: "/posts/new",
-    element: <PostCreationPage />,
-  },
-  {
     path: "/posts/new/:postId",
     element: <PostCreationPage />,
   },
