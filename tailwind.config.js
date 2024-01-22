@@ -15,6 +15,10 @@ module.exports = {
         "2xl": "1400px",
       },
     },
+    fontFamily: {
+      logo: ["Lilita One", "sans-serif"],
+      title: ["Oswald", "sans-serif"],
+    },
     extend: {
       colors: {
         border: "hsl(var(--border))",
