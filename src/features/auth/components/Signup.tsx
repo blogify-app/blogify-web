@@ -4,6 +4,7 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {RegisterUser, registerUser} from "../schema";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
+import { Button } from "@/components/shadcn-ui/button";
 
 export const Signup: FC = () => {
   const {register, handleSubmit} = useForm<RegisterUser>({
@@ -176,12 +177,12 @@ export const Signup: FC = () => {
               />
             </div>
           </div>
-          <button
+          <Button
             type="submit"
             className="w-full rounded-lg px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
           >
             Submit
-          </button>
+          </Button>
         </form>
       </Form>
     </div>

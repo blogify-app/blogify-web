@@ -17,6 +17,7 @@ import {
 } from "@/components/shadcn-ui/form";
 import {z} from "zod";
 import {Input} from "@/components/shadcn-ui/input";
+import { Button } from "@/components/shadcn-ui/button";
 
 export const Login: FC = () => {
   const store = useAuthStore();
@@ -126,12 +127,11 @@ export const Login: FC = () => {
                 </FormItem>
               )}
             />
-            <button
-              className="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 dark:focus:ring-blue-800 sm:w-auto"
-              onClick={onProvider(GoogleAuthProvider)}
+            <Button
+            onClick={onProvider(GoogleAuthProvider)}
             >
               Sign-in
-            </button>
+            </Button>
             <Link
               to="/signup"
               onClick={moveToCreateAccount}
