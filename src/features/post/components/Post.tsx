@@ -1,13 +1,12 @@
 import {FC} from "react";
 import {Link} from "react-router-dom";
-import {Icon} from "@iconify/react/dist/iconify";
+import {Icon} from "@iconify/react";
 import {Badge} from "@/components/shadcn-ui/badge";
 import {NavBar} from "@/layout";
 import {calculateReadDuration} from "@/features/post/utils";
 import {Post as PostType} from "@/services/gen";
 import {user} from "@/pages/post/data/user";
 
-import bannerImage from "@/assets/daisy_fields.jpg";
 import blankUserProfile from "@/assets/noun-user-picture.svg";
 
 export interface PostProps {
@@ -58,7 +57,10 @@ export const Post: FC<PostProps> = ({post}: PostProps) => (
       <div className="col-span-1 h-[18.75rem]"></div>
       <div className="col-span-6 grid grid-cols-8 gap-5">
         <div data-testid="post-banner" className="col-span-8 h-[35rem]">
-          <img src={bannerImage} className="h-full w-full object-cover" />
+          <img
+            src={post.thumbnail_url}
+            className="h-full w-full object-cover"
+          />
         </div>
         <div className="col-span-2 border-r border-slate-200 p-4">
           <div

@@ -2,7 +2,7 @@ import {Post, PostStatus} from "@/services/gen";
 
 export const post: Post = {
   id: "post_1",
-  picture_url:
+  thumbnail_url:
     "https://fr.freepik.com/photos-gratuite/vue-dessus-fraises-rouges-fraiches-bol-belles-fleurs-comme-tulipe-roses-fond-bois_12430572.htm#page=2&query=fleurs%20frais&position=18&from_view=keyword&track=ais&uuid=b0faa139-22de-4811-b57d-361006be8eae",
   description: "Lorem Lorem Description",
   content: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo dolore voluptatibus facere nulla quam ipsa quibusdam, voluptatem laborum iure repellat suscipit fuga provident voluptas dolor dignissimos aperiam possimus officia incidunt.
@@ -27,8 +27,7 @@ export const post: Post = {
       Provident ut at aliquam repellat, deserunt placeat nesciunt harum nulla nam ipsam. Debitis reprehenderit enim deleniti aliquam accusamus iusto maxime assumenda aspernatur! Nihil corrupti ab rem, saepe laborum temporibus nostrum?`,
   title: "Lorem ipsum dolor sit amet consectetur",
   creation_datetime: new Date("2024-01-19"),
-  reaction_count: 10,
   updated_at: new Date("2024-01-19"),
-  user_id: "user_1",
+  author_id: "user_1",
   status: PostStatus.ARCHIVED,
 };
