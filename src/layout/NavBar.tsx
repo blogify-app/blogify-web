@@ -1,6 +1,6 @@
 import {FC} from "react";
 import {Link} from "react-router-dom";
-import {Icon} from "@iconify/react/dist/iconify";
+import {Icon} from "@iconify/react";
 import {Button} from "@/components/shadcn-ui/button";
 import {
   Avatar,
