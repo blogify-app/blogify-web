@@ -11,8 +11,8 @@ export const registerUser = z.object({
   firstname: z.string().optional(),
   lastname: z.string().optional(),
   bio: z.string().optional(),
-  sex: z.string(),
-  birthdate: z.date(),
+  sex: z.string().optional(),
+  birthdate: z.date().optional(),
   password: z.string(),
 });
 

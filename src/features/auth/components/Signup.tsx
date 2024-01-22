@@ -1,42 +1,30 @@
-import {Form} from "@/components/shadcn-ui/form";
 import {FC} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
-import {RegisterUser, registerUser} from "../schema";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {z} from "zod";
 import { Button } from "@/components/shadcn-ui/button";
+import {RegisterUser, registerUser} from "../schema";
 
 export const Signup: FC = () => {
-  const {register, handleSubmit} = useForm<RegisterUser>({
-    defaultValues: {
-      firstname: "",
-      lastname: "",
-      sex: "",
-      bio: "",
-      email: "",
-      username: "",
-    },
-  });
 
-  const onSubmit: SubmitHandler<RegisterUser> = (data) => {};
+  const onSubmit: SubmitHandler<RegisterUser> = (data) => {console.log(data);
+  };
 
   //TODO: create new user via google firebase ?
 
-  const form = useForm<z.infer<typeof registerUser>>({
+  const {register, handleSubmit} = useForm<RegisterUser>({
     resolver: zodResolver(registerUser),
     defaultValues: {
-      firstname: "",
-      lastname: "",
-      sex: "",
-      bio: "",
-      email: "",
-      username: "",
-    },
+      firstname: '',
+      lastname: '',
+      username: '',
+      password: '',
+      email: '',
+      bio: ''
+    }
   });
 
   return (
     <div className="flex h-screen w-full items-center justify-center">
-      <Form {...form}>
         <form
           className="space-y-6 justify-self-center"
           onSubmit={handleSubmit(onSubmit)}
@@ -44,7 +32,6 @@ export const Signup: FC = () => {
           <h5>
             Welcome to{" "}
             <label
-              htmlFor=""
               className="font-dancing-script text-3xl font-bold"
             >
               Blogify
@@ -184,7 +171,6 @@ export const Signup: FC = () => {
             Submit
           </Button>
         </form>
-      </Form>
     </div>
   );
 };
