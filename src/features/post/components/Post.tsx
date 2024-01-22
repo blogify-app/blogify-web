@@ -2,7 +2,7 @@ import {FC} from "react";
 import {Link} from "react-router-dom";
 import {Icon} from "@iconify/react";
 import {Badge} from "@/components/shadcn-ui/badge";
-import {NavBar} from "@/layout/NavBar";
+import {NavBar} from "@/layout";
 import {calculateReadDuration} from "@/features/post/utils";
 import {Post as PostType} from "@/services/gen";
 import {user} from "@/pages/post/data/user";

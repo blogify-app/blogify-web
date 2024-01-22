@@ -14,11 +14,15 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/shadcn-ui/navigation-menu";
+
 // TODO: test this
 // TODO: move else where, e.g: layout dir
 export const NavBar: FC = () => {
   return (
-    <div className="fixed grid w-screen grid-cols-10 gap-3 border-b border-slate-200 bg-white px-10 py-5">
+    <div
+      className="fixed grid w-screen grid-cols-10 gap-3 border-b border-slate-200 bg-white px-10 py-5"
+      data-testid="Navbar"
+    >
       <div className="logo w-30 h-15 col-span-1">
         <Link
           to="/"
