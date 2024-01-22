@@ -1,6 +1,6 @@
 import {FC} from "react";
 import {Link} from "react-router-dom";
-import {Icon} from "@iconify/react";
+import {Icon} from "@iconify/react/dist/iconify";
 import {Badge} from "@/components/shadcn-ui/badge";
 import {NavBar} from "@/layout";
 import {calculateReadDuration} from "@/features/post/utils";
