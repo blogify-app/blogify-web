@@ -8,7 +8,11 @@ Welcome to Blogify, where words come to life and stories find their digital home
 
 ## We are live:
 
+<<<<<<< HEAD
 - [preprod](https://blogify-preprod.vercel.app)
+=======
+- [preprod](https://blogify-preprod-kvu9aymiz-blogify-app.vercel.app)
+>>>>>>> c825f02 (format code)
 - [prod](https://blogify-prod.vercel.app)
 
 ## Overview
