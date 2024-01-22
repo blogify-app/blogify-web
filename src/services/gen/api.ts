@@ -35,6 +35,31 @@ import {BASE_PATH, RequestArgs, BaseAPI} from "./base";
 /**
  *
  * @export
+ * @interface AuthenticationPayload
+ */
+export interface AuthenticationPayload {
+  /**
+   *
+   * @type {string}
+   * @memberof AuthenticationPayload
+   */
+  email?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof AuthenticationPayload
+   */
+  password?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof AuthenticationPayload
+   */
+  provider_id?: string;
+}
+/**
+ *
+ * @export
  * @interface BadRequestException
  */
 export interface BadRequestException {
@@ -84,6 +109,12 @@ export interface Comment {
   id?: string;
   /**
    *
+   * @type {User}
+   * @memberof Comment
+   */
+  user?: User;
+  /**
+   *
    * @type {string}
    * @memberof Comment
    */
@@ -105,7 +136,13 @@ export interface Comment {
    * @type {string}
    * @memberof Comment
    */
-  reply_to_comment_id?: string;
+  reply_to_id?: string;
+  /**
+   *
+   * @type {ReactionStat}
+   * @memberof Comment
+   */
+  reactions?: ReactionStat;
   /**
    *
    * @type {CommentStatus}
@@ -120,8 +157,8 @@ export interface Comment {
  */
 
 export enum CommentStatus {
-  ARCHIVED = "ARCHIVED",
   ENABLED = "ENABLED",
+  DISABLED = "DISABLED",
 }
 
 /**
@@ -165,31 +202,6 @@ export interface InternalServerException {
 /**
  *
  * @export
- * @interface LoginInUser
- */
-export interface LoginInUser {
-  /**
-   *
-   * @type {string}
-   * @memberof LoginInUser
-   */
-  email?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof LoginInUser
-   */
-  password?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof LoginInUser
-   */
-  userId?: string;
-}
-/**
- *
- * @export
  * @interface NotAuthorizedException
  */
 export interface NotAuthorizedException {
@@ -223,7 +235,7 @@ export interface Post {
    * @type {string}
    * @memberof Post
    */
-  picture_url?: string;
+  thumbnail_url?: string;
   /**
    *
    * @type {string}
@@ -250,12 +262,6 @@ export interface Post {
   creation_datetime?: Date;
   /**
    *
-   * @type {number}
-   * @memberof Post
-   */
-  reaction_count?: number;
-  /**
-   *
    * @type {Date}
    * @memberof Post
    */
@@ -265,13 +271,25 @@ export interface Post {
    * @type {string}
    * @memberof Post
    */
-  user_id?: string;
+  author_id?: string;
   /**
    *
    * @type {PostStatus}
    * @memberof Post
    */
   status?: PostStatus;
+  /**
+   *
+   * @type {Array<Category>}
+   * @memberof Post
+   */
+  categories?: Array<Category>;
+  /**
+   *
+   * @type {ReactionStat}
+   * @memberof Post
+   */
+  reactions?: ReactionStat;
 }
 /**
  *
@@ -281,8 +299,8 @@ export interface Post {
 
 export enum PostStatus {
   ARCHIVED = "ARCHIVED",
-  ENABLED = "ENABLED",
   DRAFT = "DRAFT",
+  DISABLED = "DISABLED",
 }
 
 /**
@@ -327,6 +345,25 @@ export interface Reaction {
    * @memberof Reaction
    */
   comment_id?: string;
+}
+/**
+ *
+ * @export
+ * @interface ReactionStat
+ */
+export interface ReactionStat {
+  /**
+   *
+   * @type {number}
+   * @memberof ReactionStat
+   */
+  likes?: number;
+  /**
+   *
+   * @type {number}
+   * @memberof ReactionStat
+   */
+  dislikes?: number;
 }
 /**
  *
@@ -398,6 +435,12 @@ export interface SignUp {
    * @type {string}
    * @memberof SignUp
    */
+  id?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof SignUp
+   */
   last_name?: string;
   /**
    *
@@ -417,6 +460,72 @@ export interface SignUp {
    * @memberof SignUp
    */
   email?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof SignUp
+   */
+  photo_url?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof SignUp
+   */
+  bio?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof SignUp
+   */
+  profile_banner_url?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof SignUp
+   */
+  username?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof SignUp
+   */
+  about?: string;
+  /**
+   *
+   * @type {UserStatus}
+   * @memberof SignUp
+   */
+  status?: UserStatus;
+  /**
+   *
+   * @type {Sex}
+   * @memberof SignUp
+   */
+  sex?: Sex;
+  /**
+   *
+   * @type {Date}
+   * @memberof SignUp
+   */
+  entrance_datetime?: Date;
+  /**
+   *
+   * @type {Array<Category>}
+   * @memberof SignUp
+   */
+  categories?: Array<Category>;
+  /**
+   *
+   * @type {boolean}
+   * @memberof SignUp
+   */
+  is_followed?: boolean;
+  /**
+   *
+   * @type {string}
+   * @memberof SignUp
+   */
+  provider_id?: string;
 }
 /**
  *
@@ -449,6 +558,30 @@ export interface User {
    * @memberof User
    */
   id?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof User
+   */
+  last_name?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof User
+   */
+  first_name?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof User
+   */
+  birth_date?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof User
+   */
+  email?: string;
   /**
    *
    * @type {string}
@@ -499,59 +632,16 @@ export interface User {
   entrance_datetime?: Date;
   /**
    *
-   * @type {string}
+   * @type {Array<Category>}
    * @memberof User
    */
-  last_name?: string;
+  categories?: Array<Category>;
   /**
    *
-   * @type {string}
+   * @type {boolean}
    * @memberof User
    */
-  first_name?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof User
-   */
-  birth_date?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof User
-   */
-  email?: string;
-}
-/**
- *
- * @export
- * @interface UserInfo
- */
-export interface UserInfo {
-  /**
-   *
-   * @type {string}
-   * @memberof UserInfo
-   */
-  last_name?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof UserInfo
-   */
-  first_name?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof UserInfo
-   */
-  birth_date?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof UserInfo
-   */
-  email?: string;
+  is_followed?: boolean;
 }
 /**
  *
@@ -606,6 +696,66 @@ export interface Whoami {
    * @memberof Whoami
    */
   email?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof Whoami
+   */
+  photo_url?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof Whoami
+   */
+  bio?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof Whoami
+   */
+  profile_banner_url?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof Whoami
+   */
+  username?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof Whoami
+   */
+  about?: string;
+  /**
+   *
+   * @type {UserStatus}
+   * @memberof Whoami
+   */
+  status?: UserStatus;
+  /**
+   *
+   * @type {Sex}
+   * @memberof Whoami
+   */
+  sex?: Sex;
+  /**
+   *
+   * @type {Date}
+   * @memberof Whoami
+   */
+  entrance_datetime?: Date;
+  /**
+   *
+   * @type {Array<Category>}
+   * @memberof Whoami
+   */
+  categories?: Array<Category>;
+  /**
+   *
+   * @type {boolean}
+   * @memberof Whoami
+   */
+  is_followed?: boolean;
 }
 
 /**
@@ -618,25 +768,28 @@ export const CommentsApiAxiosParamCreator = function (
   return {
     /**
      *
-     * @summary Create or update comment.
-     * @param {string} postId
-     * @param {Array<Post>} post Post to archive or delete.
+     * @summary Crupdate comment of the identified post by id
+     * @param {string} pid
+     * @param {string} cid
+     * @param {Comment} comment The crupdated comments.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    crupdateComment: async (
-      postId: string,
-      post: Array<Post>,
+    crupdateCommentById: async (
+      pid: string,
+      cid: string,
+      comment: Comment,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
-      // verify required parameter 'postId' is not null or undefined
-      assertParamExists("crupdateComment", "postId", postId);
-      // verify required parameter 'post' is not null or undefined
-      assertParamExists("crupdateComment", "post", post);
-      const localVarPath = `/posts/{post_id}/comments`.replace(
-        `{${"post_id"}}`,
-        encodeURIComponent(String(postId))
-      );
+      // verify required parameter 'pid' is not null or undefined
+      assertParamExists("crupdateCommentById", "pid", pid);
+      // verify required parameter 'cid' is not null or undefined
+      assertParamExists("crupdateCommentById", "cid", cid);
+      // verify required parameter 'comment' is not null or undefined
+      assertParamExists("crupdateCommentById", "comment", comment);
+      const localVarPath = `/posts/{pid}/comments/{cid}`
+        .replace(`{${"pid"}}`, encodeURIComponent(String(pid)))
+        .replace(`{${"cid"}}`, encodeURIComponent(String(cid)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -667,7 +820,7 @@ export const CommentsApiAxiosParamCreator = function (
         ...options.headers,
       };
       localVarRequestOptions.data = serializeDataIfNeeded(
-        post,
+        comment,
         localVarRequestOptions,
         configuration
       );
@@ -679,24 +832,77 @@ export const CommentsApiAxiosParamCreator = function (
     },
     /**
      *
+     * @summary Delete comment by identifier.
+     * @param {string} pid
+     * @param {string} cid
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteCommentById: async (
+      pid: string,
+      cid: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'pid' is not null or undefined
+      assertParamExists("deleteCommentById", "pid", pid);
+      // verify required parameter 'cid' is not null or undefined
+      assertParamExists("deleteCommentById", "cid", cid);
+      const localVarPath = `/posts/{pid}/comments/{cid}`
+        .replace(`{${"pid"}}`, encodeURIComponent(String(pid)))
+        .replace(`{${"cid"}}`, encodeURIComponent(String(cid)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "DELETE",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication BearerAuth required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
      * @summary Get comment by identifier.
-     * @param {string} postId
-     * @param {string} id
+     * @param {string} pid
+     * @param {string} cid
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getCommentById: async (
-      postId: string,
-      id: string,
+      pid: string,
+      cid: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
-      // verify required parameter 'postId' is not null or undefined
-      assertParamExists("getCommentById", "postId", postId);
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists("getCommentById", "id", id);
-      const localVarPath = `/posts/{post_id}/comments/{id}`
-        .replace(`{${"post_id"}}`, encodeURIComponent(String(postId)))
-        .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+      // verify required parameter 'pid' is not null or undefined
+      assertParamExists("getCommentById", "pid", pid);
+      // verify required parameter 'cid' is not null or undefined
+      assertParamExists("getCommentById", "cid", cid);
+      const localVarPath = `/posts/{pid}/comments/{cid}`
+        .replace(`{${"pid"}}`, encodeURIComponent(String(pid)))
+        .replace(`{${"cid"}}`, encodeURIComponent(String(cid)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -732,25 +938,25 @@ export const CommentsApiAxiosParamCreator = function (
     },
     /**
      *
-     * @summary Get comments of identified post.
+     * @summary Get the identified post comments.
      * @param {number} page
      * @param {number} pageSize
      * @param {string} id
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getComments: async (
+    getCommentsByPostId: async (
       page: number,
       pageSize: number,
       id: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'page' is not null or undefined
-      assertParamExists("getComments", "page", page);
+      assertParamExists("getCommentsByPostId", "page", page);
       // verify required parameter 'pageSize' is not null or undefined
-      assertParamExists("getComments", "pageSize", pageSize);
+      assertParamExists("getCommentsByPostId", "pageSize", pageSize);
       // verify required parameter 'id' is not null or undefined
-      assertParamExists("getComments", "id", id);
+      assertParamExists("getCommentsByPostId", "id", id);
       const localVarPath = `/posts/{id}/comments`.replace(
         `{${"id"}}`,
         encodeURIComponent(String(id))
@@ -805,18 +1011,18 @@ export const CommentsApiAxiosParamCreator = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    reactToComment: async (
+    reactToCommentByid: async (
       id: string,
       commentId: string,
       reactionType: ReactionType,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
-      assertParamExists("reactToComment", "id", id);
+      assertParamExists("reactToCommentByid", "id", id);
       // verify required parameter 'commentId' is not null or undefined
-      assertParamExists("reactToComment", "commentId", commentId);
+      assertParamExists("reactToCommentByid", "commentId", commentId);
       // verify required parameter 'reactionType' is not null or undefined
-      assertParamExists("reactToComment", "reactionType", reactionType);
+      assertParamExists("reactToCommentByid", "reactionType", reactionType);
       const localVarPath = `/post/{id}/comments/{comment_id}/reaction`
         .replace(`{${"id"}}`, encodeURIComponent(String(id)))
         .replace(`{${"comment_id"}}`, encodeURIComponent(String(commentId)));
@@ -869,24 +1075,52 @@ export const CommentsApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
-     * @summary Create or update comment.
-     * @param {string} postId
-     * @param {Array<Post>} post Post to archive or delete.
+     * @summary Crupdate comment of the identified post by id
+     * @param {string} pid
+     * @param {string} cid
+     * @param {Comment} comment The crupdated comments.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async crupdateComment(
-      postId: string,
-      post: Array<Post>,
+    async crupdateCommentById(
+      pid: string,
+      cid: string,
+      comment: Comment,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<User>>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.crupdateComment(
-        postId,
-        post,
-        options
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.crupdateCommentById(
+          pid,
+          cid,
+          comment,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
       );
+    },
+    /**
+     *
+     * @summary Delete comment by identifier.
+     * @param {string} pid
+     * @param {string} cid
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deleteCommentById(
+      pid: string,
+      cid: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Comment>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.deleteCommentById(pid, cid, options);
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -897,21 +1131,21 @@ export const CommentsApiFp = function (configuration?: Configuration) {
     /**
      *
      * @summary Get comment by identifier.
-     * @param {string} postId
-     * @param {string} id
+     * @param {string} pid
+     * @param {string} cid
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getCommentById(
-      postId: string,
-      id: string,
+      pid: string,
+      cid: string,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Comment>
     > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getCommentById(
-        postId,
-        id,
+        pid,
+        cid,
         options
       );
       return createRequestFunction(
@@ -923,14 +1157,14 @@ export const CommentsApiFp = function (configuration?: Configuration) {
     },
     /**
      *
-     * @summary Get comments of identified post.
+     * @summary Get the identified post comments.
      * @param {number} page
      * @param {number} pageSize
      * @param {string} id
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async getComments(
+    async getCommentsByPostId(
       page: number,
       pageSize: number,
       id: string,
@@ -938,12 +1172,13 @@ export const CommentsApiFp = function (configuration?: Configuration) {
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Comment>>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getComments(
-        page,
-        pageSize,
-        id,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getCommentsByPostId(
+          page,
+          pageSize,
+          id,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -960,7 +1195,7 @@ export const CommentsApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async reactToComment(
+    async reactToCommentByid(
       id: string,
       commentId: string,
       reactionType: ReactionType,
@@ -968,12 +1203,13 @@ export const CommentsApiFp = function (configuration?: Configuration) {
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Reaction>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.reactToComment(
-        id,
-        commentId,
-        reactionType,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.reactToCommentByid(
+          id,
+          commentId,
+          reactionType,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -997,55 +1233,74 @@ export const CommentsApiFactory = function (
   return {
     /**
      *
-     * @summary Create or update comment.
-     * @param {string} postId
-     * @param {Array<Post>} post Post to archive or delete.
+     * @summary Crupdate comment of the identified post by id
+     * @param {string} pid
+     * @param {string} cid
+     * @param {Comment} comment The crupdated comments.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    crupdateComment(
-      postId: string,
-      post: Array<Post>,
+    crupdateCommentById(
+      pid: string,
+      cid: string,
+      comment: Comment,
       options?: any
     ): AxiosPromise<Array<User>> {
       return localVarFp
-        .crupdateComment(postId, post, options)
+        .crupdateCommentById(pid, cid, comment, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary Delete comment by identifier.
+     * @param {string} pid
+     * @param {string} cid
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteCommentById(
+      pid: string,
+      cid: string,
+      options?: any
+    ): AxiosPromise<Comment> {
+      return localVarFp
+        .deleteCommentById(pid, cid, options)
         .then((request) => request(axios, basePath));
     },
     /**
      *
      * @summary Get comment by identifier.
-     * @param {string} postId
-     * @param {string} id
+     * @param {string} pid
+     * @param {string} cid
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getCommentById(
-      postId: string,
-      id: string,
+      pid: string,
+      cid: string,
       options?: any
     ): AxiosPromise<Comment> {
       return localVarFp
-        .getCommentById(postId, id, options)
+        .getCommentById(pid, cid, options)
         .then((request) => request(axios, basePath));
     },
     /**
      *
-     * @summary Get comments of identified post.
+     * @summary Get the identified post comments.
      * @param {number} page
      * @param {number} pageSize
      * @param {string} id
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getComments(
+    getCommentsByPostId(
       page: number,
       pageSize: number,
       id: string,
       options?: any
     ): AxiosPromise<Array<Comment>> {
       return localVarFp
-        .getComments(page, pageSize, id, options)
+        .getCommentsByPostId(page, pageSize, id, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -1057,14 +1312,14 @@ export const CommentsApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    reactToComment(
+    reactToCommentByid(
       id: string,
       commentId: string,
       reactionType: ReactionType,
       options?: any
     ): AxiosPromise<Reaction> {
       return localVarFp
-        .reactToComment(id, commentId, reactionType, options)
+        .reactToCommentByid(id, commentId, reactionType, options)
         .then((request) => request(axios, basePath));
     },
   };
@@ -1079,45 +1334,66 @@ export const CommentsApiFactory = function (
 export class CommentsApi extends BaseAPI {
   /**
    *
-   * @summary Create or update comment.
-   * @param {string} postId
-   * @param {Array<Post>} post Post to archive or delete.
+   * @summary Crupdate comment of the identified post by id
+   * @param {string} pid
+   * @param {string} cid
+   * @param {Comment} comment The crupdated comments.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof CommentsApi
    */
-  public crupdateComment(
-    postId: string,
-    post: Array<Post>,
+  public crupdateCommentById(
+    pid: string,
+    cid: string,
+    comment: Comment,
     options?: AxiosRequestConfig
   ) {
     return CommentsApiFp(this.configuration)
-      .crupdateComment(postId, post, options)
+      .crupdateCommentById(pid, cid, comment, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Delete comment by identifier.
+   * @param {string} pid
+   * @param {string} cid
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof CommentsApi
+   */
+  public deleteCommentById(
+    pid: string,
+    cid: string,
+    options?: AxiosRequestConfig
+  ) {
+    return CommentsApiFp(this.configuration)
+      .deleteCommentById(pid, cid, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *
    * @summary Get comment by identifier.
-   * @param {string} postId
-   * @param {string} id
+   * @param {string} pid
+   * @param {string} cid
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof CommentsApi
    */
   public getCommentById(
-    postId: string,
-    id: string,
+    pid: string,
+    cid: string,
     options?: AxiosRequestConfig
   ) {
     return CommentsApiFp(this.configuration)
-      .getCommentById(postId, id, options)
+      .getCommentById(pid, cid, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *
-   * @summary Get comments of identified post.
+   * @summary Get the identified post comments.
    * @param {number} page
    * @param {number} pageSize
    * @param {string} id
@@ -1125,14 +1401,14 @@ export class CommentsApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof CommentsApi
    */
-  public getComments(
+  public getCommentsByPostId(
     page: number,
     pageSize: number,
     id: string,
     options?: AxiosRequestConfig
   ) {
     return CommentsApiFp(this.configuration)
-      .getComments(page, pageSize, id, options)
+      .getCommentsByPostId(page, pageSize, id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -1146,14 +1422,14 @@ export class CommentsApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof CommentsApi
    */
-  public reactToComment(
+  public reactToCommentByid(
     id: string,
     commentId: string,
     reactionType: ReactionType,
     options?: AxiosRequestConfig
   ) {
     return CommentsApiFp(this.configuration)
-      .reactToComment(id, commentId, reactionType, options)
+      .reactToCommentByid(id, commentId, reactionType, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -1218,28 +1494,28 @@ export const FollowingApiAxiosParamCreator = function (
     },
     /**
      *
-     * @summary Followers of identified user.
+     * @summary Get the users that the identified user follows
      * @param {string} id
      * @param {number} page
      * @param {number} pageSize
-     * @param {string} [followerName] Filter follower by first name or lastname.
+     * @param {string} [name] Filters follower by first name or lastname.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getUserFollowers: async (
+    getFollowedByUserId: async (
       id: string,
       page: number,
       pageSize: number,
-      followerName?: string,
+      name?: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
-      assertParamExists("getUserFollowers", "id", id);
+      assertParamExists("getFollowedByUserId", "id", id);
       // verify required parameter 'page' is not null or undefined
-      assertParamExists("getUserFollowers", "page", page);
+      assertParamExists("getFollowedByUserId", "page", page);
       // verify required parameter 'pageSize' is not null or undefined
-      assertParamExists("getUserFollowers", "pageSize", pageSize);
-      const localVarPath = `/users/{id}/followers`.replace(
+      assertParamExists("getFollowedByUserId", "pageSize", pageSize);
+      const localVarPath = `/users/{id}/follows`.replace(
         `{${"id"}}`,
         encodeURIComponent(String(id))
       );
@@ -1270,8 +1546,8 @@ export const FollowingApiAxiosParamCreator = function (
         localVarQueryParameter["page_size"] = pageSize;
       }
 
-      if (followerName !== undefined) {
-        localVarQueryParameter["follower_name"] = followerName;
+      if (name !== undefined) {
+        localVarQueryParameter["name"] = name;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -1290,7 +1566,72 @@ export const FollowingApiAxiosParamCreator = function (
     },
     /**
      *
-     * @summary Follow user by identifier.
+     * @summary Get self followers
+     * @param {number} page
+     * @param {number} pageSize
+     * @param {string} [name] Filters follower by first name or lastname or username
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSelfFollowers: async (
+      page: number,
+      pageSize: number,
+      name?: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'page' is not null or undefined
+      assertParamExists("getSelfFollowers", "page", page);
+      // verify required parameter 'pageSize' is not null or undefined
+      assertParamExists("getSelfFollowers", "pageSize", pageSize);
+      const localVarPath = `/users/followers`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "GET",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication BearerAuth required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      if (page !== undefined) {
+        localVarQueryParameter["page"] = page;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter["page_size"] = pageSize;
+      }
+
+      if (name !== undefined) {
+        localVarQueryParameter["name"] = name;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Unfollow user by identifier.
      * @param {string} userId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1375,29 +1716,29 @@ export const FollowingApiFp = function (configuration?: Configuration) {
     },
     /**
      *
-     * @summary Followers of identified user.
+     * @summary Get the users that the identified user follows
      * @param {string} id
      * @param {number} page
      * @param {number} pageSize
-     * @param {string} [followerName] Filter follower by first name or lastname.
+     * @param {string} [name] Filters follower by first name or lastname.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async getUserFollowers(
+    async getFollowedByUserId(
       id: string,
       page: number,
       pageSize: number,
-      followerName?: string,
+      name?: string,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<User>>
     > {
       const localVarAxiosArgs =
-        await localVarAxiosParamCreator.getUserFollowers(
+        await localVarAxiosParamCreator.getFollowedByUserId(
           id,
           page,
           pageSize,
-          followerName,
+          name,
           options
         );
       return createRequestFunction(
@@ -1409,7 +1750,38 @@ export const FollowingApiFp = function (configuration?: Configuration) {
     },
     /**
      *
-     * @summary Follow user by identifier.
+     * @summary Get self followers
+     * @param {number} page
+     * @param {number} pageSize
+     * @param {string} [name] Filters follower by first name or lastname or username
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getSelfFollowers(
+      page: number,
+      pageSize: number,
+      name?: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<User>>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getSelfFollowers(
+          page,
+          pageSize,
+          name,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     *
+     * @summary Unfollow user by identifier.
      * @param {string} userId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1457,28 +1829,47 @@ export const FollowingApiFactory = function (
     },
     /**
      *
-     * @summary Followers of identified user.
+     * @summary Get the users that the identified user follows
      * @param {string} id
      * @param {number} page
      * @param {number} pageSize
-     * @param {string} [followerName] Filter follower by first name or lastname.
+     * @param {string} [name] Filters follower by first name or lastname.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getUserFollowers(
+    getFollowedByUserId(
       id: string,
       page: number,
       pageSize: number,
-      followerName?: string,
+      name?: string,
       options?: any
     ): AxiosPromise<Array<User>> {
       return localVarFp
-        .getUserFollowers(id, page, pageSize, followerName, options)
+        .getFollowedByUserId(id, page, pageSize, name, options)
         .then((request) => request(axios, basePath));
     },
     /**
      *
-     * @summary Follow user by identifier.
+     * @summary Get self followers
+     * @param {number} page
+     * @param {number} pageSize
+     * @param {string} [name] Filters follower by first name or lastname or username
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSelfFollowers(
+      page: number,
+      pageSize: number,
+      name?: string,
+      options?: any
+    ): AxiosPromise<Array<User>> {
+      return localVarFp
+        .getSelfFollowers(page, pageSize, name, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary Unfollow user by identifier.
      * @param {string} userId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1514,30 +1905,51 @@ export class FollowingApi extends BaseAPI {
 
   /**
    *
-   * @summary Followers of identified user.
+   * @summary Get the users that the identified user follows
    * @param {string} id
    * @param {number} page
    * @param {number} pageSize
-   * @param {string} [followerName] Filter follower by first name or lastname.
+   * @param {string} [name] Filters follower by first name or lastname.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FollowingApi
    */
-  public getUserFollowers(
+  public getFollowedByUserId(
     id: string,
     page: number,
     pageSize: number,
-    followerName?: string,
+    name?: string,
     options?: AxiosRequestConfig
   ) {
     return FollowingApiFp(this.configuration)
-      .getUserFollowers(id, page, pageSize, followerName, options)
+      .getFollowedByUserId(id, page, pageSize, name, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *
-   * @summary Follow user by identifier.
+   * @summary Get self followers
+   * @param {number} page
+   * @param {number} pageSize
+   * @param {string} [name] Filters follower by first name or lastname or username
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof FollowingApi
+   */
+  public getSelfFollowers(
+    page: number,
+    pageSize: number,
+    name?: string,
+    options?: AxiosRequestConfig
+  ) {
+    return FollowingApiFp(this.configuration)
+      .getSelfFollowers(page, pageSize, name, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Unfollow user by identifier.
    * @param {string} userId
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -1687,9 +2099,9 @@ export const PostingApiAxiosParamCreator = function (
   return {
     /**
      *
-     * @summary Create or Update post by identifier.
+     * @summary Crupdate post by identifier.
      * @param {string} id
-     * @param {Post} post Post to update
+     * @param {Post} post Post to crupdate
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1748,21 +2160,17 @@ export const PostingApiAxiosParamCreator = function (
     },
     /**
      *
-     * @summary Delete or archive a post.
+     * @summary Delete post by identifier.
      * @param {string} id
-     * @param {Post} post Post to archive or delete.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteArchivePost: async (
+    deletePostById: async (
       id: string,
-      post: Post,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
-      assertParamExists("deleteArchivePost", "id", id);
-      // verify required parameter 'post' is not null or undefined
-      assertParamExists("deleteArchivePost", "post", post);
+      assertParamExists("deletePostById", "id", id);
       const localVarPath = `/posts/{id}`.replace(
         `{${"id"}}`,
         encodeURIComponent(String(id))
@@ -1786,8 +2194,6 @@ export const PostingApiAxiosParamCreator = function (
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
-      localVarHeaderParameter["Content-Type"] = "application/json";
-
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -1796,11 +2202,6 @@ export const PostingApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        post,
-        localVarRequestOptions,
-        configuration
-      );
 
       return {
         url: toPathString(localVarUrlObj),
@@ -1862,7 +2263,7 @@ export const PostingApiAxiosParamCreator = function (
      * @summary Get all posts.
      * @param {number} page
      * @param {number} pageSize
-     * @param {string} [categories] Filter post by list of category label
+     * @param {string} [categories] Filters by coma-separated categories.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1992,9 +2393,9 @@ export const PostingApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
-     * @summary Create or Update post by identifier.
+     * @summary Crupdate post by identifier.
      * @param {string} id
-     * @param {Post} post Post to update
+     * @param {Post} post Post to crupdate
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2016,21 +2417,21 @@ export const PostingApiFp = function (configuration?: Configuration) {
     },
     /**
      *
-     * @summary Delete or archive a post.
+     * @summary Delete post by identifier.
      * @param {string} id
-     * @param {Post} post Post to archive or delete.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async deleteArchivePost(
+    async deletePostById(
       id: string,
-      post: Post,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Post>
     > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.deleteArchivePost(id, post, options);
+      const localVarAxiosArgs = await localVarAxiosParamCreator.deletePostById(
+        id,
+        options
+      );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -2067,7 +2468,7 @@ export const PostingApiFp = function (configuration?: Configuration) {
      * @summary Get all posts.
      * @param {number} page
      * @param {number} pageSize
-     * @param {string} [categories] Filter post by list of category label
+     * @param {string} [categories] Filters by coma-separated categories.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2135,9 +2536,9 @@ export const PostingApiFactory = function (
   return {
     /**
      *
-     * @summary Create or Update post by identifier.
+     * @summary Crupdate post by identifier.
      * @param {string} id
-     * @param {Post} post Post to update
+     * @param {Post} post Post to crupdate
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2152,19 +2553,14 @@ export const PostingApiFactory = function (
     },
     /**
      *
-     * @summary Delete or archive a post.
+     * @summary Delete post by identifier.
      * @param {string} id
-     * @param {Post} post Post to archive or delete.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteArchivePost(
-      id: string,
-      post: Post,
-      options?: any
-    ): AxiosPromise<Post> {
+    deletePostById(id: string, options?: any): AxiosPromise<Post> {
       return localVarFp
-        .deleteArchivePost(id, post, options)
+        .deletePostById(id, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -2184,7 +2580,7 @@ export const PostingApiFactory = function (
      * @summary Get all posts.
      * @param {number} page
      * @param {number} pageSize
-     * @param {string} [categories] Filter post by list of category label
+     * @param {string} [categories] Filters by coma-separated categories.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2227,9 +2623,9 @@ export const PostingApiFactory = function (
 export class PostingApi extends BaseAPI {
   /**
    *
-   * @summary Create or Update post by identifier.
+   * @summary Crupdate post by identifier.
    * @param {string} id
-   * @param {Post} post Post to update
+   * @param {Post} post Post to crupdate
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PostingApi
@@ -2246,20 +2642,15 @@ export class PostingApi extends BaseAPI {
 
   /**
    *
-   * @summary Delete or archive a post.
+   * @summary Delete post by identifier.
    * @param {string} id
-   * @param {Post} post Post to archive or delete.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PostingApi
    */
-  public deleteArchivePost(
-    id: string,
-    post: Post,
-    options?: AxiosRequestConfig
-  ) {
+  public deletePostById(id: string, options?: AxiosRequestConfig) {
     return PostingApiFp(this.configuration)
-      .deleteArchivePost(id, post, options)
+      .deletePostById(id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -2282,7 +2673,7 @@ export class PostingApi extends BaseAPI {
    * @summary Get all posts.
    * @param {number} page
    * @param {number} pageSize
-   * @param {string} [categories] Filter post by list of category label
+   * @param {string} [categories] Filters by coma-separated categories.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PostingApi
@@ -2329,16 +2720,20 @@ export const SecurityApiAxiosParamCreator = function (
     /**
      *
      * @summary Login user.
-     * @param {LoginInUser} loginInUser Login payload.
+     * @param {AuthenticationPayload} authenticationPayload Login payload. set \&#39;user_id\&#39; to null when authenticating with email and password
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     signIn: async (
-      loginInUser: LoginInUser,
+      authenticationPayload: AuthenticationPayload,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
-      // verify required parameter 'loginInUser' is not null or undefined
-      assertParamExists("signIn", "loginInUser", loginInUser);
+      // verify required parameter 'authenticationPayload' is not null or undefined
+      assertParamExists(
+        "signIn",
+        "authenticationPayload",
+        authenticationPayload
+      );
       const localVarPath = `/signin`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2370,7 +2765,7 @@ export const SecurityApiAxiosParamCreator = function (
         ...options.headers,
       };
       localVarRequestOptions.data = serializeDataIfNeeded(
-        loginInUser,
+        authenticationPayload,
         localVarRequestOptions,
         configuration
       );
@@ -2436,7 +2831,7 @@ export const SecurityApiAxiosParamCreator = function (
     },
     /**
      *
-     * @summary Who am I? Tells you who you are.
+     * @summary Tells you who you are.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2488,18 +2883,18 @@ export const SecurityApiFp = function (configuration?: Configuration) {
     /**
      *
      * @summary Login user.
-     * @param {LoginInUser} loginInUser Login payload.
+     * @param {AuthenticationPayload} authenticationPayload Login payload. set \&#39;user_id\&#39; to null when authenticating with email and password
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async signIn(
-      loginInUser: LoginInUser,
+      authenticationPayload: AuthenticationPayload,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Whoami>
     > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.signIn(
-        loginInUser,
+        authenticationPayload,
         options
       );
       return createRequestFunction(
@@ -2535,7 +2930,7 @@ export const SecurityApiFp = function (configuration?: Configuration) {
     },
     /**
      *
-     * @summary Who am I? Tells you who you are.
+     * @summary Tells you who you are.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2569,13 +2964,16 @@ export const SecurityApiFactory = function (
     /**
      *
      * @summary Login user.
-     * @param {LoginInUser} loginInUser Login payload.
+     * @param {AuthenticationPayload} authenticationPayload Login payload. set \&#39;user_id\&#39; to null when authenticating with email and password
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    signIn(loginInUser: LoginInUser, options?: any): AxiosPromise<Whoami> {
+    signIn(
+      authenticationPayload: AuthenticationPayload,
+      options?: any
+    ): AxiosPromise<Whoami> {
       return localVarFp
-        .signIn(loginInUser, options)
+        .signIn(authenticationPayload, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -2592,7 +2990,7 @@ export const SecurityApiFactory = function (
     },
     /**
      *
-     * @summary Who am I? Tells you who you are.
+     * @summary Tells you who you are.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2614,14 +3012,17 @@ export class SecurityApi extends BaseAPI {
   /**
    *
    * @summary Login user.
-   * @param {LoginInUser} loginInUser Login payload.
+   * @param {AuthenticationPayload} authenticationPayload Login payload. set \&#39;user_id\&#39; to null when authenticating with email and password
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SecurityApi
    */
-  public signIn(loginInUser: LoginInUser, options?: AxiosRequestConfig) {
+  public signIn(
+    authenticationPayload: AuthenticationPayload,
+    options?: AxiosRequestConfig
+  ) {
     return SecurityApiFp(this.configuration)
-      .signIn(loginInUser, options)
+      .signIn(authenticationPayload, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -2641,7 +3042,7 @@ export class SecurityApi extends BaseAPI {
 
   /**
    *
-   * @summary Who am I? Tells you who you are.
+   * @summary Tells you who you are.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SecurityApi
@@ -2661,6 +3062,67 @@ export const UserApiAxiosParamCreator = function (
   configuration?: Configuration
 ) {
   return {
+    /**
+     *
+     * @summary Crupdate user by identifier.
+     * @param {string} id
+     * @param {User} user User to crupdate.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    crupdateUserById: async (
+      id: string,
+      user: User,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists("crupdateUserById", "id", id);
+      // verify required parameter 'user' is not null or undefined
+      assertParamExists("crupdateUserById", "user", user);
+      const localVarPath = `/users/{id}`.replace(
+        `{${"id"}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "PUT",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication BearerAuth required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter["Content-Type"] = "application/json";
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        user,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
     /**
      *
      * @summary Get user by identifier.
@@ -2713,17 +3175,17 @@ export const UserApiAxiosParamCreator = function (
     },
     /**
      *
-     * @summary Get all users with criteria.
+     * @summary Get all users.
      * @param {number} page
      * @param {number} pageSize
-     * @param {string} [userName] Filter user by first name, lastname or username.
+     * @param {string} [name] Filter user by first name or lastname or username.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getUsers: async (
       page: number,
       pageSize: number,
-      userName?: string,
+      name?: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'page' is not null or undefined
@@ -2758,8 +3220,8 @@ export const UserApiAxiosParamCreator = function (
         localVarQueryParameter["page_size"] = pageSize;
       }
 
-      if (userName !== undefined) {
-        localVarQueryParameter["user_name"] = userName;
+      if (name !== undefined) {
+        localVarQueryParameter["name"] = name;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -2770,67 +3232,6 @@ export const UserApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     *
-     * @summary Update user by identifier.
-     * @param {string} id
-     * @param {User} user User to update.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    updateUserById: async (
-      id: string,
-      user: User,
-      options: AxiosRequestConfig = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists("updateUserById", "id", id);
-      // verify required parameter 'user' is not null or undefined
-      assertParamExists("updateUserById", "user", user);
-      const localVarPath = `/users/{id}`.replace(
-        `{${"id"}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
-
-      const localVarRequestOptions = {
-        method: "PUT",
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      // authentication BearerAuth required
-      // http bearer authentication required
-      await setBearerAuthToObject(localVarHeaderParameter, configuration);
-
-      localVarHeaderParameter["Content-Type"] = "application/json";
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        user,
-        localVarRequestOptions,
-        configuration
-      );
 
       return {
         url: toPathString(localVarUrlObj),
@@ -2847,6 +3248,30 @@ export const UserApiAxiosParamCreator = function (
 export const UserApiFp = function (configuration?: Configuration) {
   const localVarAxiosParamCreator = UserApiAxiosParamCreator(configuration);
   return {
+    /**
+     *
+     * @summary Crupdate user by identifier.
+     * @param {string} id
+     * @param {User} user User to crupdate.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async crupdateUserById(
+      id: string,
+      user: User,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.crupdateUserById(id, user, options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
     /**
      *
      * @summary Get user by identifier.
@@ -2873,17 +3298,17 @@ export const UserApiFp = function (configuration?: Configuration) {
     },
     /**
      *
-     * @summary Get all users with criteria.
+     * @summary Get all users.
      * @param {number} page
      * @param {number} pageSize
-     * @param {string} [userName] Filter user by first name, lastname or username.
+     * @param {string} [name] Filter user by first name or lastname or username.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getUsers(
       page: number,
       pageSize: number,
-      userName?: string,
+      name?: string,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<User>>
@@ -2891,34 +3316,7 @@ export const UserApiFp = function (configuration?: Configuration) {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getUsers(
         page,
         pageSize,
-        userName,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     *
-     * @summary Update user by identifier.
-     * @param {string} id
-     * @param {User} user User to update.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async updateUserById(
-      id: string,
-      user: User,
-      options?: AxiosRequestConfig
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.updateUserById(
-        id,
-        user,
+        name,
         options
       );
       return createRequestFunction(
@@ -2944,6 +3342,23 @@ export const UserApiFactory = function (
   return {
     /**
      *
+     * @summary Crupdate user by identifier.
+     * @param {string} id
+     * @param {User} user User to crupdate.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    crupdateUserById(
+      id: string,
+      user: User,
+      options?: any
+    ): AxiosPromise<User> {
+      return localVarFp
+        .crupdateUserById(id, user, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary Get user by identifier.
      * @param {string} id
      * @param {*} [options] Override http request option.
@@ -2956,34 +3371,21 @@ export const UserApiFactory = function (
     },
     /**
      *
-     * @summary Get all users with criteria.
+     * @summary Get all users.
      * @param {number} page
      * @param {number} pageSize
-     * @param {string} [userName] Filter user by first name, lastname or username.
+     * @param {string} [name] Filter user by first name or lastname or username.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getUsers(
       page: number,
       pageSize: number,
-      userName?: string,
+      name?: string,
       options?: any
     ): AxiosPromise<Array<User>> {
       return localVarFp
-        .getUsers(page, pageSize, userName, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     *
-     * @summary Update user by identifier.
-     * @param {string} id
-     * @param {User} user User to update.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    updateUserById(id: string, user: User, options?: any): AxiosPromise<User> {
-      return localVarFp
-        .updateUserById(id, user, options)
+        .getUsers(page, pageSize, name, options)
         .then((request) => request(axios, basePath));
     },
   };
@@ -2996,6 +3398,25 @@ export const UserApiFactory = function (
  * @extends {BaseAPI}
  */
 export class UserApi extends BaseAPI {
+  /**
+   *
+   * @summary Crupdate user by identifier.
+   * @param {string} id
+   * @param {User} user User to crupdate.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof UserApi
+   */
+  public crupdateUserById(
+    id: string,
+    user: User,
+    options?: AxiosRequestConfig
+  ) {
+    return UserApiFp(this.configuration)
+      .crupdateUserById(id, user, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
   /**
    *
    * @summary Get user by identifier.
@@ -3012,10 +3433,10 @@ export class UserApi extends BaseAPI {
 
   /**
    *
-   * @summary Get all users with criteria.
+   * @summary Get all users.
    * @param {number} page
    * @param {number} pageSize
-   * @param {string} [userName] Filter user by first name, lastname or username.
+   * @param {string} [name] Filter user by first name or lastname or username.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof UserApi
@@ -3023,26 +3444,11 @@ export class UserApi extends BaseAPI {
   public getUsers(
     page: number,
     pageSize: number,
-    userName?: string,
+    name?: string,
     options?: AxiosRequestConfig
   ) {
     return UserApiFp(this.configuration)
-      .getUsers(page, pageSize, userName, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
-
-  /**
-   *
-   * @summary Update user by identifier.
-   * @param {string} id
-   * @param {User} user User to update.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof UserApi
-   */
-  public updateUserById(id: string, user: User, options?: AxiosRequestConfig) {
-    return UserApiFp(this.configuration)
-      .updateUserById(id, user, options)
+      .getUsers(page, pageSize, name, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
