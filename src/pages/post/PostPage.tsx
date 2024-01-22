@@ -22,7 +22,7 @@ import {
 import {users} from "./data/user";
 import {posts} from "./data/posts";
 
-import banner from "@/assets/daisy_fields.jpg";
+import bannerImage from "@/assets/daisy_fields.jpg";
 import blankUserProfile from "@/assets/noun-user-picture.svg";
 
 // TODO: move else where, e.g: layout dir
@@ -120,7 +120,7 @@ export const PostPage: FC = () => {
         <div className="col-span-1 h-[18.75rem]"></div>
         <div className="col-span-6 grid grid-cols-8 gap-5">
           <div className="col-span-8 h-[35rem]">
-            <img src={banner} className="h-full w-full object-cover" />
+            <img src={bannerImage} className="h-full w-full object-cover" />
           </div>
           <div className="col-span-2 p-4">
             <div className="mx-4 flex flex-col justify-center">
