@@ -3,74 +3,15 @@ import {Link} from "react-router-dom";
 
 import {Icon} from "@iconify/react";
 import {Badge} from "@/components/shadcn-ui/badge";
-import {Button} from "@/components/shadcn-ui/button";
-import {calculateReadDuration} from "@/features/post/utils";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/shadcn-ui/avatar";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from "@/components/shadcn-ui/navigation-menu";
 
+import {NavBar} from "../../layout/NavBar";
+import {calculateReadDuration} from "@/features/post/utils";
 // TODO: replace static data with cypress tests
 import {users} from "./data/user";
 import {posts} from "./data/posts";
 
 import bannerImage from "@/assets/daisy_fields.jpg";
 import blankUserProfile from "@/assets/noun-user-picture.svg";
-
-// TODO: move else where, e.g: layout dir
-const NavBar: FC = () => {
-  return (
-    <div className="fixed grid w-screen grid-cols-10 gap-3 border-b border-black bg-white px-10 py-5">
-      <div className="logo w-30 h-15 col-span-1">
-        <Link to="/" className="font-logo text-2xl font-bold">
-          BLOGIFY
-        </Link>
-      </div>
-      <div className="col-span-8 flex justify-center">
-        <NavigationMenu>
-          <NavigationMenuList className="flex flex-col flex-wrap md:flex-row">
-            <NavigationMenuItem className="mx-4 w-40">
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Home
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem className="mx-4 w-40">
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                About
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem className="mx-4 w-40">
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Profile
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-      </div>
-      <div className="col-span-1 flex justify-evenly align-middle">
-        <Link to="">
-          <Avatar>
-            <AvatarImage src="random_link" />
-            <AvatarFallback>
-              <Icon icon="material-symbols-light:face-6" className="text-2xl" />
-            </AvatarFallback>
-          </Avatar>
-        </Link>
-        <Button className="flex justify-evenly align-middle">
-          <Icon icon="material-symbols-light:login" className="text-2xl" />
-        </Button>
-      </div>
-    </div>
-  );
-};
 
 export const PostPage: FC = () => {
   // TODO: implement providers
@@ -84,17 +25,23 @@ export const PostPage: FC = () => {
   return (
     <div className=" overflow-hidden bg-white">
       <NavBar />
-      <div className="mb-4 mt-40 flex w-screen justify-center p-11 md:mt-20">
+      <div
+        data-testid="post-title"
+        className="mb-4 mt-40 flex w-screen justify-center p-11 md:mt-20"
+      >
         <p className="font-optical-sizing-auto normal font-title text-6xl font-bold">
           {currentPost?.title}
         </p>
       </div>
       <div className="flex w-screen justify-center">
-        <div className="grid w-[31.25rem] grid-cols-3">
+        <div
+          data-testid="post-details"
+          className="grid w-[31.25rem] grid-cols-3"
+        >
           <div className="flex items-center justify-center">
             <Icon icon="material-symbols-light:face-6" className="text-2xl" />
             <span className="mx-1">
-              by <strong>{postAuthor.first_name}</strong>
+              by <strong>{postAuthor?.first_name || "No user"}</strong>
             </span>
           </div>
           <div className="flex items-center justify-center">
@@ -102,7 +49,10 @@ export const PostPage: FC = () => {
               icon="material-symbols-light:nest-clock-farsight-analog-outline"
               className="text-2xl"
             />
-            <span className="mx-1">{`${calculateReadDuration(currentPost?.content).minutes} min read`}</span>
+            {/* TODO: relative datetime (like: 1 week ago) for later */}
+            <span className="mx-1">
+              {calculateReadDuration(currentPost?.content).minutes} min read
+            </span>
           </div>
           <div className="flex items-center justify-center">
             <Icon
@@ -119,11 +69,14 @@ export const PostPage: FC = () => {
       <div className="my-5 grid grid-cols-8">
         <div className="col-span-1 h-[18.75rem]"></div>
         <div className="col-span-6 grid grid-cols-8 gap-5">
-          <div className="col-span-8 h-[35rem]">
+          <div data-testid="post-banner" className="col-span-8 h-[35rem]">
             <img src={bannerImage} className="h-full w-full object-cover" />
           </div>
-          <div className="col-span-2 p-4">
-            <div className="mx-4 flex flex-col justify-center">
+          <div className="col-span-2 border-r border-slate-200 p-4">
+            <div
+              data-testid="content-menu"
+              className="mx-4 flex flex-col justify-center"
+            >
               <p className="mb-5 text-left font-title text-2xl">Menu</p>
               <ul className="ml-1 text-left">
                 <li>menu menu menu menu</li>
@@ -149,9 +102,9 @@ export const PostPage: FC = () => {
               </ul>
             </div>
           </div>
-          <div className="col-span-6 p-4">
+          <div data-testid="content" className="col-span-6 p-4">
             <div className="mx-10">{currentPost?.content}</div>
-            <div className="mx-10 flex w-full py-10">
+            <div data-testid="tags" className="mx-10 flex w-full py-10">
               <span className="mr-2">Tags : </span>
               <div className="flex justify-evenly">
                 <Badge className="mx-1">Lorem</Badge>
@@ -163,10 +116,13 @@ export const PostPage: FC = () => {
         </div>
         <div className="col-span-1 h-[18.75rem]"></div>
       </div>
-      <div className="grid grid-cols-8 bg-slate-50 ">
+      <div data-testid="user-details" className="grid grid-cols-8 bg-slate-50 ">
         <div className="col-span-1 h-[18.75rem]"></div>
         <div className="col-span-6 grid h-[18.75rem] grid-cols-8">
-          <div className=" col-span-2 flex justify-center">
+          <div
+            data-testid="user-profile-picture"
+            className=" col-span-2 flex justify-center"
+          >
             <img
               src={blankUserProfile}
               className="m-auto h-[12.5rem] w-[12.5rem] rounded-md bg-white object-cover"
