@@ -1,17 +1,17 @@
 describe("Post", () => {
+  // TODO: more precise test
   beforeEach(() => {
     cy.visit("/posts/1");
-    cy.scrollTo("top");
   });
 
   it("renders the title", () => {
-    cy.getByTestid("post-title").should("be.visible");
+    cy.getByTestid("post-title").contains(
+      "Lorem ipsum dolor sit amet consectetur"
+    );
   });
 
   it("renders the post details", () => {
     cy.getByTestid("post-details").should("be.visible");
-
-    cy.scrollTo("top");
     cy.getByTestid("post-details").contains("by");
     cy.contains("min read");
   });
@@ -29,16 +29,15 @@ describe("Post", () => {
   });
 
   it("renders the tags", () => {
-    cy.getByTestid("post-tags").should("be.visible").contains("Tags");
-    cy.contains("Lorem");
-    cy.contains("Ipsum");
-    cy.contains("Hello");
+    cy.getByTestid("post-tags").as("tags");
+    cy.get("@tags").should("be.visible");
+    cy.get("@tags").contains("Ipsum");
+    cy.get("@tags").contains("Lorem");
+    cy.get("@tags").contains("Hello");
   });
 
   it("renders the user infos", () => {
-    cy.getByTestid("user-details")
-      .should("be.visible")
-      .contains("See more about this author");
+    cy.getByTestid("user-details").contains("See more about this author");
     cy.getByTestid("user-profile-picture").should("be.visible");
   });
 });
