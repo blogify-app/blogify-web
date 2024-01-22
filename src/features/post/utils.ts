@@ -1,5 +1,5 @@
 // theory : https://stackoverflow.com/questions/4216752/anyone-having-any-leads-on-a-reading-time-algorithm
-export const calculateReadTime = (text: string) => {
+export const calculateReadDuration = (text = "") => {
   // Get the total word count
   const wordCount = text.split(" ").length;
 

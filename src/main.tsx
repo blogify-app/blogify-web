@@ -1,8 +1,7 @@
 import React from "react";
-
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 
-import {Post} from "@/pages/post";
+import {PostPage} from "@/pages/post";
 import ReactDOM from "react-dom/client";
 import {HomePage} from "@/pages/home";
 import {LoginPage} from "@/pages/auth";
@@ -40,7 +39,7 @@ const ROUTER = createBrowserRouter([
   },
   {
     path: "/posts/:id",
-    element: <Post />,
+    element: <PostPage />,
   },
 ]);
 

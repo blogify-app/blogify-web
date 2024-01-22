@@ -1,11 +1,10 @@
 import {FC} from "react";
-
 import {Link} from "react-router-dom";
 
 import {Icon} from "@iconify/react";
 import {Badge} from "@/components/shadcn-ui/badge";
 import {Button} from "@/components/shadcn-ui/button";
-import {calculateReadTime} from "@/features/post/utils";
+import {calculateReadDuration} from "@/features/post/utils";
 import {
   Avatar,
   AvatarFallback,
@@ -23,9 +22,10 @@ import {
 import {users} from "./data/user";
 import {posts} from "./data/posts";
 
-import banner_image from "@/assets/daisy_fields.jpg";
+import banner from "@/assets/daisy_fields.jpg";
 import blankUserProfile from "@/assets/noun-user-picture.svg";
 
+// TODO: move else where, e.g: layout dir
 const NavBar: FC = () => {
   return (
     <div className="fixed grid w-screen grid-cols-10 gap-3 border-b border-black bg-white px-10 py-5">
@@ -72,7 +72,7 @@ const NavBar: FC = () => {
   );
 };
 
-export const Post: FC = () => {
+export const PostPage: FC = () => {
   // TODO: implement providers
   // TODO: implement error page if user or post is not found
   const currentPost = posts.filter((post) => post.id === "post_1")[0];
@@ -90,7 +90,7 @@ export const Post: FC = () => {
         </p>
       </div>
       <div className="flex w-screen justify-center">
-        <div className="grid w-[500px] grid-cols-3">
+        <div className="grid w-[31.25rem] grid-cols-3">
           <div className="flex items-center justify-center">
             <Icon icon="material-symbols-light:face-6" className="text-2xl" />
             <span className="mx-1">
@@ -102,7 +102,7 @@ export const Post: FC = () => {
               icon="material-symbols-light:nest-clock-farsight-analog-outline"
               className="text-2xl"
             />
-            <span className="mx-1">{`${calculateReadTime(currentPost?.content || "").minutes} min read`}</span>
+            <span className="mx-1">{`${calculateReadDuration(currentPost?.content).minutes} min read`}</span>
           </div>
           <div className="flex items-center justify-center">
             <Icon
@@ -119,8 +119,8 @@ export const Post: FC = () => {
       <div className="my-5 grid grid-cols-8">
         <div className="col-span-1 h-[18.75rem]"></div>
         <div className="col-span-6 grid grid-cols-8 gap-5">
-          <div className="col-span-8 h-[30rem]">
-            <img src={banner_image} className="h-full w-full object-cover" />
+          <div className="col-span-8 h-[35rem]">
+            <img src={banner} className="h-full w-full object-cover" />
           </div>
           <div className="col-span-2 p-4">
             <div className="mx-4 flex flex-col justify-center">
@@ -169,14 +169,16 @@ export const Post: FC = () => {
           <div className=" col-span-2 flex justify-center">
             <img
               src={blankUserProfile}
-              className="m-auto h-[200px] w-[200px] rounded-md bg-white object-cover"
+              className="m-auto h-[12.5rem] w-[12.5rem] rounded-md bg-white object-cover"
             />
           </div>
           <div className="container col-span-6 flex flex-col justify-center">
             <Link
               to=""
               className="mb-5 text-left font-title text-2xl hover:text-slate-700 focus:text-slate-200 active:font-semibold"
-            >{`${postAuthor?.first_name} ${postAuthor?.last_name}`}</Link>
+            >
+              {postAuthor?.first_name} {postAuthor?.last_name}
+            </Link>
             <p className="overflow-hidden truncate">{postAuthor?.about}</p>
             <Link
               to=""
