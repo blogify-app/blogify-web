@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {FC, useState} from "react";
 import {Button} from "@/components/shadcn-ui/button";
 import {Textarea} from "@/components/shadcn-ui/textarea";
 import {Input} from "@/components/shadcn-ui/input";
@@ -17,12 +17,12 @@ import {post} from "../schema";
 
 interface PostData {
   title: string;
-  category: string;
   content: string;
 }
 
 export const PostCreation: FC = () => {
   const {postId} = useParams();
+  const [category, setCategory] = useState('');
 
   const {
     register,
@@ -37,7 +37,7 @@ export const PostCreation: FC = () => {
     console.log({
       id: postId,
       title: data.title,
-      category: data.category,
+      category: category,
       content: data.content,
     });
   };
@@ -51,7 +51,7 @@ export const PostCreation: FC = () => {
             <h2 className="mx-4 mb-4 flex text-2xl font-semibold">
               Nouveau post
             </h2>
-            <Select {...register("category")} defaultValue="">
+            <Select defaultValue="" onValueChange={(newCategory) => setCategory(newCategory)}>
               <SelectTrigger className="mx-1/4 w-1/4">
                 <SelectValue placeholder="Sélectionner une catégorie" />
               </SelectTrigger>
@@ -65,8 +65,8 @@ export const PostCreation: FC = () => {
                 </SelectGroup>
               </SelectContent>
             </Select>
-            {errors.category && (
-              <p className="text-red-300">{errors.category.message}</p>
+            {category === "" && (
+              <p className="text-red-300">{"Veuillez sélectionner une catégorie"}</p>
             )}
             <Button
               type="submit"
