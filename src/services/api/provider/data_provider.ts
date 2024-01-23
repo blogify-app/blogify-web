@@ -1,26 +1,27 @@
-export interface Filter<R> {
+export interface Query<R = Record<string, string>> {
   page: number;
   pageSize: number;
-  query: R;
+  params: R;
 }
 
 // intentionally type query record as 'any' so it is compatible with any filter
-export const DEFAULT_FILTER: Filter<any> = {
+export const DEFAULT_QUERY: Query<any> = {
   page: 0,
   pageSize: 500,
-  query: {},
+  params: {},
 };
 
 /**
  * Base data provider interface that needs to be implemented by every data providers.
  *
  * @template R - Resource type
- * @template F - Filter record
+ * @template P - Filter record
  */
-export interface DataProvider<R = any, F = Record<string, string>> {
-  getById(id: string): Promise<R>;
-  getMany(filter: Filter<F>): Promise<R[]>;
-  crupdateById(id: string, update: R): Promise<R>;
-  crupdate(payload: R): Promise<R>;
-  crupdateMany(toCrupdate: R[]): Promise<R[]>;
+export interface DataProvider<R = any, P = Record<string, string>> {
+  getById(id: string, query?: Query<P>): Promise<R>;
+  getMany(query: Query<P>): Promise<R[]>;
+  crupdateById(id: string, update: R, query?: Query<P>): Promise<R>;
+  crupdate(payload: R, query?: Query<P>): Promise<R>;
+  crupdateMany(toCrupdate: R[], query?: Query<P>): Promise<R[]>;
+  deleteById(id: string, query?: Query<P>): Promise<R>;
 }

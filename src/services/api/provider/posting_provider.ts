@@ -1,31 +1,35 @@
 import {Post, Reaction, ReactionType} from "@/services/api/gen";
-import {postingApi, DataProvider, DEFAULT_FILTER} from "@/services/api";
+import {postingApi, DataProvider, DEFAULT_QUERY, Query} from "@/services/api";
 
 export interface PostProvider extends DataProvider<Post> {
-  reactToPostById(id: string, type: ReactionType): Promise<Reaction>;
+  reactToPostById(pid: string, type: ReactionType): Promise<Reaction>;
 }
 
 export const PostProvider: PostProvider = {
-  async getById(id: string): Promise<Post> {
-    return (await postingApi().getPostById(id)).data;
+  async getById(pid: string): Promise<Post> {
+    return (await postingApi().getPostById(pid)).data;
   },
 
-  async getMany(filter = DEFAULT_FILTER): Promise<Post[]> {
+  async getMany(query = DEFAULT_QUERY): Promise<Post[]> {
     return (
       await postingApi().getPosts(
-        filter.page,
-        filter.pageSize,
-        filter.query?.categories
+        query.page,
+        query.pageSize,
+        query.params.categories
       )
     ).data;
   },
 
-  async crupdateById(id: string, update: Post): Promise<Post> {
-    return (await postingApi().crupdatePostById(id, update)).data;
+  async crupdateById(pid: string, update: Post): Promise<Post> {
+    return (await postingApi().crupdatePostById(pid, update)).data;
   },
 
-  async reactToPostById(id: string, type: ReactionType) {
-    return (await postingApi().reactToPostById(id, type)).data;
+  async reactToPostById(pid: string, type: ReactionType) {
+    return (await postingApi().reactToPostById(pid, type)).data;
+  },
+
+  async deleteById(pid: string, _query: Query): Promise<Post> {
+    return (await postingApi().deletePostById(pid)).data;
   },
 
   crupdate(_payload: Post): Promise<Post> {

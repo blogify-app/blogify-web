@@ -1,27 +1,54 @@
-import {Comment} from "@/services/api/gen";
-import {commentApi, DataProvider, DEFAULT_FILTER} from "@/services/api";
+import {Comment, Reaction, ReactionType} from "@/services/api/gen";
+import {commentApi, DataProvider, DEFAULT_QUERY, Query} from "@/services/api";
 
-export type CommentProvider = DataProvider<Comment>;
+export interface CommentProvider extends DataProvider<Comment> {
+  reactById(cid: string, query: Query): Promise<Reaction>;
+}
 
 export const CommentProvider: CommentProvider = {
-  getById(_id: string): Promise<Comment> {
-    // TODO(spec): id is defined twice... for no good reason
-    throw new Error("Function not implemented.");
+  async getById(cid: string, query): Promise<Comment> {
+    // TODO: handle optional query
+    return (await commentApi().getCommentById(query?.params?.pid ?? "", cid))
+      .data;
   },
 
-  async getMany(filter = DEFAULT_FILTER): Promise<Array<Comment>> {
+  async getMany(query = DEFAULT_QUERY): Promise<Comment[]> {
     return (
-      await commentApi().getComments(
-        filter.page,
-        filter.pageSize,
-        filter.query.post_id
+      await commentApi().getCommentsByPostId(
+        query.params.pid,
+        query.pageSize,
+        query.page
       )
     ).data;
   },
 
-  crupdateById(_id: string, _user: Comment): Promise<Comment> {
-    // TODO(spec): shouldn't ask for post[]
-    throw new Error("Function not implemented.");
+  async crupdateById(cid: string, update: Comment, query): Promise<Comment> {
+    // TODO: handle optional query
+    return (
+      await commentApi().crupdateCommentById(
+        query?.params?.pid ?? update.post_id!,
+        cid,
+        update
+      )
+    ).data;
+  },
+
+  async reactById(cid: string, query: Query) {
+    return (
+      await commentApi().reactToCommentById(
+        query.params.pid,
+        cid,
+        (query?.params?.type as ReactionType) || ReactionType.Like
+      )
+    ).data;
+  },
+
+  async deleteById(
+    cid: string,
+    query?: Query<Record<string, string>>
+  ): Promise<Comment> {
+    return (await commentApi().deleteCommentById(query?.params?.pid ?? "", cid))
+      .data;
   },
 
   crupdate: function (_payload: Comment): Promise<Comment> {

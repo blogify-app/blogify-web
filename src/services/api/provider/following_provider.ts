@@ -1,31 +1,31 @@
 import {User} from "@/services/api/gen";
-import {
-  followingApi,
-  DataProvider,
-  Filter,
-  DEFAULT_FILTER,
-} from "@/services/api";
+import {followingApi, DataProvider, Query, DEFAULT_QUERY} from "@/services/api";
 
 export interface FollowingProvider extends DataProvider<User> {
   followUserById(uid: string): Promise<User>;
   unfollowUserById(uid: string): Promise<User>;
-  getUserFollowers(
-    uid: string,
-    filter: Filter<{followerName?: string}>
-  ): Promise<User[]>;
+  getFollowedByUser(uid: string, query: Query): Promise<User[]>;
+  getSelfFollowers(query: Query): Promise<User[]>;
 }
 
 export const FollowingProvider: FollowingProvider = {
-  async getUserFollowers(
-    uid: string,
-    filter = DEFAULT_FILTER
-  ): Promise<User[]> {
+  async getSelfFollowers(query = DEFAULT_QUERY): Promise<User[]> {
     return (
-      await followingApi().getUserFollowers(
+      await followingApi().getSelfFollowers(
+        query.page,
+        query.pageSize,
+        query.params.name
+      )
+    ).data;
+  },
+
+  async getFollowedByUser(uid: string, query: Query): Promise<User[]> {
+    return (
+      await followingApi().getFollowedByUserId(
         uid,
-        filter.page,
-        filter.pageSize,
-        filter.query.followerName
+        query.page,
+        query.pageSize,
+        query.params.name
       )
     ).data;
   },
@@ -42,7 +42,14 @@ export const FollowingProvider: FollowingProvider = {
     throw new Error("Function not implemented.");
   },
 
-  getMany(_filter: Filter<Record<string, string>>): Promise<User[]> {
+  getMany(_filter: Query): Promise<User[]> {
+    throw new Error("Function not implemented.");
+  },
+
+  deleteById(
+    _id: string,
+    _query?: Query<Record<string, string>>
+  ): Promise<User> {
     throw new Error("Function not implemented.");
   },
 

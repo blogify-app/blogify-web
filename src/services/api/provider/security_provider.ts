@@ -1,4 +1,9 @@
-import {User, Whoami, SignUp, LoginInUser as SignIn} from "@/services/api/gen";
+import {
+  User,
+  Whoami,
+  SignUp,
+  AuthenticationPayload as SignIn,
+} from "@/services/api/gen";
 import {securityApi} from "@/services/api";
 
 export interface SecurityProvider {

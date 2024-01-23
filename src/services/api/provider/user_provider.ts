@@ -1,25 +1,25 @@
 import {User} from "@/services/api/gen";
-import {userApi, DataProvider, DEFAULT_FILTER} from "@/services/api";
+import {userApi, DataProvider, DEFAULT_QUERY, Query} from "@/services/api";
 
 export type UserProvider = DataProvider<User>;
 
 export const UserProvider: UserProvider = {
-  async getById(id: string): Promise<User> {
-    return (await userApi().getUserById(id)).data;
+  async getById(uid: string): Promise<User> {
+    return (await userApi().getUserById(uid)).data;
   },
 
-  async getMany(filter = DEFAULT_FILTER): Promise<Array<User>> {
+  async getMany(query = DEFAULT_QUERY): Promise<Array<User>> {
     return (
       await userApi().getUsers(
-        filter.page,
-        filter.pageSize,
-        filter.query.username
+        query.page,
+        query.pageSize,
+        query.params.username
       )
     ).data;
   },
 
-  async crupdateById(id: string, user: User): Promise<User> {
-    return (await userApi().updateUserById(id, user)).data;
+  async crupdateById(uid: string, user: User): Promise<User> {
+    return (await userApi().crupdateUserById(uid, user)).data;
   },
 
   crupdate: function (_payload: User): Promise<User> {
@@ -27,6 +27,10 @@ export const UserProvider: UserProvider = {
   },
 
   crupdateMany(_toCrupdate: User[]): Promise<User[]> {
+    throw new Error("Function not implemented.");
+  },
+
+  deleteById(_id: string, _query: Query): Promise<User> {
     throw new Error("Function not implemented.");
   },
 };

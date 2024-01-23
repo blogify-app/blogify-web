@@ -93,7 +93,7 @@ export const AuthProvider = new (class implements AuthProvider {
   private signIn(credential: UserCredential): Promise<Whoami> {
     const {user} = credential;
     return SecurityProvider.signIn({
-      userId: user.uid,
+      provider_id: user.uid,
       email: user.email || undefined,
       // FIXME: Do we really need password
       password: "passwd",
