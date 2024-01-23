@@ -15,7 +15,7 @@ import {
   FormLabel,
 } from "@/components/shadcn-ui/form";
 import {Input} from "@/components/shadcn-ui/input";
-import { Button } from "@/components/shadcn-ui/button";
+import {Button} from "@/components/shadcn-ui/button";
 
 export const Login: FC = () => {
   const store = useAuthStore();
@@ -73,9 +73,7 @@ export const Login: FC = () => {
           >
             <h5 className="text-xl font-medium text-gray-900 dark:text-white">
               Sign in to{" "}
-              <label
-                className="font-dancing-script text-3xl font-bold"
-              >
+              <label className="font-dancing-script text-3xl font-bold">
                 Blogify
               </label>
             </h5>
@@ -83,13 +81,11 @@ export const Login: FC = () => {
               control={form.control}
               name="email"
               render={({field}) => (
-                <FormItem >
-                  <FormLabel>
-                    email
-                  </FormLabel>
+                <FormItem>
+                  <FormLabel>email</FormLabel>
                   <FormControl>
                     <Input
-                    data-testid="email-field"
+                      data-testid="email-field"
                       placeholder="email@gmail.com"
                       {...field}
                       {...form.register("email")}
@@ -103,12 +99,10 @@ export const Login: FC = () => {
               name="password"
               render={({field}) => (
                 <FormItem className="mb-5">
-                  <FormLabel>
-                    password
-                  </FormLabel>
+                  <FormLabel>password</FormLabel>
                   <FormControl>
                     <Input
-                    data-testid="password-field"
+                      data-testid="password-field"
                       type="password"
                       placeholder="******"
                       {...field}
@@ -118,11 +112,7 @@ export const Login: FC = () => {
                 </FormItem>
               )}
             />
-            <Button
-            onClick={onProvider(GoogleAuthProvider)}
-            >
-              Sign-in
-            </Button>
+            <Button onClick={onProvider(GoogleAuthProvider)}>Sign-in</Button>
             <Link
               to="/signup"
               className="me-2 ml-2 inline-flex items-center justify-center rounded border border-blue-400 bg-blue-100 px-2.5 py-0.5 text-sm font-medium text-blue-800 hover:bg-blue-200 dark:bg-gray-700 dark:text-blue-400 rtl:ml-0"
