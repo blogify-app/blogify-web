@@ -8,16 +8,17 @@ export interface CommentProvider extends DataProvider<Comment> {
 export const CommentProvider: CommentProvider = {
   async getById(cid: string, query): Promise<Comment> {
     // TODO: handle optional query
-    return (await commentApi().getCommentById(query?.params?.pid ?? "", cid))
-      .data;
+    return (
+      await commentApi().getCommentById(query?.params?.pid as string, cid)
+    ).data;
   },
 
   async getMany(query = DEFAULT_QUERY): Promise<Comment[]> {
     return (
       await commentApi().getCommentsByPostId(
-        query.params.pid,
-        query.pageSize,
-        query.page
+        query.params.pid as string,
+        query.page,
+        query.pageSize
       )
     ).data;
   },
@@ -38,7 +39,7 @@ export const CommentProvider: CommentProvider = {
       await commentApi().reactToCommentById(
         query.params.pid,
         cid,
-        (query?.params?.type as ReactionType) || ReactionType.Like
+        (query?.params?.type as ReactionType) || ReactionType.LIKE
       )
     ).data;
   },

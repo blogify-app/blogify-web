@@ -13,17 +13,14 @@
  */
 
 import type {Configuration} from "./configuration";
-import type {AxiosPromise, AxiosInstance, RawAxiosRequestConfig} from "axios";
+import type {AxiosPromise, AxiosInstance, AxiosRequestConfig} from "axios";
 import globalAxios from "axios";
 // Some imports not used depending on template conditions
 // @ts-ignore
 import {
   DUMMY_BASE_URL,
   assertParamExists,
-  setApiKeyToObject,
-  setBasicAuthToObject,
   setBearerAuthToObject,
-  setOAuthToObject,
   setSearchParams,
   serializeDataIfNeeded,
   toPathString,
@@ -31,13 +28,7 @@ import {
 } from "./common";
 import type {RequestArgs} from "./base";
 // @ts-ignore
-import {
-  BASE_PATH,
-  COLLECTION_FORMATS,
-  BaseAPI,
-  RequiredError,
-  operationServerMap,
-} from "./base";
+import {BASE_PATH, BaseAPI, operationServerMap} from "./base";
 
 /**
  *
@@ -134,10 +125,10 @@ export interface Comment {
   content?: string;
   /**
    *
-   * @type {string}
+   * @type {Date}
    * @memberof Comment
    */
-  creation_datetime?: string;
+  creation_datetime?: Date;
   /**
    *
    * @type {string}
@@ -165,8 +156,8 @@ export interface Comment {
  */
 
 export const CommentStatus = {
-  Enabled: "ENABLED",
-  Disabled: "DISABLED",
+  ENABLED: "ENABLED",
+  DISABLED: "DISABLED",
 } as const;
 
 export type CommentStatus = (typeof CommentStatus)[keyof typeof CommentStatus];
@@ -266,16 +257,16 @@ export interface Post {
   title?: string;
   /**
    *
-   * @type {string}
+   * @type {Date}
    * @memberof Post
    */
-  creation_datetime?: string;
+  creation_datetime?: Date;
   /**
    *
-   * @type {string}
+   * @type {Date}
    * @memberof Post
    */
-  updated_at?: string;
+  updated_at?: Date;
   /**
    *
    * @type {string}
@@ -309,9 +300,9 @@ export interface Post {
  */
 
 export const PostStatus = {
-  Archived: "ARCHIVED",
-  Draft: "DRAFT",
-  Disabled: "DISABLED",
+  ARCHIVED: "ARCHIVED",
+  DRAFT: "DRAFT",
+  DISABLED: "DISABLED",
 } as const;
 
 export type PostStatus = (typeof PostStatus)[keyof typeof PostStatus];
@@ -336,10 +327,10 @@ export interface Reaction {
   type?: ReactionType;
   /**
    *
-   * @type {string}
+   * @type {Date}
    * @memberof Reaction
    */
-  creation_datetime?: string;
+  creation_datetime?: Date;
   /**
    *
    * @type {string}
@@ -386,8 +377,8 @@ export interface ReactionStat {
  */
 
 export const ReactionType = {
-  Like: "LIKE",
-  Dislike: "DISLIKE",
+  LIKE: "LIKE",
+  DISLIKE: "DISLIKE",
 } as const;
 
 export type ReactionType = (typeof ReactionType)[keyof typeof ReactionType];
@@ -418,8 +409,8 @@ export interface ResourceNotFoundException {
  */
 
 export const Role = {
-  Client: "CLIENT",
-  Manager: "MANAGER",
+  CLIENT: "CLIENT",
+  MANAGER: "MANAGER",
 } as const;
 
 export type Role = (typeof Role)[keyof typeof Role];
@@ -433,7 +424,7 @@ export type Role = (typeof Role)[keyof typeof Role];
 export const Sex = {
   M: "M",
   F: "F",
-  Other: "OTHER",
+  OTHER: "OTHER",
 } as const;
 
 export type Sex = (typeof Sex)[keyof typeof Sex];
@@ -524,10 +515,10 @@ export interface SignUp {
   sex?: Sex;
   /**
    *
-   * @type {string}
+   * @type {Date}
    * @memberof SignUp
    */
-  entrance_datetime?: string;
+  entrance_datetime?: Date;
   /**
    *
    * @type {Array<Category>}
@@ -647,10 +638,10 @@ export interface User {
   sex?: Sex;
   /**
    *
-   * @type {string}
+   * @type {Date}
    * @memberof User
    */
-  entrance_datetime?: string;
+  entrance_datetime?: Date;
   /**
    *
    * @type {Array<Category>}
@@ -672,8 +663,8 @@ export interface User {
  */
 
 export const UserStatus = {
-  Enabled: "ENABLED",
-  Banished: "BANISHED",
+  ENABLED: "ENABLED",
+  BANISHED: "BANISHED",
 } as const;
 
 export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus];
@@ -764,10 +755,10 @@ export interface Whoami {
   sex?: Sex;
   /**
    *
-   * @type {string}
+   * @type {Date}
    * @memberof Whoami
    */
-  entrance_datetime?: string;
+  entrance_datetime?: Date;
   /**
    *
    * @type {Array<Category>}
@@ -803,7 +794,7 @@ export const CommentsApiAxiosParamCreator = function (
       pid: string,
       cid: string,
       comment: Comment,
-      options: RawAxiosRequestConfig = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'pid' is not null or undefined
       assertParamExists("crupdateCommentById", "pid", pid);
@@ -865,7 +856,7 @@ export const CommentsApiAxiosParamCreator = function (
     deleteCommentById: async (
       pid: string,
       cid: string,
-      options: RawAxiosRequestConfig = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'pid' is not null or undefined
       assertParamExists("deleteCommentById", "pid", pid);
@@ -918,7 +909,7 @@ export const CommentsApiAxiosParamCreator = function (
     getCommentById: async (
       pid: string,
       cid: string,
-      options: RawAxiosRequestConfig = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'pid' is not null or undefined
       assertParamExists("getCommentById", "pid", pid);
@@ -973,7 +964,7 @@ export const CommentsApiAxiosParamCreator = function (
       pid: string,
       page: number,
       pageSize: number,
-      options: RawAxiosRequestConfig = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'pid' is not null or undefined
       assertParamExists("getCommentsByPostId", "pid", pid);
@@ -1039,7 +1030,7 @@ export const CommentsApiAxiosParamCreator = function (
       pid: string,
       cid: string,
       type: ReactionType,
-      options: RawAxiosRequestConfig = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'pid' is not null or undefined
       assertParamExists("reactToCommentById", "pid", pid);
@@ -1110,7 +1101,7 @@ export const CommentsApiFp = function (configuration?: Configuration) {
       pid: string,
       cid: string,
       comment: Comment,
-      options?: RawAxiosRequestConfig
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Comment>
     > {
@@ -1143,7 +1134,7 @@ export const CommentsApiFp = function (configuration?: Configuration) {
     async deleteCommentById(
       pid: string,
       cid: string,
-      options?: RawAxiosRequestConfig
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Comment>
     > {
@@ -1171,7 +1162,7 @@ export const CommentsApiFp = function (configuration?: Configuration) {
     async getCommentById(
       pid: string,
       cid: string,
-      options?: RawAxiosRequestConfig
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Comment>
     > {
@@ -1204,7 +1195,7 @@ export const CommentsApiFp = function (configuration?: Configuration) {
       pid: string,
       page: number,
       pageSize: number,
-      options?: RawAxiosRequestConfig
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Comment>>
     > {
@@ -1239,7 +1230,7 @@ export const CommentsApiFp = function (configuration?: Configuration) {
       pid: string,
       cid: string,
       type: ReactionType,
-      options?: RawAxiosRequestConfig
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Reaction>
     > {
@@ -1390,7 +1381,7 @@ export class CommentsApi extends BaseAPI {
     pid: string,
     cid: string,
     comment: Comment,
-    options?: RawAxiosRequestConfig
+    options?: AxiosRequestConfig
   ) {
     return CommentsApiFp(this.configuration)
       .crupdateCommentById(pid, cid, comment, options)
@@ -1409,7 +1400,7 @@ export class CommentsApi extends BaseAPI {
   public deleteCommentById(
     pid: string,
     cid: string,
-    options?: RawAxiosRequestConfig
+    options?: AxiosRequestConfig
   ) {
     return CommentsApiFp(this.configuration)
       .deleteCommentById(pid, cid, options)
@@ -1428,7 +1419,7 @@ export class CommentsApi extends BaseAPI {
   public getCommentById(
     pid: string,
     cid: string,
-    options?: RawAxiosRequestConfig
+    options?: AxiosRequestConfig
   ) {
     return CommentsApiFp(this.configuration)
       .getCommentById(pid, cid, options)
@@ -1449,7 +1440,7 @@ export class CommentsApi extends BaseAPI {
     pid: string,
     page: number,
     pageSize: number,
-    options?: RawAxiosRequestConfig
+    options?: AxiosRequestConfig
   ) {
     return CommentsApiFp(this.configuration)
       .getCommentsByPostId(pid, page, pageSize, options)
@@ -1470,7 +1461,7 @@ export class CommentsApi extends BaseAPI {
     pid: string,
     cid: string,
     type: ReactionType,
-    options?: RawAxiosRequestConfig
+    options?: AxiosRequestConfig
   ) {
     return CommentsApiFp(this.configuration)
       .reactToCommentById(pid, cid, type, options)
@@ -1495,7 +1486,7 @@ export const FollowingApiAxiosParamCreator = function (
      */
     followUserById: async (
       uid: string,
-      options: RawAxiosRequestConfig = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'uid' is not null or undefined
       assertParamExists("followUserById", "uid", uid);
@@ -1551,7 +1542,7 @@ export const FollowingApiAxiosParamCreator = function (
       page: number,
       pageSize: number,
       name?: string,
-      options: RawAxiosRequestConfig = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists("getFollowedByUserId", "id", id);
@@ -1621,7 +1612,7 @@ export const FollowingApiAxiosParamCreator = function (
       page: number,
       pageSize: number,
       name?: string,
-      options: RawAxiosRequestConfig = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'page' is not null or undefined
       assertParamExists("getSelfFollowers", "page", page);
@@ -1682,7 +1673,7 @@ export const FollowingApiAxiosParamCreator = function (
      */
     unfollowUserById: async (
       uid: string,
-      options: RawAxiosRequestConfig = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'uid' is not null or undefined
       assertParamExists("unfollowUserById", "uid", uid);
@@ -1743,7 +1734,7 @@ export const FollowingApiFp = function (configuration?: Configuration) {
      */
     async followUserById(
       uid: string,
-      options?: RawAxiosRequestConfig
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>
     > {
@@ -1777,7 +1768,7 @@ export const FollowingApiFp = function (configuration?: Configuration) {
       page: number,
       pageSize: number,
       name?: string,
-      options?: RawAxiosRequestConfig
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<User>>
     > {
@@ -1813,7 +1804,7 @@ export const FollowingApiFp = function (configuration?: Configuration) {
       page: number,
       pageSize: number,
       name?: string,
-      options?: RawAxiosRequestConfig
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<User>>
     > {
@@ -1844,7 +1835,7 @@ export const FollowingApiFp = function (configuration?: Configuration) {
      */
     async unfollowUserById(
       uid: string,
-      options?: RawAxiosRequestConfig
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>
     > {
@@ -1957,7 +1948,7 @@ export class FollowingApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof FollowingApi
    */
-  public followUserById(uid: string, options?: RawAxiosRequestConfig) {
+  public followUserById(uid: string, options?: AxiosRequestConfig) {
     return FollowingApiFp(this.configuration)
       .followUserById(uid, options)
       .then((request) => request(this.axios, this.basePath));
@@ -1979,7 +1970,7 @@ export class FollowingApi extends BaseAPI {
     page: number,
     pageSize: number,
     name?: string,
-    options?: RawAxiosRequestConfig
+    options?: AxiosRequestConfig
   ) {
     return FollowingApiFp(this.configuration)
       .getFollowedByUserId(id, page, pageSize, name, options)
@@ -2000,7 +1991,7 @@ export class FollowingApi extends BaseAPI {
     page: number,
     pageSize: number,
     name?: string,
-    options?: RawAxiosRequestConfig
+    options?: AxiosRequestConfig
   ) {
     return FollowingApiFp(this.configuration)
       .getSelfFollowers(page, pageSize, name, options)
@@ -2015,7 +2006,7 @@ export class FollowingApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof FollowingApi
    */
-  public unfollowUserById(uid: string, options?: RawAxiosRequestConfig) {
+  public unfollowUserById(uid: string, options?: AxiosRequestConfig) {
     return FollowingApiFp(this.configuration)
       .unfollowUserById(uid, options)
       .then((request) => request(this.axios, this.basePath));
@@ -2036,7 +2027,7 @@ export const HealthApiAxiosParamCreator = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    ping: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+    ping: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
       const localVarPath = `/ping`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2088,7 +2079,7 @@ export const HealthApiFp = function (configuration?: Configuration) {
      * @throws {RequiredError}
      */
     async ping(
-      options?: RawAxiosRequestConfig
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>
     > {
@@ -2146,7 +2137,7 @@ export class HealthApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof HealthApi
    */
-  public ping(options?: RawAxiosRequestConfig) {
+  public ping(options?: AxiosRequestConfig) {
     return HealthApiFp(this.configuration)
       .ping(options)
       .then((request) => request(this.axios, this.basePath));
@@ -2172,7 +2163,7 @@ export const PostingApiAxiosParamCreator = function (
     crupdatePostById: async (
       pid: string,
       post: Post,
-      options: RawAxiosRequestConfig = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'pid' is not null or undefined
       assertParamExists("crupdatePostById", "pid", pid);
@@ -2231,7 +2222,7 @@ export const PostingApiAxiosParamCreator = function (
      */
     deletePostById: async (
       pid: string,
-      options: RawAxiosRequestConfig = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'pid' is not null or undefined
       assertParamExists("deletePostById", "pid", pid);
@@ -2281,7 +2272,7 @@ export const PostingApiAxiosParamCreator = function (
      */
     getPostById: async (
       pid: string,
-      options: RawAxiosRequestConfig = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'pid' is not null or undefined
       assertParamExists("getPostById", "pid", pid);
@@ -2335,7 +2326,7 @@ export const PostingApiAxiosParamCreator = function (
       page: number,
       pageSize: number,
       categories?: string,
-      options: RawAxiosRequestConfig = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'page' is not null or undefined
       assertParamExists("getPosts", "page", page);
@@ -2398,7 +2389,7 @@ export const PostingApiAxiosParamCreator = function (
     reactToPostById: async (
       pid: string,
       type: ReactionType,
-      options: RawAxiosRequestConfig = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'pid' is not null or undefined
       assertParamExists("reactToPostById", "pid", pid);
@@ -2466,7 +2457,7 @@ export const PostingApiFp = function (configuration?: Configuration) {
     async crupdatePostById(
       pid: string,
       post: Post,
-      options?: RawAxiosRequestConfig
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Post>
     > {
@@ -2492,7 +2483,7 @@ export const PostingApiFp = function (configuration?: Configuration) {
      */
     async deletePostById(
       pid: string,
-      options?: RawAxiosRequestConfig
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Post>
     > {
@@ -2520,7 +2511,7 @@ export const PostingApiFp = function (configuration?: Configuration) {
      */
     async getPostById(
       pid: string,
-      options?: RawAxiosRequestConfig
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Post>
     > {
@@ -2552,7 +2543,7 @@ export const PostingApiFp = function (configuration?: Configuration) {
       page: number,
       pageSize: number,
       categories?: string,
-      options?: RawAxiosRequestConfig
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Post>>
     > {
@@ -2584,7 +2575,7 @@ export const PostingApiFp = function (configuration?: Configuration) {
     async reactToPostById(
       pid: string,
       type: ReactionType,
-      options?: RawAxiosRequestConfig
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Reaction>
     > {
@@ -2717,7 +2708,7 @@ export class PostingApi extends BaseAPI {
   public crupdatePostById(
     pid: string,
     post: Post,
-    options?: RawAxiosRequestConfig
+    options?: AxiosRequestConfig
   ) {
     return PostingApiFp(this.configuration)
       .crupdatePostById(pid, post, options)
@@ -2732,7 +2723,7 @@ export class PostingApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof PostingApi
    */
-  public deletePostById(pid: string, options?: RawAxiosRequestConfig) {
+  public deletePostById(pid: string, options?: AxiosRequestConfig) {
     return PostingApiFp(this.configuration)
       .deletePostById(pid, options)
       .then((request) => request(this.axios, this.basePath));
@@ -2746,7 +2737,7 @@ export class PostingApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof PostingApi
    */
-  public getPostById(pid: string, options?: RawAxiosRequestConfig) {
+  public getPostById(pid: string, options?: AxiosRequestConfig) {
     return PostingApiFp(this.configuration)
       .getPostById(pid, options)
       .then((request) => request(this.axios, this.basePath));
@@ -2766,7 +2757,7 @@ export class PostingApi extends BaseAPI {
     page: number,
     pageSize: number,
     categories?: string,
-    options?: RawAxiosRequestConfig
+    options?: AxiosRequestConfig
   ) {
     return PostingApiFp(this.configuration)
       .getPosts(page, pageSize, categories, options)
@@ -2785,7 +2776,7 @@ export class PostingApi extends BaseAPI {
   public reactToPostById(
     pid: string,
     type: ReactionType,
-    options?: RawAxiosRequestConfig
+    options?: AxiosRequestConfig
   ) {
     return PostingApiFp(this.configuration)
       .reactToPostById(pid, type, options)
@@ -2810,7 +2801,7 @@ export const SecurityApiAxiosParamCreator = function (
      */
     signIn: async (
       authenticationPayload: AuthenticationPayload,
-      options: RawAxiosRequestConfig = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'authenticationPayload' is not null or undefined
       assertParamExists(
@@ -2868,7 +2859,7 @@ export const SecurityApiAxiosParamCreator = function (
      */
     signUp: async (
       signUp: SignUp,
-      options: RawAxiosRequestConfig = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'signUp' is not null or undefined
       assertParamExists("signUp", "signUp", signUp);
@@ -2919,9 +2910,7 @@ export const SecurityApiAxiosParamCreator = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    whoami: async (
-      options: RawAxiosRequestConfig = {}
-    ): Promise<RequestArgs> => {
+    whoami: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
       const localVarPath = `/whoami`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2975,7 +2964,7 @@ export const SecurityApiFp = function (configuration?: Configuration) {
      */
     async signIn(
       authenticationPayload: AuthenticationPayload,
-      options?: RawAxiosRequestConfig
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Whoami>
     > {
@@ -3003,7 +2992,7 @@ export const SecurityApiFp = function (configuration?: Configuration) {
      */
     async signUp(
       signUp: SignUp,
-      options?: RawAxiosRequestConfig
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>
     > {
@@ -3029,7 +3018,7 @@ export const SecurityApiFp = function (configuration?: Configuration) {
      * @throws {RequiredError}
      */
     async whoami(
-      options?: RawAxiosRequestConfig
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Whoami>
     > {
@@ -3117,7 +3106,7 @@ export class SecurityApi extends BaseAPI {
    */
   public signIn(
     authenticationPayload: AuthenticationPayload,
-    options?: RawAxiosRequestConfig
+    options?: AxiosRequestConfig
   ) {
     return SecurityApiFp(this.configuration)
       .signIn(authenticationPayload, options)
@@ -3132,7 +3121,7 @@ export class SecurityApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof SecurityApi
    */
-  public signUp(signUp: SignUp, options?: RawAxiosRequestConfig) {
+  public signUp(signUp: SignUp, options?: AxiosRequestConfig) {
     return SecurityApiFp(this.configuration)
       .signUp(signUp, options)
       .then((request) => request(this.axios, this.basePath));
@@ -3145,7 +3134,7 @@ export class SecurityApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof SecurityApi
    */
-  public whoami(options?: RawAxiosRequestConfig) {
+  public whoami(options?: AxiosRequestConfig) {
     return SecurityApiFp(this.configuration)
       .whoami(options)
       .then((request) => request(this.axios, this.basePath));
@@ -3171,7 +3160,7 @@ export const UserApiAxiosParamCreator = function (
     crupdateUserById: async (
       id: string,
       user: User,
-      options: RawAxiosRequestConfig = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists("crupdateUserById", "id", id);
@@ -3230,7 +3219,7 @@ export const UserApiAxiosParamCreator = function (
      */
     getUserById: async (
       id: string,
-      options: RawAxiosRequestConfig = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists("getUserById", "id", id);
@@ -3284,7 +3273,7 @@ export const UserApiAxiosParamCreator = function (
       page: number,
       pageSize: number,
       name?: string,
-      options: RawAxiosRequestConfig = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'page' is not null or undefined
       assertParamExists("getUsers", "page", page);
@@ -3357,7 +3346,7 @@ export const UserApiFp = function (configuration?: Configuration) {
     async crupdateUserById(
       id: string,
       user: User,
-      options?: RawAxiosRequestConfig
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>
     > {
@@ -3383,7 +3372,7 @@ export const UserApiFp = function (configuration?: Configuration) {
      */
     async getUserById(
       id: string,
-      options?: RawAxiosRequestConfig
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>
     > {
@@ -3415,7 +3404,7 @@ export const UserApiFp = function (configuration?: Configuration) {
       page: number,
       pageSize: number,
       name?: string,
-      options?: RawAxiosRequestConfig
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<User>>
     > {
@@ -3520,7 +3509,7 @@ export class UserApi extends BaseAPI {
   public crupdateUserById(
     id: string,
     user: User,
-    options?: RawAxiosRequestConfig
+    options?: AxiosRequestConfig
   ) {
     return UserApiFp(this.configuration)
       .crupdateUserById(id, user, options)
@@ -3535,7 +3524,7 @@ export class UserApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof UserApi
    */
-  public getUserById(id: string, options?: RawAxiosRequestConfig) {
+  public getUserById(id: string, options?: AxiosRequestConfig) {
     return UserApiFp(this.configuration)
       .getUserById(id, options)
       .then((request) => request(this.axios, this.basePath));
@@ -3555,7 +3544,7 @@ export class UserApi extends BaseAPI {
     page: number,
     pageSize: number,
     name?: string,
-    options?: RawAxiosRequestConfig
+    options?: AxiosRequestConfig
   ) {
     return UserApiFp(this.configuration)
       .getUsers(page, pageSize, name, options)
