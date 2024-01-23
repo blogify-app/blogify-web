@@ -12,10 +12,11 @@
  * Do not edit the class manually.
  */
 
-import {Configuration} from "./configuration";
+import type {Configuration} from "./configuration";
 // Some imports not used depending on template conditions
 // @ts-ignore
-import globalAxios, {AxiosInstance, AxiosRequestConfig} from "axios";
+import type {AxiosPromise, AxiosInstance, AxiosRequestConfig} from "axios";
+import globalAxios from "axios";
 
 export const BASE_PATH = (
   process.env.API_URL || "http://localhost:8080"
@@ -57,7 +58,7 @@ export class BaseAPI {
   ) {
     if (configuration) {
       this.configuration = configuration;
-      this.basePath = configuration.basePath || this.basePath;
+      this.basePath = configuration.basePath ?? basePath;
     }
   }
 }
@@ -69,11 +70,24 @@ export class BaseAPI {
  * @extends {Error}
  */
 export class RequiredError extends Error {
-  name: "RequiredError" = "RequiredError";
   constructor(
     public field: string,
     msg?: string
   ) {
     super(msg);
+    this.name = "RequiredError";
   }
 }
+
+interface ServerMap {
+  [key: string]: {
+    url: string;
+    description: string;
+  }[];
+}
+
+/**
+ *
+ * @export
+ */
+export const operationServerMap: ServerMap = {};

@@ -1,19 +1,15 @@
 import {
   type AuthProvider as _AuthProvider,
-  type UserCredential,
-  type User,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  type User as FUser,
+  type UserCredential,
 } from "firebase/auth";
 import {auth} from "@/config/firebase.ts";
-
-// FIXME: dummy, ... YOU DON'T EVENT HAVE THE RIGHT TO EXPORT ANYTHING APART FROM AUTH PROVIDER FROM THIS MOD
-export interface DummyUser {
-  email: string;
-  username: string;
-}
+import {SignUp, User, Whoami} from "@/services/api/gen";
+import {SecurityProvider} from "@/services/api";
 
 /**
  * such as: GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider from **firebase.auth**
@@ -23,26 +19,24 @@ export type ProviderCtor = {
 };
 
 export interface AuthProvider {
-  signInWithEmailAndPassword(
-    email: string,
-    password: string
-  ): Promise<DummyUser>;
+  signInWithEmailAndPassword(email: string, password: string): Promise<Whoami>;
 
-  signInWithProvider(providerCtor: ProviderCtor): Promise<DummyUser>;
+  signInWithProvider(providerCtor: ProviderCtor): Promise<Whoami>;
 
   signUpWithEmailAndPassword(
     email: string,
     password: string,
-    payload: DummyUser
-  ): Promise<DummyUser>;
+    payload: SignUp
+  ): Promise<User>;
 
   signUpWithProvider(
     providerCtor: ProviderCtor,
-    payload: DummyUser
-  ): Promise<DummyUser>;
+    payload: SignUp
+  ): Promise<User>;
 
   logOut(): Promise<void>;
-  getCurrentUser(): Promise<User | null>;
+
+  getCurrentUser(): Promise<FUser | null>;
 }
 
 /**
@@ -52,12 +46,12 @@ export const AuthProvider = new (class implements AuthProvider {
   async signInWithEmailAndPassword(
     email: string,
     password: string
-  ): Promise<DummyUser> {
+  ): Promise<Whoami> {
     const credential = await signInWithEmailAndPassword(auth, email, password);
     return this.signIn(credential);
   }
 
-  async signInWithProvider(providerCtor: ProviderCtor): Promise<DummyUser> {
+  async signInWithProvider(providerCtor: ProviderCtor): Promise<Whoami> {
     const credential = await this._initializeProviderAuth(providerCtor);
     return this.signIn(credential);
   }
@@ -65,8 +59,8 @@ export const AuthProvider = new (class implements AuthProvider {
   async signUpWithEmailAndPassword(
     email: string,
     password: string,
-    payload: DummyUser
-  ): Promise<DummyUser> {
+    payload: SignUp
+  ): Promise<User> {
     const credential = await createUserWithEmailAndPassword(
       auth,
       email,
@@ -77,8 +71,8 @@ export const AuthProvider = new (class implements AuthProvider {
 
   async signUpWithProvider(
     providerCtor: ProviderCtor,
-    payload: DummyUser
-  ): Promise<DummyUser> {
+    payload: SignUp
+  ): Promise<User> {
     const credential = await this._initializeProviderAuth(providerCtor);
     return this.signUp(payload, credential);
   }
@@ -87,8 +81,7 @@ export const AuthProvider = new (class implements AuthProvider {
     return signOut(auth);
   }
 
-  // TODO: Ensure it is always resolved on **auth.onAuthStateChanged**
-  getCurrentUser(): Promise<User | null> {
+  getCurrentUser(): Promise<FUser | null> {
     return new Promise((resolve) => {
       const unsub = auth.onAuthStateChanged((user) => {
         unsub();
@@ -97,22 +90,18 @@ export const AuthProvider = new (class implements AuthProvider {
     });
   }
 
-  private signIn(credential: UserCredential): Promise<DummyUser> {
+  private signIn(credential: UserCredential): Promise<Whoami> {
     const {user} = credential;
-    // TODO: find user by **user.uid** from blogify api, fire_auth base info: "uid" and "token
-    return Promise.resolve({
-      email: user.email ?? "dummy@gmail.com",
-      username: user.displayName ?? "dummy user",
+    return SecurityProvider.signIn({
+      provider_id: user.uid,
+      email: user.email || undefined,
+      // FIXME: Do we really need password
+      password: "passwd",
     });
   }
 
-  private signUp(
-    user: DummyUser,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _credential: UserCredential
-  ): Promise<DummyUser> {
-    // TODO: signup to blogify api using fire_auth base info: "uid" and "token"
-    return Promise.resolve(user);
+  private signUp(user: SignUp, _credential: UserCredential): Promise<User> {
+    return SecurityProvider.signUp(user);
   }
 
   private _initializeProviderAuth(

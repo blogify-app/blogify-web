@@ -1,4 +1,4 @@
-import {Sex, User, UserStatus} from "@/services/gen";
+import {Sex, User, UserStatus} from "@/services/api/gen";
 
 export const user: User = {
   last_name: "Doe",
