@@ -60,10 +60,6 @@ export const Login: FC = () => {
     },
   });
 
-  const moveToCreateAccount = () => {
-    navigate("/signup");
-  };
-
   // TODO: build the ui
   // register email and password input
   return (
@@ -72,12 +68,12 @@ export const Login: FC = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onEmailAndPassword)}
+            data-testid="login-form"
             className="space-y-6 justify-self-center"
           >
             <h5 className="text-xl font-medium text-gray-900 dark:text-white">
               Sign in to{" "}
               <label
-                htmlFor=""
                 className="font-dancing-script text-3xl font-bold"
               >
                 Blogify
@@ -93,6 +89,7 @@ export const Login: FC = () => {
                   </FormLabel>
                   <FormControl>
                     <Input
+                    data-testid="email-field"
                       placeholder="email@gmail.com"
                       {...field}
                       {...form.register("email")}
@@ -111,6 +108,7 @@ export const Login: FC = () => {
                   </FormLabel>
                   <FormControl>
                     <Input
+                    data-testid="password-field"
                       type="password"
                       placeholder="******"
                       {...field}
@@ -127,7 +125,6 @@ export const Login: FC = () => {
             </Button>
             <Link
               to="/signup"
-              onClick={moveToCreateAccount}
               className="me-2 ml-2 inline-flex items-center justify-center rounded border border-blue-400 bg-blue-100 px-2.5 py-0.5 text-sm font-medium text-blue-800 hover:bg-blue-200 dark:bg-gray-700 dark:text-blue-400 rtl:ml-0"
             >
               create account ?
