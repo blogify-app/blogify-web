@@ -6,8 +6,7 @@ import ReactDOM from "react-dom/client";
 import {HomePage} from "@/pages/home";
 import {LoginPage} from "@/pages/auth";
 import {Authenticated} from "@/features/auth";
-import {AuthProvider} from "@/services/auth_provider.ts";
-
+import {AuthProvider} from "@/services/security";
 import "./index.css";
 
 // eslint-disable-next-line react-refresh/only-export-components

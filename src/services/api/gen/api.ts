@@ -12,12 +12,9 @@
  * Do not edit the class manually.
  */
 
-import {Configuration} from "./configuration";
-import globalAxios, {
-  AxiosPromise,
-  AxiosInstance,
-  AxiosRequestConfig,
-} from "axios";
+import type {Configuration} from "./configuration";
+import type {AxiosPromise, AxiosInstance, AxiosRequestConfig} from "axios";
+import globalAxios from "axios";
 // Some imports not used depending on template conditions
 // @ts-ignore
 import {
@@ -29,8 +26,9 @@ import {
   toPathString,
   createRequestFunction,
 } from "./common";
+import type {RequestArgs} from "./base";
 // @ts-ignore
-import {BASE_PATH, RequestArgs, BaseAPI} from "./base";
+import {BASE_PATH, BaseAPI, operationServerMap} from "./base";
 
 /**
  *
@@ -150,16 +148,19 @@ export interface Comment {
    */
   status?: CommentStatus;
 }
+
 /**
  *
  * @export
  * @enum {string}
  */
 
-export enum CommentStatus {
-  ENABLED = "ENABLED",
-  DISABLED = "DISABLED",
-}
+export const CommentStatus = {
+  ENABLED: "ENABLED",
+  DISABLED: "DISABLED",
+} as const;
+
+export type CommentStatus = (typeof CommentStatus)[keyof typeof CommentStatus];
 
 /**
  *
@@ -291,17 +292,20 @@ export interface Post {
    */
   reactions?: ReactionStat;
 }
+
 /**
  *
  * @export
  * @enum {string}
  */
 
-export enum PostStatus {
-  ARCHIVED = "ARCHIVED",
-  DRAFT = "DRAFT",
-  DISABLED = "DISABLED",
-}
+export const PostStatus = {
+  ARCHIVED: "ARCHIVED",
+  DRAFT: "DRAFT",
+  DISABLED: "DISABLED",
+} as const;
+
+export type PostStatus = (typeof PostStatus)[keyof typeof PostStatus];
 
 /**
  *
@@ -346,6 +350,7 @@ export interface Reaction {
    */
   comment_id?: string;
 }
+
 /**
  *
  * @export
@@ -371,10 +376,12 @@ export interface ReactionStat {
  * @enum {string}
  */
 
-export enum ReactionType {
-  LIKE = "LIKE",
-  DISLIKE = "DISLIKE",
-}
+export const ReactionType = {
+  LIKE: "LIKE",
+  DISLIKE: "DISLIKE",
+} as const;
+
+export type ReactionType = (typeof ReactionType)[keyof typeof ReactionType];
 
 /**
  *
@@ -401,10 +408,12 @@ export interface ResourceNotFoundException {
  * @enum {string}
  */
 
-export enum Role {
-  CLIENT = "CLIENT",
-  MANAGER = "MANAGER",
-}
+export const Role = {
+  CLIENT: "CLIENT",
+  MANAGER: "MANAGER",
+} as const;
+
+export type Role = (typeof Role)[keyof typeof Role];
 
 /**
  *
@@ -412,11 +421,13 @@ export enum Role {
  * @enum {string}
  */
 
-export enum Sex {
-  M = "M",
-  F = "F",
-  OTHER = "OTHER",
-}
+export const Sex = {
+  M: "M",
+  F: "F",
+  OTHER: "OTHER",
+} as const;
+
+export type Sex = (typeof Sex)[keyof typeof Sex];
 
 /**
  *
@@ -527,6 +538,7 @@ export interface SignUp {
    */
   provider_id?: string;
 }
+
 /**
  *
  * @export
@@ -643,16 +655,19 @@ export interface User {
    */
   is_followed?: boolean;
 }
+
 /**
  *
  * @export
  * @enum {string}
  */
 
-export enum UserStatus {
-  ENABLED = "ENABLED",
-  BANISHED = "BANISHED",
-}
+export const UserStatus = {
+  ENABLED: "ENABLED",
+  BANISHED: "BANISHED",
+} as const;
+
+export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus];
 
 /**
  *
@@ -768,10 +783,10 @@ export const CommentsApiAxiosParamCreator = function (
   return {
     /**
      *
-     * @summary Crupdate comment of the identified post by id
+     * @summary Crupdate comment of the identified post by its identifier.
      * @param {string} pid
      * @param {string} cid
-     * @param {Comment} comment The crupdated comments.
+     * @param {Comment} comment The comment to crupdate.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -939,27 +954,27 @@ export const CommentsApiAxiosParamCreator = function (
     /**
      *
      * @summary Get the identified post comments.
+     * @param {string} pid
      * @param {number} page
      * @param {number} pageSize
-     * @param {string} id
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getCommentsByPostId: async (
+      pid: string,
       page: number,
       pageSize: number,
-      id: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
+      // verify required parameter 'pid' is not null or undefined
+      assertParamExists("getCommentsByPostId", "pid", pid);
       // verify required parameter 'page' is not null or undefined
       assertParamExists("getCommentsByPostId", "page", page);
       // verify required parameter 'pageSize' is not null or undefined
       assertParamExists("getCommentsByPostId", "pageSize", pageSize);
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists("getCommentsByPostId", "id", id);
-      const localVarPath = `/posts/{id}/comments`.replace(
-        `{${"id"}}`,
-        encodeURIComponent(String(id))
+      const localVarPath = `/posts/{pid}/comments`.replace(
+        `{${"pid"}}`,
+        encodeURIComponent(String(pid))
       );
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1005,27 +1020,27 @@ export const CommentsApiAxiosParamCreator = function (
     /**
      *
      * @summary React to a comment by identifier.
-     * @param {string} id
-     * @param {string} commentId
-     * @param {ReactionType} reactionType
+     * @param {string} pid
+     * @param {string} cid
+     * @param {ReactionType} type
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    reactToCommentByid: async (
-      id: string,
-      commentId: string,
-      reactionType: ReactionType,
+    reactToCommentById: async (
+      pid: string,
+      cid: string,
+      type: ReactionType,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists("reactToCommentByid", "id", id);
-      // verify required parameter 'commentId' is not null or undefined
-      assertParamExists("reactToCommentByid", "commentId", commentId);
-      // verify required parameter 'reactionType' is not null or undefined
-      assertParamExists("reactToCommentByid", "reactionType", reactionType);
-      const localVarPath = `/post/{id}/comments/{comment_id}/reaction`
-        .replace(`{${"id"}}`, encodeURIComponent(String(id)))
-        .replace(`{${"comment_id"}}`, encodeURIComponent(String(commentId)));
+      // verify required parameter 'pid' is not null or undefined
+      assertParamExists("reactToCommentById", "pid", pid);
+      // verify required parameter 'cid' is not null or undefined
+      assertParamExists("reactToCommentById", "cid", cid);
+      // verify required parameter 'type' is not null or undefined
+      assertParamExists("reactToCommentById", "type", type);
+      const localVarPath = `/post/{pid}/comments/{cid}/reaction`
+        .replace(`{${"pid"}}`, encodeURIComponent(String(pid)))
+        .replace(`{${"cid"}}`, encodeURIComponent(String(cid)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -1045,8 +1060,8 @@ export const CommentsApiAxiosParamCreator = function (
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
-      if (reactionType !== undefined) {
-        localVarQueryParameter["reaction_type"] = reactionType;
+      if (type !== undefined) {
+        localVarQueryParameter["type"] = type;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -1075,10 +1090,10 @@ export const CommentsApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
-     * @summary Crupdate comment of the identified post by id
+     * @summary Crupdate comment of the identified post by its identifier.
      * @param {string} pid
      * @param {string} cid
-     * @param {Comment} comment The crupdated comments.
+     * @param {Comment} comment The comment to crupdate.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1088,7 +1103,7 @@ export const CommentsApiFp = function (configuration?: Configuration) {
       comment: Comment,
       options?: AxiosRequestConfig
     ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<User>>
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Comment>
     > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.crupdateCommentById(
@@ -1097,12 +1112,16 @@ export const CommentsApiFp = function (configuration?: Configuration) {
           comment,
           options
         );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["CommentsApi.crupdateCommentById"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
     },
     /**
      *
@@ -1121,12 +1140,16 @@ export const CommentsApiFp = function (configuration?: Configuration) {
     > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.deleteCommentById(pid, cid, options);
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["CommentsApi.deleteCommentById"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
     },
     /**
      *
@@ -1148,74 +1171,86 @@ export const CommentsApiFp = function (configuration?: Configuration) {
         cid,
         options
       );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["CommentsApi.getCommentById"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
     },
     /**
      *
      * @summary Get the identified post comments.
+     * @param {string} pid
      * @param {number} page
      * @param {number} pageSize
-     * @param {string} id
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getCommentsByPostId(
+      pid: string,
       page: number,
       pageSize: number,
-      id: string,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Comment>>
     > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.getCommentsByPostId(
+          pid,
           page,
           pageSize,
-          id,
           options
         );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["CommentsApi.getCommentsByPostId"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
     },
     /**
      *
      * @summary React to a comment by identifier.
-     * @param {string} id
-     * @param {string} commentId
-     * @param {ReactionType} reactionType
+     * @param {string} pid
+     * @param {string} cid
+     * @param {ReactionType} type
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async reactToCommentByid(
-      id: string,
-      commentId: string,
-      reactionType: ReactionType,
+    async reactToCommentById(
+      pid: string,
+      cid: string,
+      type: ReactionType,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Reaction>
     > {
       const localVarAxiosArgs =
-        await localVarAxiosParamCreator.reactToCommentByid(
-          id,
-          commentId,
-          reactionType,
+        await localVarAxiosParamCreator.reactToCommentById(
+          pid,
+          cid,
+          type,
           options
         );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["CommentsApi.reactToCommentById"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
     },
   };
 };
@@ -1233,10 +1268,10 @@ export const CommentsApiFactory = function (
   return {
     /**
      *
-     * @summary Crupdate comment of the identified post by id
+     * @summary Crupdate comment of the identified post by its identifier.
      * @param {string} pid
      * @param {string} cid
-     * @param {Comment} comment The crupdated comments.
+     * @param {Comment} comment The comment to crupdate.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1245,7 +1280,7 @@ export const CommentsApiFactory = function (
       cid: string,
       comment: Comment,
       options?: any
-    ): AxiosPromise<Array<User>> {
+    ): AxiosPromise<Comment> {
       return localVarFp
         .crupdateCommentById(pid, cid, comment, options)
         .then((request) => request(axios, basePath));
@@ -1287,39 +1322,39 @@ export const CommentsApiFactory = function (
     /**
      *
      * @summary Get the identified post comments.
+     * @param {string} pid
      * @param {number} page
      * @param {number} pageSize
-     * @param {string} id
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getCommentsByPostId(
+      pid: string,
       page: number,
       pageSize: number,
-      id: string,
       options?: any
     ): AxiosPromise<Array<Comment>> {
       return localVarFp
-        .getCommentsByPostId(page, pageSize, id, options)
+        .getCommentsByPostId(pid, page, pageSize, options)
         .then((request) => request(axios, basePath));
     },
     /**
      *
      * @summary React to a comment by identifier.
-     * @param {string} id
-     * @param {string} commentId
-     * @param {ReactionType} reactionType
+     * @param {string} pid
+     * @param {string} cid
+     * @param {ReactionType} type
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    reactToCommentByid(
-      id: string,
-      commentId: string,
-      reactionType: ReactionType,
+    reactToCommentById(
+      pid: string,
+      cid: string,
+      type: ReactionType,
       options?: any
     ): AxiosPromise<Reaction> {
       return localVarFp
-        .reactToCommentByid(id, commentId, reactionType, options)
+        .reactToCommentById(pid, cid, type, options)
         .then((request) => request(axios, basePath));
     },
   };
@@ -1334,10 +1369,10 @@ export const CommentsApiFactory = function (
 export class CommentsApi extends BaseAPI {
   /**
    *
-   * @summary Crupdate comment of the identified post by id
+   * @summary Crupdate comment of the identified post by its identifier.
    * @param {string} pid
    * @param {string} cid
-   * @param {Comment} comment The crupdated comments.
+   * @param {Comment} comment The comment to crupdate.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof CommentsApi
@@ -1394,42 +1429,42 @@ export class CommentsApi extends BaseAPI {
   /**
    *
    * @summary Get the identified post comments.
+   * @param {string} pid
    * @param {number} page
    * @param {number} pageSize
-   * @param {string} id
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof CommentsApi
    */
   public getCommentsByPostId(
+    pid: string,
     page: number,
     pageSize: number,
-    id: string,
     options?: AxiosRequestConfig
   ) {
     return CommentsApiFp(this.configuration)
-      .getCommentsByPostId(page, pageSize, id, options)
+      .getCommentsByPostId(pid, page, pageSize, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *
    * @summary React to a comment by identifier.
-   * @param {string} id
-   * @param {string} commentId
-   * @param {ReactionType} reactionType
+   * @param {string} pid
+   * @param {string} cid
+   * @param {ReactionType} type
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof CommentsApi
    */
-  public reactToCommentByid(
-    id: string,
-    commentId: string,
-    reactionType: ReactionType,
+  public reactToCommentById(
+    pid: string,
+    cid: string,
+    type: ReactionType,
     options?: AxiosRequestConfig
   ) {
     return CommentsApiFp(this.configuration)
-      .reactToCommentByid(id, commentId, reactionType, options)
+      .reactToCommentById(pid, cid, type, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -1445,19 +1480,19 @@ export const FollowingApiAxiosParamCreator = function (
     /**
      *
      * @summary Follow user by identifier.
-     * @param {string} userId
+     * @param {string} uid
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     followUserById: async (
-      userId: string,
+      uid: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
-      // verify required parameter 'userId' is not null or undefined
-      assertParamExists("followUserById", "userId", userId);
-      const localVarPath = `/follow/{user_id}`.replace(
-        `{${"user_id"}}`,
-        encodeURIComponent(String(userId))
+      // verify required parameter 'uid' is not null or undefined
+      assertParamExists("followUserById", "uid", uid);
+      const localVarPath = `/follow/{uid}`.replace(
+        `{${"uid"}}`,
+        encodeURIComponent(String(uid))
       );
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1632,19 +1667,19 @@ export const FollowingApiAxiosParamCreator = function (
     /**
      *
      * @summary Unfollow user by identifier.
-     * @param {string} userId
+     * @param {string} uid
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     unfollowUserById: async (
-      userId: string,
+      uid: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
-      // verify required parameter 'userId' is not null or undefined
-      assertParamExists("unfollowUserById", "userId", userId);
-      const localVarPath = `/unfollow/{user_id}`.replace(
-        `{${"user_id"}}`,
-        encodeURIComponent(String(userId))
+      // verify required parameter 'uid' is not null or undefined
+      assertParamExists("unfollowUserById", "uid", uid);
+      const localVarPath = `/unfollow/{uid}`.replace(
+        `{${"uid"}}`,
+        encodeURIComponent(String(uid))
       );
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1693,26 +1728,30 @@ export const FollowingApiFp = function (configuration?: Configuration) {
     /**
      *
      * @summary Follow user by identifier.
-     * @param {string} userId
+     * @param {string} uid
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async followUserById(
-      userId: string,
+      uid: string,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>
     > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.followUserById(
-        userId,
+        uid,
         options
       );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["FollowingApi.followUserById"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
     },
     /**
      *
@@ -1741,12 +1780,16 @@ export const FollowingApiFp = function (configuration?: Configuration) {
           name,
           options
         );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["FollowingApi.getFollowedByUserId"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
     },
     /**
      *
@@ -1772,34 +1815,42 @@ export const FollowingApiFp = function (configuration?: Configuration) {
           name,
           options
         );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["FollowingApi.getSelfFollowers"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
     },
     /**
      *
      * @summary Unfollow user by identifier.
-     * @param {string} userId
+     * @param {string} uid
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async unfollowUserById(
-      userId: string,
+      uid: string,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>
     > {
       const localVarAxiosArgs =
-        await localVarAxiosParamCreator.unfollowUserById(userId, options);
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
+        await localVarAxiosParamCreator.unfollowUserById(uid, options);
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["FollowingApi.unfollowUserById"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
     },
   };
 };
@@ -1818,13 +1869,13 @@ export const FollowingApiFactory = function (
     /**
      *
      * @summary Follow user by identifier.
-     * @param {string} userId
+     * @param {string} uid
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    followUserById(userId: string, options?: any): AxiosPromise<User> {
+    followUserById(uid: string, options?: any): AxiosPromise<User> {
       return localVarFp
-        .followUserById(userId, options)
+        .followUserById(uid, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -1870,13 +1921,13 @@ export const FollowingApiFactory = function (
     /**
      *
      * @summary Unfollow user by identifier.
-     * @param {string} userId
+     * @param {string} uid
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    unfollowUserById(userId: string, options?: any): AxiosPromise<User> {
+    unfollowUserById(uid: string, options?: any): AxiosPromise<User> {
       return localVarFp
-        .unfollowUserById(userId, options)
+        .unfollowUserById(uid, options)
         .then((request) => request(axios, basePath));
     },
   };
@@ -1892,14 +1943,14 @@ export class FollowingApi extends BaseAPI {
   /**
    *
    * @summary Follow user by identifier.
-   * @param {string} userId
+   * @param {string} uid
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FollowingApi
    */
-  public followUserById(userId: string, options?: AxiosRequestConfig) {
+  public followUserById(uid: string, options?: AxiosRequestConfig) {
     return FollowingApiFp(this.configuration)
-      .followUserById(userId, options)
+      .followUserById(uid, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -1950,14 +2001,14 @@ export class FollowingApi extends BaseAPI {
   /**
    *
    * @summary Unfollow user by identifier.
-   * @param {string} userId
+   * @param {string} uid
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FollowingApi
    */
-  public unfollowUserById(userId: string, options?: AxiosRequestConfig) {
+  public unfollowUserById(uid: string, options?: AxiosRequestConfig) {
     return FollowingApiFp(this.configuration)
-      .unfollowUserById(userId, options)
+      .unfollowUserById(uid, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -2033,12 +2084,16 @@ export const HealthApiFp = function (configuration?: Configuration) {
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>
     > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.ping(options);
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["HealthApi.ping"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
     },
   };
 };
@@ -2100,23 +2155,23 @@ export const PostingApiAxiosParamCreator = function (
     /**
      *
      * @summary Crupdate post by identifier.
-     * @param {string} id
+     * @param {string} pid
      * @param {Post} post Post to crupdate
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     crupdatePostById: async (
-      id: string,
+      pid: string,
       post: Post,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists("crupdatePostById", "id", id);
+      // verify required parameter 'pid' is not null or undefined
+      assertParamExists("crupdatePostById", "pid", pid);
       // verify required parameter 'post' is not null or undefined
       assertParamExists("crupdatePostById", "post", post);
-      const localVarPath = `/posts/{id}`.replace(
-        `{${"id"}}`,
-        encodeURIComponent(String(id))
+      const localVarPath = `/posts/{pid}`.replace(
+        `{${"pid"}}`,
+        encodeURIComponent(String(pid))
       );
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2161,19 +2216,19 @@ export const PostingApiAxiosParamCreator = function (
     /**
      *
      * @summary Delete post by identifier.
-     * @param {string} id
+     * @param {string} pid
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     deletePostById: async (
-      id: string,
+      pid: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists("deletePostById", "id", id);
-      const localVarPath = `/posts/{id}`.replace(
-        `{${"id"}}`,
-        encodeURIComponent(String(id))
+      // verify required parameter 'pid' is not null or undefined
+      assertParamExists("deletePostById", "pid", pid);
+      const localVarPath = `/posts/{pid}`.replace(
+        `{${"pid"}}`,
+        encodeURIComponent(String(pid))
       );
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2211,19 +2266,19 @@ export const PostingApiAxiosParamCreator = function (
     /**
      *
      * @summary Get post by identifier.
-     * @param {string} id
+     * @param {string} pid
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getPostById: async (
-      id: string,
+      pid: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists("getPostById", "id", id);
-      const localVarPath = `/posts/{id}`.replace(
-        `{${"id"}}`,
-        encodeURIComponent(String(id))
+      // verify required parameter 'pid' is not null or undefined
+      assertParamExists("getPostById", "pid", pid);
+      const localVarPath = `/posts/{pid}`.replace(
+        `{${"pid"}}`,
+        encodeURIComponent(String(pid))
       );
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2326,23 +2381,23 @@ export const PostingApiAxiosParamCreator = function (
     /**
      *
      * @summary React to a post by identifier.
-     * @param {string} id
-     * @param {ReactionType} reactionType
+     * @param {string} pid
+     * @param {ReactionType} type
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     reactToPostById: async (
-      id: string,
-      reactionType: ReactionType,
+      pid: string,
+      type: ReactionType,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists("reactToPostById", "id", id);
-      // verify required parameter 'reactionType' is not null or undefined
-      assertParamExists("reactToPostById", "reactionType", reactionType);
-      const localVarPath = `/posts/{id}/reaction`.replace(
-        `{${"id"}}`,
-        encodeURIComponent(String(id))
+      // verify required parameter 'pid' is not null or undefined
+      assertParamExists("reactToPostById", "pid", pid);
+      // verify required parameter 'type' is not null or undefined
+      assertParamExists("reactToPostById", "type", type);
+      const localVarPath = `/posts/{pid}/reaction`.replace(
+        `{${"pid"}}`,
+        encodeURIComponent(String(pid))
       );
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2363,8 +2418,8 @@ export const PostingApiAxiosParamCreator = function (
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
-      if (reactionType !== undefined) {
-        localVarQueryParameter["reaction_type"] = reactionType;
+      if (type !== undefined) {
+        localVarQueryParameter["type"] = type;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -2394,74 +2449,86 @@ export const PostingApiFp = function (configuration?: Configuration) {
     /**
      *
      * @summary Crupdate post by identifier.
-     * @param {string} id
+     * @param {string} pid
      * @param {Post} post Post to crupdate
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async crupdatePostById(
-      id: string,
+      pid: string,
       post: Post,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Post>
     > {
       const localVarAxiosArgs =
-        await localVarAxiosParamCreator.crupdatePostById(id, post, options);
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
+        await localVarAxiosParamCreator.crupdatePostById(pid, post, options);
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["PostingApi.crupdatePostById"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
     },
     /**
      *
      * @summary Delete post by identifier.
-     * @param {string} id
+     * @param {string} pid
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async deletePostById(
-      id: string,
+      pid: string,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Post>
     > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deletePostById(
-        id,
+        pid,
         options
       );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["PostingApi.deletePostById"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
     },
     /**
      *
      * @summary Get post by identifier.
-     * @param {string} id
+     * @param {string} pid
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getPostById(
-      id: string,
+      pid: string,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Post>
     > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getPostById(
-        id,
+        pid,
         options
       );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["PostingApi.getPostById"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
     },
     /**
      *
@@ -2486,39 +2553,47 @@ export const PostingApiFp = function (configuration?: Configuration) {
         categories,
         options
       );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["PostingApi.getPosts"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
     },
     /**
      *
      * @summary React to a post by identifier.
-     * @param {string} id
-     * @param {ReactionType} reactionType
+     * @param {string} pid
+     * @param {ReactionType} type
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async reactToPostById(
-      id: string,
-      reactionType: ReactionType,
+      pid: string,
+      type: ReactionType,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Reaction>
     > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.reactToPostById(
-        id,
-        reactionType,
+        pid,
+        type,
         options
       );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["PostingApi.reactToPostById"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
     },
   };
 };
@@ -2537,42 +2612,42 @@ export const PostingApiFactory = function (
     /**
      *
      * @summary Crupdate post by identifier.
-     * @param {string} id
+     * @param {string} pid
      * @param {Post} post Post to crupdate
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     crupdatePostById(
-      id: string,
+      pid: string,
       post: Post,
       options?: any
     ): AxiosPromise<Post> {
       return localVarFp
-        .crupdatePostById(id, post, options)
+        .crupdatePostById(pid, post, options)
         .then((request) => request(axios, basePath));
     },
     /**
      *
      * @summary Delete post by identifier.
-     * @param {string} id
+     * @param {string} pid
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deletePostById(id: string, options?: any): AxiosPromise<Post> {
+    deletePostById(pid: string, options?: any): AxiosPromise<Post> {
       return localVarFp
-        .deletePostById(id, options)
+        .deletePostById(pid, options)
         .then((request) => request(axios, basePath));
     },
     /**
      *
      * @summary Get post by identifier.
-     * @param {string} id
+     * @param {string} pid
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getPostById(id: string, options?: any): AxiosPromise<Post> {
+    getPostById(pid: string, options?: any): AxiosPromise<Post> {
       return localVarFp
-        .getPostById(id, options)
+        .getPostById(pid, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -2597,18 +2672,18 @@ export const PostingApiFactory = function (
     /**
      *
      * @summary React to a post by identifier.
-     * @param {string} id
-     * @param {ReactionType} reactionType
+     * @param {string} pid
+     * @param {ReactionType} type
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     reactToPostById(
-      id: string,
-      reactionType: ReactionType,
+      pid: string,
+      type: ReactionType,
       options?: any
     ): AxiosPromise<Reaction> {
       return localVarFp
-        .reactToPostById(id, reactionType, options)
+        .reactToPostById(pid, type, options)
         .then((request) => request(axios, basePath));
     },
   };
@@ -2624,47 +2699,47 @@ export class PostingApi extends BaseAPI {
   /**
    *
    * @summary Crupdate post by identifier.
-   * @param {string} id
+   * @param {string} pid
    * @param {Post} post Post to crupdate
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PostingApi
    */
   public crupdatePostById(
-    id: string,
+    pid: string,
     post: Post,
     options?: AxiosRequestConfig
   ) {
     return PostingApiFp(this.configuration)
-      .crupdatePostById(id, post, options)
+      .crupdatePostById(pid, post, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *
    * @summary Delete post by identifier.
-   * @param {string} id
+   * @param {string} pid
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PostingApi
    */
-  public deletePostById(id: string, options?: AxiosRequestConfig) {
+  public deletePostById(pid: string, options?: AxiosRequestConfig) {
     return PostingApiFp(this.configuration)
-      .deletePostById(id, options)
+      .deletePostById(pid, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *
    * @summary Get post by identifier.
-   * @param {string} id
+   * @param {string} pid
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PostingApi
    */
-  public getPostById(id: string, options?: AxiosRequestConfig) {
+  public getPostById(pid: string, options?: AxiosRequestConfig) {
     return PostingApiFp(this.configuration)
-      .getPostById(id, options)
+      .getPostById(pid, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -2692,19 +2767,19 @@ export class PostingApi extends BaseAPI {
   /**
    *
    * @summary React to a post by identifier.
-   * @param {string} id
-   * @param {ReactionType} reactionType
+   * @param {string} pid
+   * @param {ReactionType} type
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PostingApi
    */
   public reactToPostById(
-    id: string,
-    reactionType: ReactionType,
+    pid: string,
+    type: ReactionType,
     options?: AxiosRequestConfig
   ) {
     return PostingApiFp(this.configuration)
-      .reactToPostById(id, reactionType, options)
+      .reactToPostById(pid, type, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -2897,12 +2972,16 @@ export const SecurityApiFp = function (configuration?: Configuration) {
         authenticationPayload,
         options
       );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["SecurityApi.signIn"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
     },
     /**
      *
@@ -2921,12 +3000,16 @@ export const SecurityApiFp = function (configuration?: Configuration) {
         signUp,
         options
       );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["SecurityApi.signUp"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
     },
     /**
      *
@@ -2940,12 +3023,16 @@ export const SecurityApiFp = function (configuration?: Configuration) {
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Whoami>
     > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.whoami(options);
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["SecurityApi.whoami"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
     },
   };
 };
@@ -3265,12 +3352,16 @@ export const UserApiFp = function (configuration?: Configuration) {
     > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.crupdateUserById(id, user, options);
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["UserApi.crupdateUserById"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
     },
     /**
      *
@@ -3289,12 +3380,16 @@ export const UserApiFp = function (configuration?: Configuration) {
         id,
         options
       );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["UserApi.getUserById"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
     },
     /**
      *
@@ -3319,12 +3414,16 @@ export const UserApiFp = function (configuration?: Configuration) {
         name,
         options
       );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["UserApi.getUsers"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
     },
   };
 };

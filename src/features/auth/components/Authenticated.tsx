@@ -1,6 +1,6 @@
 import {FC, PropsWithChildren, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
-import {AuthProvider} from "@/services/auth_provider.ts";
+import {AuthProvider} from "@/services/security";
 
 // HOC
 export const Authenticated: FC<PropsWithChildren> = ({children}) => {
