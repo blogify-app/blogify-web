@@ -4,7 +4,7 @@ import {Icon} from "@iconify/react";
 import {Badge} from "@/components/shadcn-ui/badge";
 import {NavBar} from "@/layout";
 import {calculateReadDuration} from "@/features/post/utils";
-import {Post as PostType} from "@/services/gen";
+import {Post as PostType} from "@/services/api/gen";
 import {user} from "@/pages/post/data/user";
 
 import blankUserProfile from "@/assets/noun-user-picture.svg";

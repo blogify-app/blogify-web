@@ -1,4 +1,4 @@
-import {Post, PostStatus} from "@/services/gen";
+import {Post, PostStatus} from "@/services/api/gen";
 
 export const post: Post = {
   id: "post_1",
