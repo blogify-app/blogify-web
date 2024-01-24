@@ -19,9 +19,10 @@ The Definitions Of Done (DoD) for our project are aligned with the professor's r
 3. **Recommendation System:**
    - Develop a recommendation system to enhance the user experience.
 
-## About the project
+## About the App repository
 
-Bootstraped using [Proplate](https://github.com/YumeT023/proplate) from the [Modern-react-ts](https://github.com/YumeT023/modern-react-ts/tree/master) template
+Bootstraped using [Proplate](https://github.com/YumeT023/proplate) from the [Modern-react-ts](https://github.com/YumeT023/modern-react-ts/tree/master) template.
+Coded with [React Typescript](https://www.typescriptlang.org/docs/handbook/react.html) and uses [Tailwind](https://tailwindui.com/), [shadcn UI components](https://ui.shadcn.com/), [react-router](https://reactrouter.com/en/main) etc..
 
 ### Deployments:
 
@@ -66,9 +67,8 @@ However, you don't really need to do all of this to see what our app looks like,
 ## Known Issues
 
 Help us to find bugs !
-Put it in the issues of each project-part :
+Put it in the issues :
 - [https://github.com/blogify-app/blogify-web/issues](https://github.com/blogify-app/blogify-web/issues)
-- [https://github.com/blogify-app/blogify-api/issues](https://github.com/blogify-app/blogify-api/issues)
 
 ## How to Contribute
 
