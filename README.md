@@ -62,7 +62,7 @@ However, you don't really need to do all of this to see what our app looks like,
 ### Upcoming Features
 - Recommandation system AI
 - Blogify posts list
-- A more structured and well designed Blogif
+- A more structured and well designed Blogify
    
 ## Known Issues
 
