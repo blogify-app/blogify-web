@@ -2,6 +2,9 @@ import {FC} from "react";
 import {Editor as TinyMCE, IAllProps} from "@tinymce/tinymce-react";
 import {TINY_MCE_API_KEY} from "@/config/env.ts";
 
+// FIXME: Doesn't apply since tiny_mce style is scoped in a shadow host
+// import "@/features/wisiwig/themes/poimandres.css";
+
 // Plugins to enable.
 // Refer to https://www.tiny.cloud/docs/tinymce/latest/plugins for more info.
 const ACTIVE_PLUGINS = [

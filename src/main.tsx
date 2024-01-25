@@ -1,10 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-
-import {PostPage} from "@/pages/post";
 import {HomePage} from "@/pages/home";
 import {DummyAuthenticatedPage, LoginPage, SignupPage} from "@/pages/auth";
+import {PostPage, WritePostPage} from "@/pages/post";
 import "./index.css";
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -28,6 +27,10 @@ const ROUTER = createBrowserRouter([
   {
     path: "/posts/:id",
     element: <PostPage />,
+  },
+  {
+    path: "/posts/write/:id",
+    element: <WritePostPage />,
   },
 ]);
 
