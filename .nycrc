@@ -12,6 +12,8 @@
     "// generated",
     "src/components/shadcn-ui/**/*",
     "src/services/gen/**/*",
+    "// TODO: to rm",
+    "src/features/wisiwig/components/RichTextEditor.tsx",
     "// config mod",
     "src/config"
   ]

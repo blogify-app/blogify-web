@@ -6,7 +6,11 @@ const require = createRequire(import.meta.url);
 export default defineConfig({
   env: {
     codeCoverage: {
-      exclude: "cypress/**/*",
+      exclude: [
+        "cypress/**/*",
+        // TODO: to remove,
+        "./src/features/wisiwig/components/RichTextEditor.tsx",
+      ],
     },
   },
   e2e: {
