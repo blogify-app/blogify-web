@@ -1,7 +1,17 @@
-import {User} from "@/services/api/gen";
-import {userApi, DataProvider, DEFAULT_QUERY, Query} from "@/services/api";
+import {User, UserPicture, UserPictureType} from "@/services/api/gen";
+import {DataProvider, DEFAULT_QUERY, Query, userApi} from "@/services/api";
 
-export type UserProvider = DataProvider<User>;
+type PictureQuery = Query<{type: UserPictureType}>;
+
+export interface UserProvider extends DataProvider<User> {
+  putPicture(
+    uid: string,
+    file: File,
+    query: PictureQuery
+  ): Promise<UserPicture>;
+  deletePicture(uid: string, query: PictureQuery): Promise<UserPicture>;
+  getPicture(uid: string, query: PictureQuery): Promise<UserPicture>;
+}
 
 export const UserProvider: UserProvider = {
   async getById(uid: string): Promise<User> {
@@ -20,6 +30,22 @@ export const UserProvider: UserProvider = {
 
   async crupdateById(uid: string, user: User): Promise<User> {
     return (await userApi().crupdateUserById(uid, user)).data;
+  },
+
+  async getPicture(uid: string, query: PictureQuery): Promise<UserPicture> {
+    return (await userApi().getUserPicture(uid, query.params.type)).data;
+  },
+
+  async putPicture(
+    uid: string,
+    file: File,
+    query: PictureQuery
+  ): Promise<UserPicture> {
+    return (await userApi().putUserPicture(uid, query.params.type, file)).data;
+  },
+
+  async deletePicture(uid: string, query: PictureQuery): Promise<UserPicture> {
+    return (await userApi().deleteUserPicture(uid, query.params.type)).data;
   },
 
   crupdate: function (_payload: User): Promise<User> {

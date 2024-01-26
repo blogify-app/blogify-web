@@ -296,6 +296,37 @@ export interface Post {
 /**
  *
  * @export
+ * @interface PostPicture
+ */
+export interface PostPicture {
+  /**
+   *
+   * @type {string}
+   * @memberof PostPicture
+   */
+  id?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof PostPicture
+   */
+  post_id?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof PostPicture
+   */
+  placeholder?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof PostPicture
+   */
+  url?: string;
+}
+/**
+ *
+ * @export
  * @enum {string}
  */
 
@@ -659,6 +690,46 @@ export interface User {
 /**
  *
  * @export
+ * @interface UserPicture
+ */
+export interface UserPicture {
+  /**
+   *
+   * @type {string}
+   * @memberof UserPicture
+   */
+  user_id?: string;
+  /**
+   *
+   * @type {UserPictureType}
+   * @memberof UserPicture
+   */
+  type?: UserPictureType;
+  /**
+   *
+   * @type {string}
+   * @memberof UserPicture
+   */
+  url?: string;
+}
+
+/**
+ *
+ * @export
+ * @enum {string}
+ */
+
+export const UserPictureType = {
+  BANNER: "BANNER",
+  PROFILE: "PROFILE",
+} as const;
+
+export type UserPictureType =
+  (typeof UserPictureType)[keyof typeof UserPictureType];
+
+/**
+ *
+ * @export
  * @enum {string}
  */
 
@@ -771,6 +842,158 @@ export interface Whoami {
    * @memberof Whoami
    */
   is_followed?: boolean;
+}
+
+/**
+ * CategoryApi - axios parameter creator
+ * @export
+ */
+export const CategoryApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     *
+     * @summary Get all Categories.
+     * @param {string} [label] Filter categories by label.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getCategories: async (
+      label?: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/categories`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "GET",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication BearerAuth required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      if (label !== undefined) {
+        localVarQueryParameter["label"] = label;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * CategoryApi - functional programming interface
+ * @export
+ */
+export const CategoryApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator = CategoryApiAxiosParamCreator(configuration);
+  return {
+    /**
+     *
+     * @summary Get all Categories.
+     * @param {string} [label] Filter categories by label.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getCategories(
+      label?: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<Array<Category>>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getCategories(
+        label,
+        options
+      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["CategoryApi.getCategories"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
+    },
+  };
+};
+
+/**
+ * CategoryApi - factory interface
+ * @export
+ */
+export const CategoryApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = CategoryApiFp(configuration);
+  return {
+    /**
+     *
+     * @summary Get all Categories.
+     * @param {string} [label] Filter categories by label.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getCategories(
+      label?: string,
+      options?: any
+    ): AxiosPromise<Array<Category>> {
+      return localVarFp
+        .getCategories(label, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * CategoryApi - object-oriented interface
+ * @export
+ * @class CategoryApi
+ * @extends {BaseAPI}
+ */
+export class CategoryApi extends BaseAPI {
+  /**
+   *
+   * @summary Get all Categories.
+   * @param {string} [label] Filter categories by label.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof CategoryApi
+   */
+  public getCategories(label?: string, options?: AxiosRequestConfig) {
+    return CategoryApiFp(this.configuration)
+      .getCategories(label, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
 }
 
 /**
@@ -1038,7 +1261,7 @@ export const CommentsApiAxiosParamCreator = function (
       assertParamExists("reactToCommentById", "cid", cid);
       // verify required parameter 'type' is not null or undefined
       assertParamExists("reactToCommentById", "type", type);
-      const localVarPath = `/post/{pid}/comments/{cid}/reaction`
+      const localVarPath = `/posts/{pid}/comments/{cid}/reaction`
         .replace(`{${"pid"}}`, encodeURIComponent(String(pid)))
         .replace(`{${"cid"}}`, encodeURIComponent(String(cid)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2265,6 +2488,112 @@ export const PostingApiAxiosParamCreator = function (
     },
     /**
      *
+     * @summary Delete one picture of a post
+     * @param {string} pid
+     * @param {string} picId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deletePostPictureById: async (
+      pid: string,
+      picId: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'pid' is not null or undefined
+      assertParamExists("deletePostPictureById", "pid", pid);
+      // verify required parameter 'picId' is not null or undefined
+      assertParamExists("deletePostPictureById", "picId", picId);
+      const localVarPath = `/posts/{pid}/pictures/{picId}`
+        .replace(`{${"pid"}}`, encodeURIComponent(String(pid)))
+        .replace(`{${"picId"}}`, encodeURIComponent(String(picId)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "DELETE",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication BearerAuth required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary get all pictures of a post
+     * @param {string} pid
+     * @param {string} picId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getAllPostPictureById: async (
+      pid: string,
+      picId: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'pid' is not null or undefined
+      assertParamExists("getAllPostPictureById", "pid", pid);
+      // verify required parameter 'picId' is not null or undefined
+      assertParamExists("getAllPostPictureById", "picId", picId);
+      const localVarPath = `/posts/{pid}/pictures`
+        .replace(`{${"pid"}}`, encodeURIComponent(String(pid)))
+        .replace(`{${"picId"}}`, encodeURIComponent(String(picId)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "GET",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication BearerAuth required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
      * @summary Get post by identifier.
      * @param {string} pid
      * @param {*} [options] Override http request option.
@@ -2280,6 +2609,59 @@ export const PostingApiAxiosParamCreator = function (
         `{${"pid"}}`,
         encodeURIComponent(String(pid))
       );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "GET",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication BearerAuth required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary get one picture of a post
+     * @param {string} pid
+     * @param {string} picId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPostPictureById: async (
+      pid: string,
+      picId: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'pid' is not null or undefined
+      assertParamExists("getPostPictureById", "pid", pid);
+      // verify required parameter 'picId' is not null or undefined
+      assertParamExists("getPostPictureById", "picId", picId);
+      const localVarPath = `/posts/{pid}/pictures/{picId}`
+        .replace(`{${"pid"}}`, encodeURIComponent(String(pid)))
+        .replace(`{${"picId"}}`, encodeURIComponent(String(picId)));
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -2436,6 +2818,71 @@ export const PostingApiAxiosParamCreator = function (
         options: localVarRequestOptions,
       };
     },
+    /**
+     *
+     * @summary Upload a picture to a post.
+     * @param {string} pid
+     * @param {string} picId
+     * @param {File} [file]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    uploadPostPicture: async (
+      pid: string,
+      picId: string,
+      file?: File,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'pid' is not null or undefined
+      assertParamExists("uploadPostPicture", "pid", pid);
+      // verify required parameter 'picId' is not null or undefined
+      assertParamExists("uploadPostPicture", "picId", picId);
+      const localVarPath = `/posts/{pid}/pictures/{picId}`
+        .replace(`{${"pid"}}`, encodeURIComponent(String(pid)))
+        .replace(`{${"picId"}}`, encodeURIComponent(String(picId)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "POST",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+      const localVarFormParams = new ((configuration &&
+        configuration.formDataCtor) ||
+        FormData)();
+
+      // authentication BearerAuth required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      if (file !== undefined) {
+        localVarFormParams.append("file", file as any);
+      }
+
+      localVarHeaderParameter["Content-Type"] = "multipart/form-data";
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = localVarFormParams;
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
   };
 };
 
@@ -2504,6 +2951,73 @@ export const PostingApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary Delete one picture of a post
+     * @param {string} pid
+     * @param {string} picId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deletePostPictureById(
+      pid: string,
+      picId: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PostPicture>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.deletePostPictureById(
+          pid,
+          picId,
+          options
+        );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["PostingApi.deletePostPictureById"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
+    },
+    /**
+     *
+     * @summary get all pictures of a post
+     * @param {string} pid
+     * @param {string} picId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getAllPostPictureById(
+      pid: string,
+      picId: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<Array<PostPicture>>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getAllPostPictureById(
+          pid,
+          picId,
+          options
+        );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["PostingApi.getAllPostPictureById"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
+    },
+    /**
+     *
      * @summary Get post by identifier.
      * @param {string} pid
      * @param {*} [options] Override http request option.
@@ -2522,6 +3036,34 @@ export const PostingApiFp = function (configuration?: Configuration) {
       const index = configuration?.serverIndex ?? 0;
       const operationBasePath =
         operationServerMap["PostingApi.getPostById"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
+    },
+    /**
+     *
+     * @summary get one picture of a post
+     * @param {string} pid
+     * @param {string} picId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getPostPictureById(
+      pid: string,
+      picId: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PostPicture>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getPostPictureById(pid, picId, options);
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["PostingApi.getPostPictureById"]?.[index]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
@@ -2595,6 +3137,41 @@ export const PostingApiFp = function (configuration?: Configuration) {
           configuration
         )(axios, operationBasePath || basePath);
     },
+    /**
+     *
+     * @summary Upload a picture to a post.
+     * @param {string} pid
+     * @param {string} picId
+     * @param {File} [file]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async uploadPostPicture(
+      pid: string,
+      picId: string,
+      file?: File,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PostPicture>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.uploadPostPicture(
+          pid,
+          picId,
+          file,
+          options
+        );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["PostingApi.uploadPostPicture"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
+    },
   };
 };
 
@@ -2640,6 +3217,40 @@ export const PostingApiFactory = function (
     },
     /**
      *
+     * @summary Delete one picture of a post
+     * @param {string} pid
+     * @param {string} picId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deletePostPictureById(
+      pid: string,
+      picId: string,
+      options?: any
+    ): AxiosPromise<PostPicture> {
+      return localVarFp
+        .deletePostPictureById(pid, picId, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary get all pictures of a post
+     * @param {string} pid
+     * @param {string} picId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getAllPostPictureById(
+      pid: string,
+      picId: string,
+      options?: any
+    ): AxiosPromise<Array<PostPicture>> {
+      return localVarFp
+        .getAllPostPictureById(pid, picId, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary Get post by identifier.
      * @param {string} pid
      * @param {*} [options] Override http request option.
@@ -2648,6 +3259,23 @@ export const PostingApiFactory = function (
     getPostById(pid: string, options?: any): AxiosPromise<Post> {
       return localVarFp
         .getPostById(pid, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary get one picture of a post
+     * @param {string} pid
+     * @param {string} picId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPostPictureById(
+      pid: string,
+      picId: string,
+      options?: any
+    ): AxiosPromise<PostPicture> {
+      return localVarFp
+        .getPostPictureById(pid, picId, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -2684,6 +3312,25 @@ export const PostingApiFactory = function (
     ): AxiosPromise<Reaction> {
       return localVarFp
         .reactToPostById(pid, type, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary Upload a picture to a post.
+     * @param {string} pid
+     * @param {string} picId
+     * @param {File} [file]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    uploadPostPicture(
+      pid: string,
+      picId: string,
+      file?: File,
+      options?: any
+    ): AxiosPromise<PostPicture> {
+      return localVarFp
+        .uploadPostPicture(pid, picId, file, options)
         .then((request) => request(axios, basePath));
     },
   };
@@ -2731,6 +3378,44 @@ export class PostingApi extends BaseAPI {
 
   /**
    *
+   * @summary Delete one picture of a post
+   * @param {string} pid
+   * @param {string} picId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PostingApi
+   */
+  public deletePostPictureById(
+    pid: string,
+    picId: string,
+    options?: AxiosRequestConfig
+  ) {
+    return PostingApiFp(this.configuration)
+      .deletePostPictureById(pid, picId, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary get all pictures of a post
+   * @param {string} pid
+   * @param {string} picId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PostingApi
+   */
+  public getAllPostPictureById(
+    pid: string,
+    picId: string,
+    options?: AxiosRequestConfig
+  ) {
+    return PostingApiFp(this.configuration)
+      .getAllPostPictureById(pid, picId, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
    * @summary Get post by identifier.
    * @param {string} pid
    * @param {*} [options] Override http request option.
@@ -2740,6 +3425,25 @@ export class PostingApi extends BaseAPI {
   public getPostById(pid: string, options?: AxiosRequestConfig) {
     return PostingApiFp(this.configuration)
       .getPostById(pid, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary get one picture of a post
+   * @param {string} pid
+   * @param {string} picId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PostingApi
+   */
+  public getPostPictureById(
+    pid: string,
+    picId: string,
+    options?: AxiosRequestConfig
+  ) {
+    return PostingApiFp(this.configuration)
+      .getPostPictureById(pid, picId, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -2780,6 +3484,27 @@ export class PostingApi extends BaseAPI {
   ) {
     return PostingApiFp(this.configuration)
       .reactToPostById(pid, type, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Upload a picture to a post.
+   * @param {string} pid
+   * @param {string} picId
+   * @param {File} [file]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PostingApi
+   */
+  public uploadPostPicture(
+    pid: string,
+    picId: string,
+    file?: File,
+    options?: AxiosRequestConfig
+  ) {
+    return PostingApiFp(this.configuration)
+      .uploadPostPicture(pid, picId, file, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -3212,6 +3937,64 @@ export const UserApiAxiosParamCreator = function (
     },
     /**
      *
+     * @summary Delete user picture of the type profile banner or profile picture
+     * @param {string} uid
+     * @param {UserPictureType} type
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteUserPicture: async (
+      uid: string,
+      type: UserPictureType,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'uid' is not null or undefined
+      assertParamExists("deleteUserPicture", "uid", uid);
+      // verify required parameter 'type' is not null or undefined
+      assertParamExists("deleteUserPicture", "type", type);
+      const localVarPath = `/users/{uid}/pictures`.replace(
+        `{${"uid"}}`,
+        encodeURIComponent(String(uid))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "DELETE",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication BearerAuth required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      if (type !== undefined) {
+        localVarQueryParameter["type"] = type;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
      * @summary Get user by identifier.
      * @param {string} id
      * @param {*} [options] Override http request option.
@@ -3245,6 +4028,64 @@ export const UserApiAxiosParamCreator = function (
       // authentication BearerAuth required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Get user picture of the type profile banner or profile picture
+     * @param {string} uid
+     * @param {UserPictureType} type
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getUserPicture: async (
+      uid: string,
+      type: UserPictureType,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'uid' is not null or undefined
+      assertParamExists("getUserPicture", "uid", uid);
+      // verify required parameter 'type' is not null or undefined
+      assertParamExists("getUserPicture", "type", type);
+      const localVarPath = `/users/{uid}/pictures`.replace(
+        `{${"uid"}}`,
+        encodeURIComponent(String(uid))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "GET",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication BearerAuth required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      if (type !== undefined) {
+        localVarQueryParameter["type"] = type;
+      }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
@@ -3325,6 +4166,76 @@ export const UserApiAxiosParamCreator = function (
         options: localVarRequestOptions,
       };
     },
+    /**
+     *
+     * @summary Submit user picture of the type profile banner or profile picture
+     * @param {string} uid
+     * @param {UserPictureType} type
+     * @param {File} [file]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    putUserPicture: async (
+      uid: string,
+      type: UserPictureType,
+      file?: File,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'uid' is not null or undefined
+      assertParamExists("putUserPicture", "uid", uid);
+      // verify required parameter 'type' is not null or undefined
+      assertParamExists("putUserPicture", "type", type);
+      const localVarPath = `/users/{uid}/pictures`.replace(
+        `{${"uid"}}`,
+        encodeURIComponent(String(uid))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "PUT",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+      const localVarFormParams = new ((configuration &&
+        configuration.formDataCtor) ||
+        FormData)();
+
+      // authentication BearerAuth required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      if (type !== undefined) {
+        localVarQueryParameter["type"] = type;
+      }
+
+      if (file !== undefined) {
+        localVarFormParams.append("file", file as any);
+      }
+
+      localVarHeaderParameter["Content-Type"] = "multipart/form-data";
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = localVarFormParams;
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
   };
 };
 
@@ -3365,6 +4276,34 @@ export const UserApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary Delete user picture of the type profile banner or profile picture
+     * @param {string} uid
+     * @param {UserPictureType} type
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deleteUserPicture(
+      uid: string,
+      type: UserPictureType,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserPicture>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.deleteUserPicture(uid, type, options);
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["UserApi.deleteUserPicture"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
+    },
+    /**
+     *
      * @summary Get user by identifier.
      * @param {string} id
      * @param {*} [options] Override http request option.
@@ -3383,6 +4322,37 @@ export const UserApiFp = function (configuration?: Configuration) {
       const index = configuration?.serverIndex ?? 0;
       const operationBasePath =
         operationServerMap["UserApi.getUserById"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
+    },
+    /**
+     *
+     * @summary Get user picture of the type profile banner or profile picture
+     * @param {string} uid
+     * @param {UserPictureType} type
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getUserPicture(
+      uid: string,
+      type: UserPictureType,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserPicture>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getUserPicture(
+        uid,
+        type,
+        options
+      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["UserApi.getUserPicture"]?.[index]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
@@ -3425,6 +4395,40 @@ export const UserApiFp = function (configuration?: Configuration) {
           configuration
         )(axios, operationBasePath || basePath);
     },
+    /**
+     *
+     * @summary Submit user picture of the type profile banner or profile picture
+     * @param {string} uid
+     * @param {UserPictureType} type
+     * @param {File} [file]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async putUserPicture(
+      uid: string,
+      type: UserPictureType,
+      file?: File,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserPicture>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.putUserPicture(
+        uid,
+        type,
+        file,
+        options
+      );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["UserApi.putUserPicture"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
+    },
   };
 };
 
@@ -3458,6 +4462,23 @@ export const UserApiFactory = function (
     },
     /**
      *
+     * @summary Delete user picture of the type profile banner or profile picture
+     * @param {string} uid
+     * @param {UserPictureType} type
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteUserPicture(
+      uid: string,
+      type: UserPictureType,
+      options?: any
+    ): AxiosPromise<UserPicture> {
+      return localVarFp
+        .deleteUserPicture(uid, type, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary Get user by identifier.
      * @param {string} id
      * @param {*} [options] Override http request option.
@@ -3466,6 +4487,23 @@ export const UserApiFactory = function (
     getUserById(id: string, options?: any): AxiosPromise<User> {
       return localVarFp
         .getUserById(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary Get user picture of the type profile banner or profile picture
+     * @param {string} uid
+     * @param {UserPictureType} type
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getUserPicture(
+      uid: string,
+      type: UserPictureType,
+      options?: any
+    ): AxiosPromise<UserPicture> {
+      return localVarFp
+        .getUserPicture(uid, type, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -3485,6 +4523,25 @@ export const UserApiFactory = function (
     ): AxiosPromise<Array<User>> {
       return localVarFp
         .getUsers(page, pageSize, name, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary Submit user picture of the type profile banner or profile picture
+     * @param {string} uid
+     * @param {UserPictureType} type
+     * @param {File} [file]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    putUserPicture(
+      uid: string,
+      type: UserPictureType,
+      file?: File,
+      options?: any
+    ): AxiosPromise<UserPicture> {
+      return localVarFp
+        .putUserPicture(uid, type, file, options)
         .then((request) => request(axios, basePath));
     },
   };
@@ -3518,6 +4575,25 @@ export class UserApi extends BaseAPI {
 
   /**
    *
+   * @summary Delete user picture of the type profile banner or profile picture
+   * @param {string} uid
+   * @param {UserPictureType} type
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof UserApi
+   */
+  public deleteUserPicture(
+    uid: string,
+    type: UserPictureType,
+    options?: AxiosRequestConfig
+  ) {
+    return UserApiFp(this.configuration)
+      .deleteUserPicture(uid, type, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
    * @summary Get user by identifier.
    * @param {string} id
    * @param {*} [options] Override http request option.
@@ -3527,6 +4603,25 @@ export class UserApi extends BaseAPI {
   public getUserById(id: string, options?: AxiosRequestConfig) {
     return UserApiFp(this.configuration)
       .getUserById(id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Get user picture of the type profile banner or profile picture
+   * @param {string} uid
+   * @param {UserPictureType} type
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof UserApi
+   */
+  public getUserPicture(
+    uid: string,
+    type: UserPictureType,
+    options?: AxiosRequestConfig
+  ) {
+    return UserApiFp(this.configuration)
+      .getUserPicture(uid, type, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -3548,6 +4643,27 @@ export class UserApi extends BaseAPI {
   ) {
     return UserApiFp(this.configuration)
       .getUsers(page, pageSize, name, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Submit user picture of the type profile banner or profile picture
+   * @param {string} uid
+   * @param {UserPictureType} type
+   * @param {File} [file]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof UserApi
+   */
+  public putUserPicture(
+    uid: string,
+    type: UserPictureType,
+    file?: File,
+    options?: AxiosRequestConfig
+  ) {
+    return UserApiFp(this.configuration)
+      .putUserPicture(uid, type, file, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
