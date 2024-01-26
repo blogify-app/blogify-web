@@ -1,8 +1,21 @@
-import {Post, Reaction, ReactionType} from "@/services/api/gen";
+import {Post, PostPicture, Reaction, ReactionType} from "@/services/api/gen";
 import {postingApi, DataProvider, DEFAULT_QUERY, Query} from "@/services/api";
 
 export interface PostProvider extends DataProvider<Post> {
   reactToPostById(pid: string, type: ReactionType): Promise<Reaction>;
+
+  // pictures
+  getPicture(picId: string, query: Query<{pid: string}>): Promise<PostPicture>;
+  getPictures(pid: string): Promise<PostPicture[]>;
+  uploadPicture(
+    picId: string,
+    file: File,
+    query: Query<{pid: string}>
+  ): Promise<PostPicture>;
+  deletePicture(
+    picId: string,
+    query: Query<{pid: string}>
+  ): Promise<PostPicture>;
 }
 
 export const PostProvider: PostProvider = {
@@ -30,6 +43,35 @@ export const PostProvider: PostProvider = {
 
   async deleteById(pid: string, _query: Query): Promise<Post> {
     return (await postingApi().deletePostById(pid)).data;
+  },
+
+  async getPicture(
+    picId: string,
+    query: Query<{pid: string}>
+  ): Promise<PostPicture> {
+    return (await postingApi().getPostPictureById(query.params.pid, picId))
+      .data;
+  },
+
+  async uploadPicture(
+    picId: string,
+    file: File,
+    query: Query<{pid: string}>
+  ): Promise<PostPicture> {
+    return (await postingApi().uploadPostPicture(query.params.pid, picId, file))
+      .data;
+  },
+
+  async deletePicture(
+    picId: string,
+    query: Query<{pid: string}>
+  ): Promise<PostPicture> {
+    return (await postingApi().deletePostPictureById(query.params.pid, picId))
+      .data;
+  },
+
+  getPictures(_picId: string): Promise<PostPicture[]> {
+    throw new Error("Function not implemented.");
   },
 
   crupdate(_payload: Post): Promise<Post> {
