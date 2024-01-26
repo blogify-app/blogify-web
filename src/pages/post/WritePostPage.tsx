@@ -3,14 +3,24 @@ import {useParams} from "react-router-dom";
 import {Layout} from "@/layout";
 import {WritePost} from "@/features/post";
 import {Post} from "@/services/api/gen";
+import {PostProvider} from "@/services/api";
 
 export const WritePostPage = () => {
   // TODO: handle
-  const {pid} = useParams();
+  const pid = useParams().pid!;
   const [post, _setPost] = useState<Post | null>(null);
 
   useEffect(() => {
-    // TODO: fetch post
+    const fetch = async () => {
+      try {
+        const p = await PostProvider.getById(pid);
+        // TODO
+      } catch (e) {
+        /* EMPTY */
+      }
+    };
+
+    void fetch();
   }, [pid]);
 
   return (
