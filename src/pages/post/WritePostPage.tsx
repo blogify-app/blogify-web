@@ -1,26 +1,39 @@
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {Layout} from "@/layout";
+import {uuid} from "@tinymce/tinymce-react/lib/es2015/main/ts/Utils";
 import {WritePost} from "@/features/post";
-import {Post} from "@/services/api/gen";
+import {Layout} from "@/layout";
+import {Post, PostStatus} from "@/services/api/gen";
 import {PostProvider} from "@/services/api";
 
 export const WritePostPage = () => {
-  // TODO: handle
+  const [post, setPost] = useState<Post | null>(null);
+
   const pid = useParams().pid!;
-  const [post, _setPost] = useState<Post | null>(null);
 
   useEffect(() => {
     const fetch = async () => {
+      let post: Post;
       try {
-        const p = await PostProvider.getById(pid);
-        // TODO
-      } catch (e) {
-        /* EMPTY */
+        post = await PostProvider.getById(pid);
+      } catch (e: any) {
+        // TODO: assuming status is 404 here, handle 403, and other status code properly
+        const id = uuid(pid /* prefix */);
+        post = await PostProvider.crupdateById(id, {
+          id,
+          content: "",
+          status: PostStatus.DRAFT,
+          creation_datetime: new Date(),
+          author_id: undefined /* TODO: current user */,
+          categories: [],
+        });
       }
+      setPost(post);
     };
 
-    void fetch();
+    if (pid) {
+      void fetch();
+    }
   }, [pid]);
 
   return (

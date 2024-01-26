@@ -79,12 +79,14 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
   };
 
   return (
-    <TinyMCE
-      id={id}
-      initialValue={children}
-      onInit={onEditorInit}
-      apiKey={TINY_MCE_API_KEY}
-      init={TINY_MCE_CONFIGURATION}
-    />
+    <div className="h-full w-full" data-testid="rich-text-editor">
+      <TinyMCE
+        id={id}
+        initialValue={children}
+        onInit={onEditorInit}
+        apiKey={TINY_MCE_API_KEY}
+        init={TINY_MCE_CONFIGURATION}
+      />
+    </div>
   );
 };

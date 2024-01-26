@@ -16,7 +16,7 @@ export const WritePost: FC<WritePostProps> = ({post}) => {
       {/* paper */}
       <div className="h-full w-[50rem]">
         <div className="flex h-[3.75rem] items-center text-2xl font-medium">
-          Writing: {post.id}
+          Writing: {post.title}
         </div>
 
         <div

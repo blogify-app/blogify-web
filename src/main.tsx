@@ -29,7 +29,7 @@ const ROUTER = createBrowserRouter([
     element: <PostPage />,
   },
   {
-    path: "/posts/write/:id",
+    path: "/posts/write/:pid",
     element: <WritePostPage />,
   },
 ]);
