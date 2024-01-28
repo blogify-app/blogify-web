@@ -16,7 +16,7 @@ describe("WritePost", () => {
     });
 
     cy.visit(`/posts/write/${non_existent_id()}`);
-    cy.contains("This post does not exist");
+    cy.contains("The post you're trying to edit does not exist");
 
     // fallbacks correctly to draft post
     cy.getByTestid("post-title").should("have.value", "Draft");
