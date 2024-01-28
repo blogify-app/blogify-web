@@ -6,7 +6,6 @@ import {TitleInput} from "@/features/post";
 import {RichTextEditor} from "@/features/wisiwig";
 import {Post} from "@/services/api/gen";
 import {PostProvider} from "@/services/api";
-import {useAuthStore} from "@/features/auth";
 
 export interface WritePostProps {
   post: Post;
@@ -14,7 +13,6 @@ export interface WritePostProps {
 }
 
 export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
-  const user = useAuthStore((s) => s.user);
   const navigate = useNavigate();
 
   const [editor, setEditor] = useState<Editor | null>(null);
@@ -25,9 +23,6 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
   const syncPost = () => {
     post.title = titleInputRef.current?.value || "";
     post.content = editor?.getContent() || "";
-    // write_post is a protected route so at this point we can assume user to be non-null
-    // FIXME: when Authentication is ok
-    post.author_id = user!;
   };
 
   const createNewPost = async () => {

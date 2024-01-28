@@ -1,4 +1,5 @@
 import {Post} from "@/services/api/gen";
+// TODO: add alias for test fixture
 import {non_existent_id, post1} from "../fixtures/post.ts";
 
 describe("WritePost", () => {
