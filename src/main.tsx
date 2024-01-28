@@ -1,8 +1,8 @@
 import React from "react";
+import ReactDOM from "react-dom/client";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 
 import {PostPage} from "@/pages/post";
-import ReactDOM from "react-dom/client";
 import {HomePage} from "@/pages/home";
 import {LoginPage} from "@/pages/auth";
 import {Authenticated} from "@/features/auth";

@@ -20,7 +20,7 @@ import {
 export const NavBar: FC = () => {
   return (
     <div
-      className="fixed grid w-screen grid-cols-10 gap-3 border-b border-slate-200 bg-white px-10 py-5"
+      className="grid h-full w-full grid-cols-10 items-center gap-3 bg-white px-5"
       data-testid="Navbar"
     >
       <div className="logo w-30 h-15 col-span-1">
