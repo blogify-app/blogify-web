@@ -3,7 +3,7 @@ import {Post, PostStatus} from "@/services/api/gen";
 export const post: Post = {
   id: "post_1",
   thumbnail_url:
-    "https://fr.freepik.com/photos-gratuite/vue-dessus-fraises-rouges-fraiches-bol-belles-fleurs-comme-tulipe-roses-fond-bois_12430572.htm#page=2&query=fleurs%20frais&position=18&from_view=keyword&track=ais&uuid=b0faa139-22de-4811-b57d-361006be8eae",
+    "https://images.pexels.com/photos/14577237/pexels-photo-14577237.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
   description: "Lorem Lorem Description",
   content: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo dolore voluptatibus facere nulla quam ipsa quibusdam, voluptatem laborum iure repellat suscipit fuga provident voluptas dolor dignissimos aperiam possimus officia incidunt.
       Sunt voluptatum ipsa eius recusandae placeat et fugit, eos nemo? Est perspiciatis aut asperiores assumenda non deleniti provident! Dolorem excepturi laudantium quod autem assumenda repellendus ad error nobis illo culpa?

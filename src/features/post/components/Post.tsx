@@ -2,7 +2,7 @@ import {FC} from "react";
 import {Link} from "react-router-dom";
 import {Icon} from "@iconify/react";
 import {Badge} from "@/components/shadcn-ui/badge";
-import {NavBar} from "@/layout";
+import {Layout} from "@/layout";
 import {calculateReadDuration} from "@/features/post/utils";
 import {Post as PostType} from "@/services/api/gen";
 import {user} from "@/pages/post/data/user";
@@ -14,17 +14,16 @@ export interface PostProps {
 }
 
 export const Post: FC<PostProps> = ({post}: PostProps) => (
-  <div className=" overflow-hidden bg-white">
-    <NavBar />
+  <Layout>
     <div
       data-testid="post-title"
-      className="mb-4 mt-40 flex w-screen justify-center p-11 md:mt-20"
+      className="mb-4 mt-40 flex w-full justify-center p-11 md:mt-20"
     >
       <p className="font-optical-sizing-auto normal font-title text-6xl font-bold">
         {post?.title}
       </p>
     </div>
-    <div className="flex w-screen justify-center">
+    <div className="flex w-full justify-center">
       <div data-testid="post-details" className="grid w-[31.25rem] grid-cols-3">
         <div className="flex items-center justify-center">
           <Icon icon="material-symbols-light:face-6" className="text-2xl" />
@@ -56,12 +55,14 @@ export const Post: FC<PostProps> = ({post}: PostProps) => (
     <div className="my-5 grid grid-cols-8">
       <div className="col-span-1 h-[18.75rem]"></div>
       <div className="col-span-6 grid grid-cols-8 gap-5">
-        <div data-testid="post-banner" className="col-span-8 h-[35rem]">
-          <img
-            src={post.thumbnail_url}
-            className="h-full w-full object-cover"
-          />
-        </div>
+        {post.thumbnail_url && (
+          <div data-testid="post-banner" className="col-span-8 h-[35rem]">
+            <img
+              src={post.thumbnail_url}
+              className="rounded-sd h-full w-full object-cover"
+            />
+          </div>
+        )}
         <div className="col-span-2 border-r border-slate-200 p-4">
           <div
             data-testid="post-content-menu"
@@ -136,5 +137,5 @@ export const Post: FC<PostProps> = ({post}: PostProps) => (
       </div>
       <div className="col-span-1 h-[18.75rem]"></div>
     </div>
-  </div>
+  </Layout>
 );
