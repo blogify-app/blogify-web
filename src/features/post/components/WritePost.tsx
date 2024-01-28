@@ -19,9 +19,15 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
 
   const titleInputRef = useRef<HTMLInputElement>(null);
 
+  // bind title/content to the post object
+  const syncPost = () => {
+    post.title = titleInputRef.current?.value || "";
+    post.content = editor?.getContent() || "";
+  };
+
   const createNewPost = async () => {
     try {
-      post.title = "New post";
+      syncPost();
       await PostProvider.crupdateById(post.id!, post);
       navigate(`/posts/write/${post.id}`);
     } catch (e) {
@@ -30,13 +36,10 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
   };
 
   /**
-   * TODO: Also handle periodical caching to avoid loss of edit
+   * TODO: implement periodically caching to avoid loss
    */
   const save = async () => {
-    // at this point, editor is not null
-    post.content = editor!.getContent();
-    // ref is bound
-    post.title = titleInputRef.current!.title ?? "";
+    syncPost();
     post.updated_at = new Date();
     try {
       await PostProvider.crupdateById(post.id!, post);
@@ -44,8 +47,6 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
       // TODO: handle error
     }
   };
-
-  const canEdit = isExistent && editor !== null;
 
   return (
     <div className="mx-auto my-0 flex h-full w-[75rem] justify-center">
@@ -56,7 +57,6 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
           <TitleInput
             data-testid="post-title"
             ref={titleInputRef}
-            disabled={!canEdit}
             defaultValue={post.title}
           />
 
@@ -74,7 +74,11 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
               </Button>
             </div>
           ) : (
-            <Button data-testid="save-post" disabled={!canEdit} onClick={save}>
+            <Button
+              data-testid="save-post"
+              disabled={!isExistent || !editor}
+              onClick={save}
+            >
               Save
             </Button>
           )}
@@ -85,7 +89,7 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
           className="rounded border border-gray-200 p-2"
         >
           <RichTextEditor
-            disabled={!canEdit}
+            disabled={!editor}
             onInit={(_, e) => {
               setEditor(e);
             }}
