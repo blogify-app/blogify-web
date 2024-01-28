@@ -1,10 +1,27 @@
+import {Post} from "@/services/api/gen";
 import {non_existent_id, post1} from "../fixtures/post.ts";
 
 describe("WritePost", () => {
   it("should display post", () => {
     cy.visit(`/posts/write/${post1().id}`);
+
     cy.intercept("GET", `/posts/${post1().id}`, post1());
-    cy.getByTestid("post-title").should("have.value", post1().title);
+
+    cy.getByTestid("post-title")
+      .should("be.enabled")
+      .should("have.value", post1().title);
+
+    cy.getByTestid("save-post").should("be.visible");
+
+    // edit
+    cy.getByTestid("post-title").type("Edited post title");
+
+    cy.getByTestid("save-post").click();
+
+    cy.intercept("PUT", `/posts/${post1().id}`, (req) => {
+      const post: Post = req.body;
+      expect(post.title).to.eq("Edited post title");
+    });
   });
 
   it("should suggest creating new post when trying to write non-existent", () => {
@@ -19,7 +36,9 @@ describe("WritePost", () => {
     cy.contains("The post you're trying to edit does not exist");
 
     // fallbacks correctly to draft post
-    cy.getByTestid("post-title").should("have.value", "Draft");
+    cy.getByTestid("post-title")
+      .should("be.disabled")
+      .should("have.value", "Draft");
 
     // Create new
     cy.getByTestid("create-new-post").click();

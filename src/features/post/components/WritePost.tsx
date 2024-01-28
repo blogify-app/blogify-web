@@ -1,4 +1,4 @@
-import {FC, useRef} from "react";
+import {FC, useRef, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {Editor} from "tinymce";
 import {Button} from "@/components/shadcn-ui/button";
@@ -15,18 +15,37 @@ export interface WritePostProps {
 export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
   const navigate = useNavigate();
 
-  const editorRef = useRef<Editor | null>(null);
+  const [editor, setEditor] = useState<Editor | null>(null);
+
   const titleInputRef = useRef<HTMLInputElement>(null);
 
   const createNewPost = async () => {
     try {
       post.title = "New post";
-      await PostProvider.crupdate(post);
+      await PostProvider.crupdateById(post.id!, post);
       navigate(`/posts/write/${post.id}`);
     } catch (e) {
       // TODO: handle error
     }
   };
+
+  /**
+   * TODO: Also handle periodical caching to avoid loss of edit
+   */
+  const save = async () => {
+    // at this point, editor is not null
+    post.content = editor!.getContent();
+    // ref is bound
+    post.title = titleInputRef.current!.title ?? "";
+    post.updated_at = new Date();
+    try {
+      await PostProvider.crupdateById(post.id!, post);
+    } catch (e) {
+      // TODO: handle error
+    }
+  };
+
+  const canEdit = editor != null && isExistent;
 
   return (
     <div className="mx-auto my-0 flex h-full w-[75rem] justify-center">
@@ -37,7 +56,7 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
           <TitleInput
             data-testid="post-title"
             ref={titleInputRef}
-            disabled={!isExistent}
+            disabled={!canEdit}
             defaultValue={post.title}
           />
 
@@ -55,7 +74,9 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
               </Button>
             </div>
           ) : (
-            <Button>Save</Button>
+            <Button data-testid="save-post" onClick={save}>
+              Save
+            </Button>
           )}
         </div>
 
@@ -64,9 +85,9 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
           className="rounded border border-gray-200 p-2"
         >
           <RichTextEditor
-            disabled={!isExistent}
-            onInit={(_, editor) => {
-              editorRef.current = editor;
+            disabled={!canEdit}
+            onInit={(_, e) => {
+              setEditor(e);
             }}
           >
             {post.content ?? ""}
