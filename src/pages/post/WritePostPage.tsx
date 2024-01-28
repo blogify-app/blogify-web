@@ -34,6 +34,7 @@ export const WritePostPage = () => {
 
   const createNewPost = async () => {
     try {
+      post.title = "New post";
       await PostProvider.crupdate(post);
       navigate(`/posts/write/${post.id}`);
     } catch (e) {
@@ -44,14 +45,16 @@ export const WritePostPage = () => {
   return (
     <Layout>
       {/* TODO: Add loader */}
-      <WritePost post={post} created={isExistent} />
+      <WritePost post={post} created={isExistent} key={post.id} />
       <div className="mx-auto my-0 mt-2 flex w-[75rem] justify-center">
         {!isExistent && (
           <div className="flex w-[50rem] items-center gap-2">
             <span className="text-muted-foreground">
-              This post is does not exist
+              This post does not exist
             </span>
-            <Button onClick={createNewPost}>create new</Button>
+            <Button data-testid="create-new-post" onClick={createNewPost}>
+              create new
+            </Button>
           </div>
         )}
       </div>

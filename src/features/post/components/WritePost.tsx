@@ -20,7 +20,11 @@ export const WritePost: FC<WritePostProps> = ({post, created = false}) => {
       <div className="h-full w-[50rem]">
         <div className="flex h-[3.75rem] items-center gap-3 text-2xl font-medium">
           <span>Write</span>
-          <TitleInput ref={titleInputRef} />
+          <TitleInput
+            data-testid="post-title"
+            ref={titleInputRef}
+            defaultValue={post.title}
+          />
         </div>
 
         <div
