@@ -1,4 +1,4 @@
-import {post1} from "../fixtures/post.ts";
+import {non_existent_id, post1} from "../fixtures/post.ts";
 
 describe("WritePost", () => {
   it("should display and write existing post", () => {
@@ -9,9 +9,9 @@ describe("WritePost", () => {
   });
 
   it("should create when not existing", () => {
-    cy.visit(`/posts/write/non-existent`);
+    cy.visit(`/posts/write/${non_existent_id()}`);
 
-    cy.intercept("GET", `/posts/non-existent`, (req) => {
+    cy.intercept("GET", `/posts/${non_existent_id()}`, (req) => {
       // simulate 404 not found
       req.reply({
         statusCode: 404,

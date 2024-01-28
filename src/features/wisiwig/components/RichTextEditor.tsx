@@ -63,6 +63,7 @@ const TINY_MCE_CONFIGURATION: any = {
 export interface RichTextEditorProps {
   children?: string;
   id?: string;
+  disabled?: boolean;
   onInit: IAllProps["onInit"];
 }
 
@@ -73,6 +74,7 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
   onInit,
   id,
   children = "",
+  disabled = false,
 }) => {
   const onEditorInit: IAllProps["onInit"] = (ev, editor) => {
     onInit && onInit(ev, editor);
@@ -83,6 +85,7 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
       <TinyMCE
         id={id}
         initialValue={children}
+        disabled={disabled}
         onInit={onEditorInit}
         apiKey={TINY_MCE_API_KEY}
         init={TINY_MCE_CONFIGURATION}

@@ -1,5 +1,7 @@
 import {Post, PostStatus} from "../../src/services/api/gen"; // alias path does not work here
 
+export const non_existent_id = () => "non_existent_pid";
+
 export const post1 = (): Post => ({
   id: "post_1",
   thumbnail_url:

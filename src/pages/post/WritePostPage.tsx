@@ -1,45 +1,60 @@
 import {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
-import {uuid} from "@tinymce/tinymce-react/lib/es2015/main/ts/Utils";
-import {WritePost} from "@/features/post";
+import {useNavigate, useParams} from "react-router-dom";
+import {nanoid} from "nanoid";
 import {Layout} from "@/layout";
-import {Post, PostStatus} from "@/services/api/gen";
+import {Button} from "@/components/shadcn-ui/button";
+import {WritePost} from "@/features/post";
+import {createDraftPost} from "@/features/post/lib";
+import {useAuthStore} from "@/features/auth";
 import {PostProvider} from "@/services/api";
 
 export const WritePostPage = () => {
-  const [post, setPost] = useState<Post | null>(null);
+  const user = useAuthStore((auth) => auth.user!);
+  const navigate = useNavigate();
+
+  const [post, setPost] = useState(createDraftPost(nanoid(), user));
+  const [isExistent, setIsExistent] = useState(true);
 
   const pid = useParams().pid!;
 
   useEffect(() => {
     const fetch = async () => {
-      let post: Post;
       try {
-        post = await PostProvider.getById(pid);
+        const post = await PostProvider.getById(pid);
+        setPost(post);
       } catch (e: any) {
-        // TODO: assuming status is 404 here, handle 403, and other status code properly
-        const id = uuid(pid /* prefix */);
-        post = await PostProvider.crupdateById(id, {
-          id,
-          content: "",
-          status: PostStatus.DRAFT,
-          creation_datetime: new Date(),
-          author_id: undefined /* TODO: current user */,
-          categories: [],
-        });
+        // suggest creating new post if "pid" is 404 not found
+        // TODO: handle error status_code
+        setIsExistent(false);
       }
-      setPost(post);
     };
 
-    if (pid) {
-      void fetch();
-    }
+    void fetch();
   }, [pid]);
+
+  const createNewPost = async () => {
+    try {
+      await PostProvider.crupdate(post);
+      navigate(`/posts/write/${post.id}`);
+    } catch (e) {
+      // TODO: handle error
+    }
+  };
 
   return (
     <Layout>
       {/* TODO: Add loader */}
-      {post && <WritePost post={post} />}
+      <WritePost post={post} created={isExistent} />
+      <div className="mx-auto my-0 mt-2 flex w-[75rem] justify-center">
+        {!isExistent && (
+          <div className="flex w-[50rem] items-center gap-2">
+            <span className="text-muted-foreground">
+              This post is does not exist
+            </span>
+            <Button onClick={createNewPost}>create new</Button>
+          </div>
+        )}
+      </div>
     </Layout>
   );
 };
