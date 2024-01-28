@@ -45,7 +45,7 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
     }
   };
 
-  const canEdit = editor != null && isExistent;
+  const canEdit = isExistent && editor !== null;
 
   return (
     <div className="mx-auto my-0 flex h-full w-[75rem] justify-center">
@@ -74,7 +74,7 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
               </Button>
             </div>
           ) : (
-            <Button data-testid="save-post" onClick={save}>
+            <Button data-testid="save-post" disabled={!canEdit} onClick={save}>
               Save
             </Button>
           )}

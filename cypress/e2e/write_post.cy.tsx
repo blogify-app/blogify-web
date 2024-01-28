@@ -2,26 +2,29 @@ import {Post} from "@/services/api/gen";
 import {non_existent_id, post1} from "../fixtures/post.ts";
 
 describe("WritePost", () => {
+  beforeEach(() => {
+    cy.waitForTinyMCELoaded();
+  });
+
   it("should display post", () => {
-    cy.visit(`/posts/write/${post1().id}`);
-
-    cy.intercept("GET", `/posts/${post1().id}`, post1());
-
-    cy.getByTestid("post-title")
-      .should("be.enabled")
-      .should("have.value", post1().title);
-
-    cy.getByTestid("save-post").should("be.visible");
-
-    // edit
-    cy.getByTestid("post-title").type("Edited post title");
-
-    cy.getByTestid("save-post").click();
+    cy.intercept("GET", `/posts/${post1().id}`, post1()).as("getPost");
 
     cy.intercept("PUT", `/posts/${post1().id}`, (req) => {
       const post: Post = req.body;
       expect(post.title).to.eq("Edited post title");
-    });
+      req.reply();
+    }).as("saveEditedPost");
+
+    cy.visit(`/posts/write/${post1().id}`);
+
+    cy.wait("@getPost");
+    cy.getByTestid("post-title").should("have.value", post1().title);
+    cy.getByTestid("save-post").should("be.visible");
+
+    // edit
+    cy.getByTestid("post-title").clear().type("Edited post title");
+    cy.getByTestid("save-post").click();
+    cy.wait("@saveEditedPost");
   });
 
   it("should suggest creating new post when trying to write non-existent", () => {

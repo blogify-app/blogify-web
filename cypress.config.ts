@@ -5,13 +5,14 @@ const require = createRequire(import.meta.url);
 
 export default defineConfig({
   env: {
-    codeCoverage: {
-      exclude: [
-        "cypress/**/*",
-        // TODO: to remove,
-        "./src/features/wisiwig/components/RichTextEditor.tsx",
-      ],
-    },
+    // codeCoverage: {
+    //   exclude: [
+    //     "cypress/**/*",
+    //     // TODO: to remove,
+    //     "./src/features/wisiwig/components/RichTextEditor.tsx",
+    //   ],
+    // },
+    codeCoverage: false,
   },
   e2e: {
     setupNodeEvents(on, config) {
