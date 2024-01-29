@@ -4,12 +4,12 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  type User as FUser,
   type UserCredential,
 } from "firebase/auth";
-import {auth} from "@/config/firebase.ts";
-import {SignUp, User, Whoami} from "@/services/api/gen";
+import {Configuration, SignUp, User, Whoami} from "@/services/api/gen";
 import {SecurityProvider} from "@/services/api";
+import {EmailAndPassword} from "@/features/auth/schema.ts";
+import {auth} from "@/config/firebase.ts";
 
 /**
  * such as: GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider from **firebase.auth**
@@ -18,7 +18,10 @@ export type ProviderCtor = {
   new (): _AuthProvider;
 };
 
+// TODO: refactor!!!
 export interface AuthProvider {
+  signUp(user: SignUp, credential: UserCredential): Promise<Whoami>;
+
   signInWithEmailAndPassword(email: string, password: string): Promise<Whoami>;
 
   signInWithProvider(providerCtor: ProviderCtor): Promise<Whoami>;
@@ -38,24 +41,36 @@ export interface AuthProvider {
 
   initializeProviderAuth(providerCtor: ProviderCtor): Promise<UserCredential>;
 
-  getCurrentUser(): Promise<FUser | null>;
+  createWithEmailAndPassword(
+    payload: EmailAndPassword
+  ): Promise<UserCredential>;
+
+  getCachedAuthConf(): Configuration;
 }
 
 /**
  * IIFE (Immediately Invoked Function Expression) that creates a **AuthProvider** singleton
  */
-export const AuthProvider = new (class implements AuthProvider {
+export const AuthProvider = new (class Provider implements AuthProvider {
+  private static AUTH_TOKEN_KEY = "auth:token";
+
+  signUp(user: SignUp): Promise<User> {
+    return SecurityProvider.signUp(user);
+  }
+
   async signInWithEmailAndPassword(
     email: string,
     password: string
   ): Promise<Whoami> {
-    const credential = await signInWithEmailAndPassword(auth, email, password);
-    return this.signIn(credential);
+    await this.cacheCredential(
+      await signInWithEmailAndPassword(auth, email, password)
+    );
+    return this.signIn();
   }
 
   async signInWithProvider(providerCtor: ProviderCtor): Promise<Whoami> {
-    const credential = await this.initializeProviderAuth(providerCtor);
-    return this.signIn(credential);
+    await this.initializeProviderAuth(providerCtor);
+    return this.signIn();
   }
 
   async signUpWithEmailAndPassword(
@@ -63,50 +78,55 @@ export const AuthProvider = new (class implements AuthProvider {
     password: string,
     payload: SignUp
   ): Promise<User> {
-    const credential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    return this.signUp(payload, credential);
+    await this.createWithEmailAndPassword({email, password});
+    return this.signUp(payload);
   }
 
   async signUpWithProvider(
     providerCtor: ProviderCtor,
     payload: SignUp
   ): Promise<User> {
-    const credential = await this.initializeProviderAuth(providerCtor);
-    return this.signUp(payload, credential);
+    await this.initializeProviderAuth(providerCtor);
+    return this.signUp(payload);
   }
 
-  initializeProviderAuth(providerCtor: ProviderCtor): Promise<UserCredential> {
-    return signInWithPopup(auth, new providerCtor());
+  async initializeProviderAuth(
+    providerCtor: ProviderCtor
+  ): Promise<UserCredential> {
+    return this.cacheCredential(
+      await signInWithPopup(auth, new providerCtor())
+    );
+  }
+
+  async createWithEmailAndPassword(
+    payload: EmailAndPassword
+  ): Promise<UserCredential> {
+    return this.cacheCredential(
+      await createUserWithEmailAndPassword(
+        auth,
+        payload.email,
+        payload.password
+      )
+    );
   }
 
   logOut(): Promise<void> {
     return signOut(auth);
   }
 
-  getCurrentUser(): Promise<FUser | null> {
-    return new Promise((resolve) => {
-      const unsub = auth.onAuthStateChanged((user) => {
-        unsub();
-        resolve(user);
-      });
-    });
+  getCachedAuthConf(): Configuration {
+    const conf = new Configuration();
+    conf.accessToken = localStorage.getItem(Provider.AUTH_TOKEN_KEY) ?? "";
+    return conf;
   }
 
-  private signIn(credential: UserCredential): Promise<Whoami> {
-    const {user} = credential;
-    return SecurityProvider.signIn({
-      provider_id: user.uid,
-      email: user.email || undefined,
-      // FIXME: Do we really need password
-      password: "passwd",
-    });
+  private signIn(): Promise<Whoami> {
+    return SecurityProvider.signIn({} as any);
   }
 
-  public signUp(user: SignUp, _credential: UserCredential): Promise<User> {
-    return SecurityProvider.signUp(user);
+  private async cacheCredential(credential: UserCredential) {
+    const token = await credential.user.getIdToken();
+    localStorage.setItem(Provider.AUTH_TOKEN_KEY, token);
+    return credential;
   }
 })();

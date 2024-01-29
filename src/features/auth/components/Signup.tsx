@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC} from "react";
 import {Link} from "react-router-dom";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -7,7 +7,6 @@ import {CalendarIcon} from "lucide-react";
 import {
   GoogleAuthProvider,
   GithubAuthProvider,
-  UserCredential,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import {Button} from "@/components/shadcn-ui/button.tsx";
@@ -45,8 +44,6 @@ import {
 } from "@/components/shadcn-ui/radio-group.tsx";
 
 export const Signup: FC = () => {
-  const [credential, setCredential] = useState<UserCredential | null>(null);
-
   const stepper = useStepperContext();
 
   const form = useForm<User>({
@@ -56,8 +53,7 @@ export const Signup: FC = () => {
     },
   });
 
-  const continueSignup = (credential: UserCredential) => {
-    setCredential(credential);
+  const stepNext = () => {
     stepper.nextStep();
   };
 
@@ -66,7 +62,7 @@ export const Signup: FC = () => {
       const credential =
         await AuthProvider.initializeProviderAuth(providerCtor);
       form.setValue("email", credential?.user?.email!);
-      continueSignup(credential);
+      stepNext();
     } catch (e) {
       /* EMPTY */
     }
@@ -74,13 +70,13 @@ export const Signup: FC = () => {
 
   const onEmailAndPassword = async (payload: EmailAndPassword) => {
     try {
-      const credential = await createUserWithEmailAndPassword(
+      await createUserWithEmailAndPassword(
         auth,
         payload.email,
         payload.password
       );
       form.setValue("email", payload.email);
-      continueSignup(credential);
+      stepNext();
     } catch (e) {
       /* EMPTY */
     }
@@ -88,8 +84,7 @@ export const Signup: FC = () => {
 
   const createUser: SubmitHandler<User> = async (user) => {
     try {
-      const created = await AuthProvider.signUp(user as any, credential!);
-      console.log("created", created);
+      await AuthProvider.signUp(user as any);
     } catch (e) {
       // TODO: handle error
     }
@@ -304,6 +299,7 @@ export const Signup: FC = () => {
 
 interface SignupWithProps {
   onEmailAndPassword(payload: EmailAndPassword): void;
+
   onSocial(providerCtor: ProviderCtor): void;
 }
 
