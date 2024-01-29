@@ -36,6 +36,8 @@ export interface AuthProvider {
 
   logOut(): Promise<void>;
 
+  initializeProviderAuth(providerCtor: ProviderCtor): Promise<UserCredential>;
+
   getCurrentUser(): Promise<FUser | null>;
 }
 
@@ -52,7 +54,7 @@ export const AuthProvider = new (class implements AuthProvider {
   }
 
   async signInWithProvider(providerCtor: ProviderCtor): Promise<Whoami> {
-    const credential = await this._initializeProviderAuth(providerCtor);
+    const credential = await this.initializeProviderAuth(providerCtor);
     return this.signIn(credential);
   }
 
@@ -73,8 +75,12 @@ export const AuthProvider = new (class implements AuthProvider {
     providerCtor: ProviderCtor,
     payload: SignUp
   ): Promise<User> {
-    const credential = await this._initializeProviderAuth(providerCtor);
+    const credential = await this.initializeProviderAuth(providerCtor);
     return this.signUp(payload, credential);
+  }
+
+  initializeProviderAuth(providerCtor: ProviderCtor): Promise<UserCredential> {
+    return signInWithPopup(auth, new providerCtor());
   }
 
   logOut(): Promise<void> {
@@ -100,13 +106,7 @@ export const AuthProvider = new (class implements AuthProvider {
     });
   }
 
-  private signUp(user: SignUp, _credential: UserCredential): Promise<User> {
+  public signUp(user: SignUp, _credential: UserCredential): Promise<User> {
     return SecurityProvider.signUp(user);
-  }
-
-  private _initializeProviderAuth(
-    providerCtor: ProviderCtor
-  ): Promise<UserCredential> {
-    return signInWithPopup(auth, new providerCtor());
   }
 })();
