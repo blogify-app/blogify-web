@@ -17,10 +17,12 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
   const [postAuthor, setPostAuthor] = useState<User>({});
 
   useEffect(() => {
-    UserProvider.getById(post?.author_id!).then((author) =>
-      setPostAuthor(author)
-    );
-  }, []);
+    if (post?.author_id) {
+      UserProvider.getById(post.author_id!).then((author) =>
+        setPostAuthor(author)
+      );
+    }
+  }, [post, setPostAuthor]);
 
   return (
     <Layout>
@@ -59,7 +61,7 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
               className="text-2xl"
             />
             <span className="mx-1">
-              {post?.creation_datetime?.toLocaleDateString()}
+              {new Date(post?.creation_datetime!).toLocaleDateString()}
             </span>
           </div>
         </div>
