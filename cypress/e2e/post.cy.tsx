@@ -1,7 +1,11 @@
+import {post1} from "../fixtures/post";
+
 describe("Post", () => {
   // TODO: more precise test
   beforeEach(() => {
     cy.visit("/posts/1");
+    cy.intercept("GET", "/posts/1", post1());
+    cy.intercept("GET", `/users/${post1().author_id}`, post1());
   });
 
   it("renders the title", () => {
