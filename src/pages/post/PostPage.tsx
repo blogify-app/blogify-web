@@ -8,11 +8,21 @@ export const PostPage: FC = () => {
   const [post, setPost] = useState<PostType>({});
 
   const params = useParams();
-  const id = params?.id!;
+  const id = params.id;
 
   useEffect(() => {
-    PostProvider.getById(id).then((post) => setPost(post));
-  }, []);
+    const fetch = async () => {
+      if (!id) return;
+      try {
+        const post = await PostProvider.getById(id);
+        setPost(post);
+      } catch (_e) {}
+    };
 
+    void fetch();
+  }, [id]);
+
+  // TODO: loading .. or redirect
+  if (!post) return null;
   return <Post post={post} />;
 };
