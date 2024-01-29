@@ -4,7 +4,7 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 
 import {PostPage} from "@/pages/post";
 import {HomePage} from "@/pages/home";
-import {LoginPage} from "@/pages/auth";
+import {LoginPage, SignupPage} from "@/pages/auth";
 import {Authenticated} from "@/features/auth";
 import {AuthProvider} from "@/services/security";
 import "./index.css";
@@ -18,6 +18,10 @@ const ROUTER = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/signup",
+    element: <SignupPage />,
   },
   {
     path: "/protected",

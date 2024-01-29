@@ -1,8 +1,9 @@
 import {FC} from "react";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {SubmitHandler, useForm} from "react-hook-form";
-import {GoogleAuthProvider} from "firebase/auth";
 import {zodResolver} from "@hookform/resolvers/zod";
+import {Button} from "@/components/shadcn-ui/button.tsx";
+import {Icons} from "@/components/common/icons.tsx";
 import {useAuthStore} from "@/features/auth";
 import {basic, BasicPayload} from "@/features/auth/schema.ts";
 import {AuthProvider, ProviderCtor} from "@/services/security";
@@ -12,7 +13,7 @@ export const Login: FC = () => {
   const navigate = useNavigate();
   // TODO: use register with inputs
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const {register: _register, handleSubmit} = useForm<BasicPayload>({
+  const form = useForm<BasicPayload>({
     resolver: zodResolver(basic),
   });
 
@@ -48,9 +49,8 @@ export const Login: FC = () => {
   // TODO: build the ui
   // register email and password input
   return (
-    <form onSubmit={handleSubmit(onEmailAndPassword)}>
-      {/* TODO: form inputs */}
-      <button onClick={onProvider(GoogleAuthProvider)}>google</button>
-    </form>
+    <div className="flex flex-col items-center justify-center gap-20">
+      <h1>Login</h1>
+    </div>
   );
 };
