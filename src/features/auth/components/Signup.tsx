@@ -33,34 +33,42 @@ export const Signup: FC = () => {
           </p>
         </div>
 
-        <div className="flex flex-col items-center justify-center gap-8">
-          <FormField
-            name="email"
-            control={form.control}
-            render={({field}) => (
-              <FormItem>
-                <FormLabel />
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <div className="flex w-[35rem] flex-col items-center justify-center gap-8 space-y-6">
+          <div className="w-full">
+            <FormField
+              name="email"
+              control={form.control}
+              render={({field}) => (
+                <FormItem className="text-md h-12">
+                  <FormLabel>Email</FormLabel>
+                  <FormControl className="h-12">
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
-          <FormField
-            name="password"
-            control={form.control}
-            render={({field}) => (
-              <FormItem>
-                <FormLabel />
-                <FormControl>
-                  <Input type="password" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="w-full">
+            <FormField
+              name="password"
+              control={form.control}
+              render={({field}) => (
+                <FormItem className="text-md h-12">
+                  <FormLabel>Password</FormLabel>
+                  <FormControl className="h-12">
+                    <Input {...field} type="password" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="w-full">
+            <Button className="h-12 w-full rounded-full">Continue</Button>
+          </div>
         </div>
 
         <div className="flex w-[30rem] flex-col justify-center space-y-[1.5rem]">
