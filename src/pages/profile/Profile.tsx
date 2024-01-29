@@ -1,16 +1,32 @@
-import {FC, useEffect, useState} from "react";
-import profilepic from "../../assets/profile.jpg";
+import profilepic from "@/assets/profile.jpg";
 import {Error} from "@/common/error";
 import {useParams} from "react-router-dom";
 import {InlineMenu} from "@/common/inline-menu";
 import {Button} from "@/components/shadcn-ui/button";
+import {Post, PostStatus} from "@/services/api/gen";
+import {CustomCard} from "@/common/card";
+import {FC, useEffect, useState} from "react";
 
-export const Profile: FC = () => {
-  const [posts, setPosts] = useState<any>([]);
+let post: Post = {
+  id: "post_1",
+  thumbnail_url: "image-uri",
+  description: "Deploy a SpringBoot Application on Azure",
+  content: "content",
+  title: "Deploy a SpringBoot Application on Azure",
+  creation_datetime: new Date(),
+  updated_at: new Date(),
+  author_id: "Author_id",
+  categories: [],
+  status: PostStatus.ARCHIVED,
+  reactions: undefined,
+};
+
+export const ProfilePage: FC = () => {
+  const [posts, setPosts] = useState<Post[]>([post]);
   const {id} = useParams();
 
   function increment() {
-    setPosts([...posts, 1]);
+    setPosts([]);
   }
 
   useEffect(() => {
@@ -46,7 +62,7 @@ export const Profile: FC = () => {
       </div>
       <InlineMenu action={increment} />
       <hr className="mx-12" />
-      {posts.length == 0 && (
+      {posts.length == 0 ? (
         <div className="grid grid-cols-3 gap-4">
           <div className="col-start-2 row-start-10 text-center text-xs">
             <Error
@@ -69,6 +85,8 @@ export const Profile: FC = () => {
             </Error>
           </div>
         </div>
+      ) : (
+        posts.map((post, k) => <CustomCard />)
       )}
     </div>
   );
