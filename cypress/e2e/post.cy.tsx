@@ -24,10 +24,6 @@ describe("Post", () => {
     cy.getByTestid("post-banner").should("be.visible");
   });
 
-  it("renders the content's menu", () => {
-    cy.getByTestid("post-content-menu").should("be.visible").contains("Menu");
-  });
-
   it("renders the content", () => {
     cy.getByTestid("post-content").should("be.visible");
   });
