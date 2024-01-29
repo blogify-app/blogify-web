@@ -2,6 +2,7 @@ import {
   signInWithPopup,
   signInWithEmailAndPassword,
   UserCredential,
+  signOut,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import {ProviderCtor} from "@/services/security/auth_provider.ts";
@@ -20,6 +21,8 @@ const cacheIdToken = async (credential: UserCredential) => {
   localStorage.setItem(AUTH_ID_TOKEN, idToken);
   return credential;
 };
+
+export const getCachedIdToken = () => localStorage.getItem(AUTH_ID_TOKEN);
 
 export const loginWith: AuthWith = async (
   provider
@@ -43,4 +46,10 @@ export const registerWith: AuthWith = async (
     );
   }
   return cacheIdToken(await loginWith(provider));
+};
+
+export const logout = async (): Promise<void> => {
+  await signOut(auth);
+  localStorage.removeItem(AUTH_ID_TOKEN);
+  window.location.reload();
 };

@@ -1,6 +1,7 @@
 import Auth from "firebase/auth";
 import {Configuration, Role, SignUp, User, Whoami} from "@/services/api/gen";
 import {SecurityProvider} from "@/services/api";
+import {getCachedIdToken, logout} from "@/services/security/firebase_auth.ts";
 
 /**
  * Firebase oauth provider such as:
@@ -39,7 +40,7 @@ export const AuthProvider = new (class Provider implements AuthProvider {
 
   getAuthConf(): Configuration {
     return new Configuration({
-      accessToken: localStorage.getItem(Provider.AUTH_ID_TOKEN) ?? "",
+      accessToken: getCachedIdToken() ?? "",
     });
   }
 
@@ -60,7 +61,7 @@ export const AuthProvider = new (class Provider implements AuthProvider {
   }
 
   logout(): Promise<void> {
-    throw new Error("Function not implemented.");
+    return logout();
   }
 
   onError(): Promise<void> {

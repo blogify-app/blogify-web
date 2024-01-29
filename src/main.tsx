@@ -30,9 +30,7 @@ const ROUTER = createBrowserRouter([
         <h1>Connected</h1>
         <button
           onClick={() => {
-            void AuthProvider.logOut().then(() => {
-              window.location.reload();
-            });
+            void AuthProvider.logout();
           }}
         >
           logout
