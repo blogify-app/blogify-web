@@ -1,12 +1,11 @@
 import {FC} from "react";
-import {useNavigate} from "react-router-dom";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {GoogleAuthProvider} from "firebase/auth";
 import {Link, useNavigate} from "react-router-dom";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useAuthStore} from "@/features/auth";
 import {LoginUser, loginUser} from "@/features/auth/schema.ts";
-import {AuthProvider, ProviderCtor} from "@/services/auth_provider.ts";
+import {AuthProvider, ProviderCtor} from "@/services/security/auth_provider";
 import {
   Form,
   FormControl,
