@@ -8,6 +8,7 @@ import {calculateReadDuration} from "@/features/post/utils";
 import {Post as PostType, User} from "@/services/api/gen";
 import {UserProvider} from "@/services/api";
 import blankUserProfile from "@/assets/noun-user-picture.svg";
+import {Comment} from "./Comment";
 
 export interface PostProps {
   post: PostType;
@@ -88,6 +89,9 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
                 <Badge className="mx-1">Ipsum</Badge>
                 <Badge className="mx-1">Hello</Badge>
               </div>
+            </div>
+            <div className="mx-10">
+              <Comment />
             </div>
           </div>
         </div>
