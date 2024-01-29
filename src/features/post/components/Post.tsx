@@ -3,10 +3,10 @@ import {Link} from "react-router-dom";
 import {Icon} from "@iconify/react";
 import {Badge} from "@/components/shadcn-ui/badge";
 import {Layout} from "@/layout";
+import {Reader} from "@/features/wisiwig";
 import {calculateReadDuration} from "@/features/post/utils";
 import {Post as PostType, User} from "@/services/api/gen";
 import {UserProvider} from "@/services/api";
-
 import blankUserProfile from "@/assets/noun-user-picture.svg";
 
 export interface PostProps {
@@ -77,38 +77,10 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
               />
             </div>
           )}
-          <div className="col-span-2 border-r border-slate-200 p-4">
-            <div
-              data-testid="post-content-menu"
-              className="mx-4 flex flex-col justify-center"
-            >
-              <p className="mb-5 text-left font-title text-2xl">Menu</p>
-              <ul className="ml-1 text-left">
-                <li>menu menu menu menu</li>
-                <li>menu menu menu menu</li>
-                <li>menu menu menu menu</li>
-                <li>menu menu menu menu</li>
-                <li>menu menu menu menu</li>
-                <li>menu menu menu menu</li>
-                <li>menu menu menu menu</li>
-                <li>menu menu menu menu</li>
-                <li>menu menu menu menu</li>
-                <li>menu menu menu menu</li>
-                <li>menu menu menu menu</li>
-                <li>menu menu menu menu</li>
-                <li>menu menu menu menu</li>
-                <li>menu menu menu menu</li>
-                <li>menu menu menu menu</li>
-                <li>menu menu menu menu</li>
-                <li>menu menu menu menu</li>
-                <li>menu menu menu menu</li>
-                <li>menu menu menu menu</li>
-                <li>menu menu menu menu</li>
-              </ul>
+          <div data-testid="post-content" className="col-span-8 p-4">
+            <div className="mx-10">
+              <Reader>{post?.content!}</Reader>
             </div>
-          </div>
-          <div data-testid="post-content" className="col-span-6 p-4">
-            <div className="mx-10">{post?.content}</div>
             <div data-testid="post-tags" className="mx-10 flex w-full py-10">
               <span className="mr-2">Tags : </span>
               <div className="flex justify-evenly">
