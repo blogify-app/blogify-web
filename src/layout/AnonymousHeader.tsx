@@ -8,7 +8,7 @@ export interface AnonymousHeaderProps {
 
 const AnonymousHeaderComponent: FC<AnonymousHeaderProps> = ({page}) => {
   return (
-    <div className="mx-auto my-0 flex h-full w-[95%] items-center justify-between">
+    <div className="mx-auto my-0 flex h-full w-[95%] items-center justify-between bg-white">
       <div className="logo w-30 h-15 col-span-1">
         <a
           href="#"
