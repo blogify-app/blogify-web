@@ -4,7 +4,8 @@ import {Whoami} from "@/services/api/gen";
 
 export interface AuthStore {
   user: Whoami | null;
-  setUser(user: Whoami | null): void;
+  setUser(user: Whoami): void;
+  nullify(): void;
 }
 
 export const useAuthStore = create<AuthStore>()(
@@ -13,6 +14,9 @@ export const useAuthStore = create<AuthStore>()(
       user: null,
       setUser(user) {
         set({user});
+      },
+      nullify() {
+        set({user: null});
       },
     }),
     {

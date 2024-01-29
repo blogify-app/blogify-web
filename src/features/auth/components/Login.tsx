@@ -1,7 +1,8 @@
 import {FC} from "react";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {SubmitHandler, useForm} from "react-hook-form";
+import {useForm} from "react-hook-form";
 import {GithubAuthProvider, GoogleAuthProvider} from "firebase/auth";
+import {Link} from "react-router-dom";
 import {
   Form,
   FormControl,
@@ -18,27 +19,15 @@ import {
   emailAndPasswordSchema,
 } from "@/features/auth/schema.ts";
 import {useAuthStore} from "@/features/auth";
-import {AuthProvider, ProviderCtor} from "@/services/security";
-import {Link} from "react-router-dom";
+import {AuthProvider, loginWith, AuthWith} from "@/services/security";
 
 export const Login: FC = () => {
   const store = useAuthStore();
 
-  const onSocial = async (providerCtor: ProviderCtor) => {
+  const login: AuthWith<void> = async (provider) => {
     try {
-      const whoami = await AuthProvider.signInWithProvider(providerCtor);
-      store.setUser(whoami);
-    } catch (e) {
-      /* EMPTY */
-    }
-  };
-
-  const onEmailAndPassword = async (payload: EmailAndPassword) => {
-    try {
-      const whoami = await AuthProvider.signInWithEmailAndPassword(
-        payload.email,
-        payload.password
-      );
+      await loginWith(provider);
+      const whoami = await AuthProvider.login();
       store.setUser(whoami);
     } catch (e) {
       /* EMPTY */
@@ -57,31 +46,26 @@ export const Login: FC = () => {
         </p>
       </div>
 
-      <LoginWith onEmailAndPassword={onEmailAndPassword} onSocial={onSocial} />
+      <LoginWith onLogin={login} />
     </div>
   );
 };
 
 interface LoginWithProps {
-  onEmailAndPassword(payload: EmailAndPassword): void;
-  onSocial(providerCtor: ProviderCtor): void;
+  onLogin: AuthWith<void>;
 }
 
-const LoginWith: FC<LoginWithProps> = ({onEmailAndPassword, onSocial}) => {
+const LoginWith: FC<LoginWithProps> = ({onLogin}) => {
   const form = useForm<EmailAndPassword>({
     resolver: zodResolver(emailAndPasswordSchema),
   });
-
-  const _onEmailAndPassword: SubmitHandler<EmailAndPassword> = (payload) => {
-    onEmailAndPassword(payload);
-  };
 
   return (
     <>
       <Form {...form}>
         <form
           className="flex w-[40rem] flex-col items-center justify-center space-y-6"
-          onSubmit={form.handleSubmit(_onEmailAndPassword)}
+          onSubmit={form.handleSubmit(onLogin)}
         >
           <div className="w-full">
             <FormField
@@ -137,7 +121,7 @@ const LoginWith: FC<LoginWithProps> = ({onEmailAndPassword, onSocial}) => {
           <Button
             size="lg"
             variant="outline"
-            onClick={() => onSocial(GoogleAuthProvider)}
+            onClick={() => void onLogin(GoogleAuthProvider)}
           >
             <Icons.google className="mr-2 h-4 w-4" /> Google
           </Button>
@@ -145,7 +129,7 @@ const LoginWith: FC<LoginWithProps> = ({onEmailAndPassword, onSocial}) => {
           <Button
             size="lg"
             variant="outline"
-            onClick={() => onSocial(GithubAuthProvider)}
+            onClick={() => void onLogin(GithubAuthProvider)}
           >
             <Icons.gitHub className="mr-2 h-4 w-4" /> Github
           </Button>

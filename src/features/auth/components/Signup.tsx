@@ -4,11 +4,7 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {format} from "date-fns";
 import {CalendarIcon} from "lucide-react";
-import {
-  GoogleAuthProvider,
-  GithubAuthProvider,
-  createUserWithEmailAndPassword,
-} from "firebase/auth";
+import {GoogleAuthProvider, GithubAuthProvider} from "firebase/auth";
 import {Button} from "@/components/shadcn-ui/button.tsx";
 import {
   Form,
@@ -30,20 +26,21 @@ import {
 import {Icons} from "@/components/common/icons.tsx";
 import {Input} from "@/components/shadcn-ui/input.tsx";
 import {
+  RadioGroup,
+  RadioGroupItem,
+} from "@/components/shadcn-ui/radio-group.tsx";
+import {
   EmailAndPassword,
   emailAndPasswordSchema,
   type Signup as User,
   signupSchema,
 } from "@/features/auth/schema.ts";
-import {AuthProvider, ProviderCtor} from "@/services/security";
-import {auth} from "@/config/firebase.ts";
+import {useAuthStore} from "@/features/auth";
+import {AuthProvider, AuthWith, registerWith} from "@/services/security";
 import {cn} from "@/lib/utils.ts";
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from "@/components/shadcn-ui/radio-group.tsx";
 
 export const Signup: FC = () => {
+  const authStore = useAuthStore();
   const stepper = useStepperContext();
 
   const form = useForm<User>({
@@ -57,34 +54,15 @@ export const Signup: FC = () => {
     stepper.nextStep();
   };
 
-  const onSocial = async (providerCtor: ProviderCtor) => {
-    try {
-      const credential =
-        await AuthProvider.initializeProviderAuth(providerCtor);
-      form.setValue("email", credential?.user?.email!);
-      stepNext();
-    } catch (e) {
-      /* EMPTY */
-    }
-  };
-
-  const onEmailAndPassword = async (payload: EmailAndPassword) => {
-    try {
-      await createUserWithEmailAndPassword(
-        auth,
-        payload.email,
-        payload.password
-      );
-      form.setValue("email", payload.email);
-      stepNext();
-    } catch (e) {
-      /* EMPTY */
-    }
+  const signup: AuthWith<void> = async (provider) => {
+    await registerWith(provider);
+    stepNext();
   };
 
   const createUser: SubmitHandler<User> = async (user) => {
     try {
-      await AuthProvider.signUp(user as any);
+      const whoami = await AuthProvider.register(user as any);
+      authStore.setUser(whoami);
     } catch (e) {
       // TODO: handle error
     }
@@ -104,10 +82,7 @@ export const Signup: FC = () => {
         </div>
 
         <StepperView step="signup-with">
-          <SignupWith
-            onEmailAndPassword={onEmailAndPassword}
-            onSocial={onSocial}
-          />
+          <SignupWith onSignup={signup} />
         </StepperView>
 
         <StepperView step="user-info">
@@ -298,26 +273,20 @@ export const Signup: FC = () => {
 };
 
 interface SignupWithProps {
-  onEmailAndPassword(payload: EmailAndPassword): void;
-
-  onSocial(providerCtor: ProviderCtor): void;
+  onSignup: AuthWith<void>;
 }
 
-const SignupWith: FC<SignupWithProps> = ({onSocial, onEmailAndPassword}) => {
+const SignupWith: FC<SignupWithProps> = ({onSignup}) => {
   const form = useForm<EmailAndPassword>({
     resolver: zodResolver(emailAndPasswordSchema),
   });
-
-  const _onEmailAndPassword: SubmitHandler<EmailAndPassword> = (payload) => {
-    onEmailAndPassword(payload);
-  };
 
   return (
     <>
       <Form {...form}>
         <form
           className="flex w-[40rem] flex-col items-center justify-center space-y-6"
-          onSubmit={form.handleSubmit(_onEmailAndPassword)}
+          onSubmit={form.handleSubmit(onSignup)}
         >
           <div className="w-full">
             <FormField
@@ -373,7 +342,7 @@ const SignupWith: FC<SignupWithProps> = ({onSocial, onEmailAndPassword}) => {
           <Button
             size="lg"
             variant="outline"
-            onClick={() => onSocial(GoogleAuthProvider)}
+            onClick={() => void onSignup(GoogleAuthProvider)}
           >
             <Icons.google className="mr-2 h-4 w-4" /> Google
           </Button>
@@ -381,7 +350,7 @@ const SignupWith: FC<SignupWithProps> = ({onSocial, onEmailAndPassword}) => {
           <Button
             size="lg"
             variant="outline"
-            onClick={() => onSocial(GithubAuthProvider)}
+            onClick={() => void onSignup(GithubAuthProvider)}
           >
             <Icons.gitHub className="mr-2 h-4 w-4" /> Github
           </Button>
