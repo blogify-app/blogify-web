@@ -1,6 +1,6 @@
 import {Sex, User, UserStatus} from "@/services/api/gen";
 
-export const user: User = {
+export const user1 = (): User => ({
   last_name: "Doe",
   first_name: "John",
   birth_date: "2024-01-19",
@@ -15,4 +15,4 @@ export const user: User = {
   status: UserStatus.ENABLED,
   sex: Sex.M,
   entrance_datetime: new Date("2024-01-19"),
-};
+});
