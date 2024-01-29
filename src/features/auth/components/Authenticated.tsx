@@ -1,19 +1,19 @@
 import {FC, PropsWithChildren, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
-import {AuthProvider} from "@/services/security";
+import {useAuthStore} from "@/features/auth";
 
 // HOC
 export const Authenticated: FC<PropsWithChildren> = ({children}) => {
+  const store = useAuthStore();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    void AuthProvider.getCurrentUser().then((user) => {
-      if (!user) {
-        navigate("/login");
-      }
-    });
-  }, [navigate]);
+  const {user} = store;
 
-  // TODO: we will add loading while checking is_auth to avoid glitch-like screen!
-  return children;
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [navigate, user]);
+
+  return user ? children : null;
 };

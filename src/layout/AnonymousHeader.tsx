@@ -33,7 +33,7 @@ const AnonymousHeaderComponent: FC<AnonymousHeaderProps> = ({page}) => {
         {!page && (
           <>
             <Button variant="outline" size="lg" className="h-9" asChild>
-              <Link to="/login">Sign in</Link>
+              <Link to="/login">Login</Link>
             </Button>
 
             <Button size="lg" className="h-9" asChild>
