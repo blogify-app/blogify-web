@@ -3,6 +3,7 @@ import {
   signup_new_user_response,
   user_to_signup,
 } from "../fixtures/firebase.mock.ts";
+import {whoami1} from "../fixtures/user.ts";
 
 describe("Authentication", () => {
   it("should redirect when not logged in on protected route", () => {
@@ -57,6 +58,8 @@ describe("Authentication", () => {
         "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=*",
         signup_new_user_response()
       );
+
+      cy.intercept("/signin", whoami1());
 
       cy.intercept(
         "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=*",

@@ -6,13 +6,13 @@ import {Reader} from "@/features/wisiwig";
 import {AuthProvider} from "@/services/security";
 
 export const HomePage: FC = () => {
-  const auth = useAuthStore();
+  const authStore = useAuthStore();
 
   // NOTE: @example
   const logout = async () => {
     try {
       await AuthProvider.logout();
-      auth.nullify();
+      authStore.nullify();
     } catch (e) {
       /* TODO: handle err */
     }
@@ -39,7 +39,9 @@ export const HomePage: FC = () => {
         <Reader className="px-0">
           {[
             "## Connected user",
-            auth.user ? `**${auth.user}**` : "_None_",
+            authStore.user?.username
+              ? `**${authStore.user.username}**`
+              : "_None_",
           ].join("\n")}
         </Reader>
 

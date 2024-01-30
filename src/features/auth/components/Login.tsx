@@ -2,7 +2,7 @@ import {FC} from "react";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
 import {GithubAuthProvider, GoogleAuthProvider} from "firebase/auth";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {
   Form,
   FormControl,
@@ -23,12 +23,14 @@ import {AuthProvider, loginWith, AuthWith} from "@/services/security";
 
 export const Login: FC = () => {
   const store = useAuthStore();
+  const navigate = useNavigate();
 
   const login: AuthWith<void> = async (provider) => {
     try {
       await loginWith(provider);
       const whoami = await AuthProvider.login();
       store.setUser(whoami);
+      navigate("/");
     } catch (e) {
       /* EMPTY */
       console.error(e);

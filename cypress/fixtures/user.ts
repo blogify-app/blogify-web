@@ -1,4 +1,4 @@
-import {Sex, User, UserStatus} from "@/services/api/gen";
+import {Sex, User, UserStatus, Whoami} from "../../src/services/api/gen";
 
 export const user1 = (): User => ({
   last_name: "Doe",
@@ -15,4 +15,9 @@ export const user1 = (): User => ({
   status: UserStatus.ENABLED,
   sex: Sex.M,
   entrance_datetime: new Date("2024-01-19"),
+});
+
+export const whoami1 = (): Whoami => ({
+  ...user1,
+  bearer: "bearer",
 });
