@@ -1,112 +1,74 @@
-import {
-  type AuthProvider as _AuthProvider,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  signOut,
-  type User as FUser,
-  type UserCredential,
-} from "firebase/auth";
-import {auth} from "@/config/firebase.ts";
-import {SignUp, User, Whoami} from "@/services/api/gen";
+import Auth from "firebase/auth";
+import {Configuration, Role, SignUp, User, Whoami} from "@/services/api/gen";
 import {SecurityProvider} from "@/services/api";
+import {getCachedIdToken, logout} from "@/services/security/firebase_auth.ts";
 
 /**
- * such as: GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider from **firebase.auth**
+ * Firebase oauth provider such as:
+ * - GoogleAuthProvider
+ * - GithubAuthProvider
  */
 export type ProviderCtor = {
-  new (): _AuthProvider;
+  new (): Auth.AuthProvider;
 };
 
 export interface AuthProvider {
-  signInWithEmailAndPassword(email: string, password: string): Promise<Whoami>;
+  login(credential: Auth.UserCredential): Promise<Whoami>;
+  check(): Promise<void>;
+  logout(): Promise<void>;
+  onError(err: Record<string, unknown>): Promise<void>;
 
-  signInWithProvider(providerCtor: ProviderCtor): Promise<Whoami>;
+  register(user: SignUp, credential: Auth.UserCredential): Promise<User>;
+  getIdentity(): Promise<string>;
+  getPermissions(): Promise<Role[]>;
+  forgotPassword(): Promise<void>;
+  updatePassword(): Promise<void>;
 
-  signUpWithEmailAndPassword(
-    email: string,
-    password: string,
-    payload: SignUp
-  ): Promise<User>;
-
-  signUpWithProvider(
-    providerCtor: ProviderCtor,
-    payload: SignUp
-  ): Promise<User>;
-
-  logOut(): Promise<void>;
-
-  getCurrentUser(): Promise<FUser | null>;
+  // auth config for openapi
+  getAuthConf(): Configuration;
 }
 
-/**
- * IIFE (Immediately Invoked Function Expression) that creates a **AuthProvider** singleton
- */
-export const AuthProvider = new (class implements AuthProvider {
-  async signInWithEmailAndPassword(
-    email: string,
-    password: string
-  ): Promise<Whoami> {
-    const credential = await signInWithEmailAndPassword(auth, email, password);
-    return this.signIn(credential);
+export const AuthProvider = new (class Provider implements AuthProvider {
+  async login(): Promise<Whoami> {
+    // FIXME: remove {} as any when spec is updated
+    return SecurityProvider.signIn({} as any);
   }
 
-  async signInWithProvider(providerCtor: ProviderCtor): Promise<Whoami> {
-    const credential = await this._initializeProviderAuth(providerCtor);
-    return this.signIn(credential);
-  }
-
-  async signUpWithEmailAndPassword(
-    email: string,
-    password: string,
-    payload: SignUp
-  ): Promise<User> {
-    const credential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    return this.signUp(payload, credential);
-  }
-
-  async signUpWithProvider(
-    providerCtor: ProviderCtor,
-    payload: SignUp
-  ): Promise<User> {
-    const credential = await this._initializeProviderAuth(providerCtor);
-    return this.signUp(payload, credential);
-  }
-
-  logOut(): Promise<void> {
-    return signOut(auth);
-  }
-
-  getCurrentUser(): Promise<FUser | null> {
-    return new Promise((resolve) => {
-      const unsub = auth.onAuthStateChanged((user) => {
-        unsub();
-        resolve(user);
-      });
-    });
-  }
-
-  private signIn(credential: UserCredential): Promise<Whoami> {
-    const {user} = credential;
-    return SecurityProvider.signIn({
-      provider_id: user.uid,
-      email: user.email || undefined,
-      // FIXME: Do we really need password
-      password: "passwd",
-    });
-  }
-
-  private signUp(user: SignUp, _credential: UserCredential): Promise<User> {
+  async register(user: SignUp): Promise<Whoami> {
     return SecurityProvider.signUp(user);
   }
 
-  private _initializeProviderAuth(
-    providerCtor: ProviderCtor
-  ): Promise<UserCredential> {
-    return signInWithPopup(auth, new providerCtor());
+  getAuthConf(): Configuration {
+    return new Configuration({
+      accessToken: getCachedIdToken() ?? "",
+    });
+  }
+
+  check(): Promise<void> {
+    throw new Error("Function not implemented.");
+  }
+
+  forgotPassword(): Promise<void> {
+    throw new Error("Function not implemented.");
+  }
+
+  getIdentity(): Promise<string> {
+    throw new Error("Function not implemented.");
+  }
+
+  getPermissions(): Promise<Role[]> {
+    throw new Error("Function not implemented.");
+  }
+
+  logout(): Promise<void> {
+    return logout();
+  }
+
+  onError(): Promise<void> {
+    throw new Error("Function not implemented.");
+  }
+
+  updatePassword(): Promise<void> {
+    throw new Error("Function not implemented.");
   }
 })();
