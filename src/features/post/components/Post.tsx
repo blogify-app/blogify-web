@@ -5,10 +5,14 @@ import {Badge} from "@/components/shadcn-ui/badge";
 import {Layout} from "@/layout";
 import {Reader} from "@/features/wisiwig";
 import {calculateReadDuration} from "@/features/post/utils";
-import {Post as PostType, User} from "@/services/api/gen";
-import {UserProvider} from "@/services/api";
-import blankUserProfile from "@/assets/noun-user-picture.svg";
 import {Comment} from "./Comment";
+import {
+  Comment as CommentType,
+  Post as PostType,
+  User,
+} from "@/services/api/gen";
+import {CommentProvider, UserProvider} from "@/services/api";
+import blankUserProfile from "@/assets/noun-user-picture.svg";
 
 export interface PostProps {
   post: PostType;
@@ -16,12 +20,18 @@ export interface PostProps {
 
 export const Post: FC<PostProps> = ({post}: PostProps) => {
   const [postAuthor, setPostAuthor] = useState<User>({});
+  const [comments, setComments] = useState<CommentType[]>([]);
 
   useEffect(() => {
     if (post?.author_id) {
       UserProvider.getById(post.author_id!).then((author) =>
         setPostAuthor(author)
       );
+      CommentProvider.getMany({
+        params: {pid: post?.id!},
+        page: 0,
+        pageSize: 500,
+      }).then((comments) => setComments(comments));
     }
   }, [post, setPostAuthor]);
 
@@ -43,7 +53,7 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
           <div className="flex items-center justify-center">
             <Icon icon="material-symbols-light:face-6" className="text-2xl" />
             <span className="mx-1">
-              by <strong>{postAuthor?.first_name}</strong>
+              by <strong>{postAuthor?.username}</strong>
             </span>
           </div>
           <div className="flex items-center justify-center">
@@ -91,7 +101,9 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
               </div>
             </div>
             <div className="mx-10">
-              <Comment />
+              {comments.map((comment) => (
+                <Comment comment={comment} />
+              ))}
             </div>
           </div>
         </div>
