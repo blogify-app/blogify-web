@@ -3,6 +3,7 @@ import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {format} from "date-fns";
 import {CalendarIcon} from "lucide-react";
+import {Avatar, AvatarImage} from "@/components/shadcn-ui/avatar";
 import {Button} from "@/components/shadcn-ui/button.tsx";
 import {
   Form,
@@ -14,7 +15,6 @@ import {
   FormMessage,
 } from "@/components/shadcn-ui/form.tsx";
 import {Calendar} from "@/components/shadcn-ui/calendar.tsx";
-import {Label} from "@/components/shadcn-ui/label";
 import {Textarea} from "@/components/shadcn-ui/textarea.tsx";
 import {
   Popover,
@@ -44,7 +44,7 @@ export const ProfileEdit: FC<ProfileEditProps> = () => {
   return (
     <Form {...form}>
       <div className="flex h-full w-full flex-row">
-        <div className="mb-6 mt-6 flex w-1/2 w-[40rem] flex-col items-center justify-center space-y-2">
+        <div className="mb-6 flex w-1/2 w-[40rem] flex-col items-center space-y-6">
           <div className="w-4/5">
             <FormField
               name="first_name"
@@ -223,9 +223,13 @@ export const ProfileEdit: FC<ProfileEditProps> = () => {
             </Button>
           </div>
         </div>
-        <div className="mb-6 mt-6 flex h-2/3 w-1/2 w-[40rem] flex-col items-center justify-center space-y-2">
+        <div className="mb-6 mt-6 flex h-full w-1/2 w-[40rem] flex-col items-center space-y-4">
+          <div className="w-full max-w-sm items-center gap-1.5">
+            <Avatar className={"h-500 w-500"}>
+              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+            </Avatar>
+          </div>
           <div className="grid w-full max-w-sm items-center gap-1.5">
-            <Label htmlFor="picture">Profile picture</Label>
             <Input id="picture" type="file" />
           </div>
         </div>
