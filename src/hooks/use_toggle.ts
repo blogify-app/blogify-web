@@ -3,7 +3,7 @@ import {useCallback, useState} from "react";
 /**
  * @param initialValue coerced to boolean
  */
-export const useToggle = (
+export const use_toggle = (
   initialValue: any = false
 ): [boolean, (newValue: boolean) => void, () => void] => {
   const [value, setValue] = useState(Boolean(initialValue));
