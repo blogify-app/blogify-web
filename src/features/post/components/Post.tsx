@@ -5,13 +5,13 @@ import {Badge} from "@/components/shadcn-ui/badge";
 import {Layout} from "@/layout";
 import {Reader} from "@/features/wisiwig";
 import {calculateReadDuration} from "@/features/post/utils";
-import {Comment} from "./Comment";
 import {
   Comment as CommentType,
   Post as PostType,
   User,
 } from "@/services/api/gen";
 import {CommentProvider, UserProvider} from "@/services/api";
+import {Comment} from "./Comment";
 import blankUserProfile from "@/assets/noun-user-picture.svg";
 
 export interface PostProps {
