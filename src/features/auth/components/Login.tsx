@@ -31,6 +31,7 @@ export const Login: FC = () => {
       store.setUser(whoami);
     } catch (e) {
       /* EMPTY */
+      console.error(e);
     }
   };
 
@@ -55,6 +56,7 @@ interface LoginWithProps {
   onLogin: AuthWith<void>;
 }
 
+// TODO: refactor as it has the same structure as SignupWith
 const LoginWith: FC<LoginWithProps> = ({onLogin}) => {
   const form = useForm<EmailAndPassword>({
     resolver: zodResolver(emailAndPasswordSchema),
@@ -72,7 +74,7 @@ const LoginWith: FC<LoginWithProps> = ({onLogin}) => {
               name="email"
               control={form.control}
               render={({field}) => (
-                <FormItem className="text-md">
+                <FormItem data-testid="email-field" className="text-md">
                   <FormLabel>Email</FormLabel>
                   <FormControl className="h-12">
                     <Input {...field} />
@@ -88,7 +90,7 @@ const LoginWith: FC<LoginWithProps> = ({onLogin}) => {
               name="password"
               control={form.control}
               render={({field}) => (
-                <FormItem className="text-md">
+                <FormItem data-testid="password-field" className="text-md">
                   <FormLabel>Password</FormLabel>
                   <FormControl className="h-12">
                     <Input {...field} type="password" />
@@ -100,7 +102,11 @@ const LoginWith: FC<LoginWithProps> = ({onLogin}) => {
           </div>
 
           <div className="w-full">
-            <Button className="h-12 w-full rounded-full" type="submit">
+            <Button
+              data-testid="continue-login"
+              className="h-12 w-full rounded-full"
+              type="submit"
+            >
               Continue
             </Button>
           </div>

@@ -18,7 +18,7 @@ const AnonymousHeaderComponent: FC<AnonymousHeaderProps> = ({page}) => {
           BLOGIFY
         </a>
       </div>
-      <div className="space-x-3">
+      <div data-testid="auth-button" className="space-x-3">
         {page === "sign_up" && (
           <Button variant="outline" size="lg" className="h-9" asChild>
             <Link to="/login">Sign in</Link>

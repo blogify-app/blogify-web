@@ -51,5 +51,4 @@ export const registerWith: AuthWith = async (
 export const logout = async (): Promise<void> => {
   await signOut(auth);
   localStorage.removeItem(AUTH_ID_TOKEN);
-  window.location.reload();
 };

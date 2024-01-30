@@ -18,12 +18,11 @@ export const signupSchema = z.object({
   ),
   providerId: z.string().optional(),
   email: z.string().email(),
-  password: z.string().min(8).optional(),
 });
 
 export const emailAndPasswordSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(8),
+  password: z.string().min(8, "Password must contain at least 8 character(s)"),
 });
 
 export type Signup = z.infer<typeof signupSchema>;

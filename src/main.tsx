@@ -4,9 +4,7 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 
 import {PostPage} from "@/pages/post";
 import {HomePage} from "@/pages/home";
-import {LoginPage, SignupPage} from "@/pages/auth";
-import {Authenticated} from "@/features/auth";
-import {AuthProvider} from "@/services/security";
+import {DummyAuthenticatedPage, LoginPage, SignupPage} from "@/pages/auth";
 import "./index.css";
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -24,19 +22,8 @@ const ROUTER = createBrowserRouter([
     element: <SignupPage />,
   },
   {
-    path: "/protected",
-    element: (
-      <Authenticated>
-        <h1>Connected</h1>
-        <button
-          onClick={() => {
-            void AuthProvider.logout();
-          }}
-        >
-          logout
-        </button>
-      </Authenticated>
-    ),
+    path: "/authenticated",
+    element: <DummyAuthenticatedPage />,
   },
   {
     path: "/posts/:id",
