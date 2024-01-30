@@ -11,24 +11,28 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/shadcn-ui/form.tsx";
-import {Button} from "@/components/shadcn-ui/button.tsx";
 import {Icons} from "@/components/common/icons.tsx";
 import {Input} from "@/components/shadcn-ui/input.tsx";
+import {Button} from "@/components/common/button.tsx";
 import {
   EmailAndPassword,
   emailAndPasswordSchema,
 } from "@/features/auth/schema.ts";
 import {useAuthStore} from "@/features/auth";
 import {AuthProvider, loginWith, AuthWith} from "@/services/security";
+import {useLoading} from "@/hooks";
 
 export const Login: FC = () => {
   const store = useAuthStore();
   const navigate = useNavigate();
+  const {queue, isLoading} = useLoading("login");
 
   const login: AuthWith<void> = async (provider) => {
     try {
-      await loginWith(provider);
-      const whoami = await AuthProvider.login();
+      const whoami = await queue(async () => {
+        await loginWith(provider);
+        return AuthProvider.login();
+      });
       store.setUser(whoami);
       navigate("/");
     } catch (e) {
@@ -49,17 +53,18 @@ export const Login: FC = () => {
         </p>
       </div>
 
-      <LoginWith onLogin={login} />
+      <LoginWith onLogin={login} isLoading={isLoading} />
     </div>
   );
 };
 
 interface LoginWithProps {
   onLogin: AuthWith<void>;
+  isLoading: boolean;
 }
 
 // TODO: refactor as it has the same structure as SignupWith
-const LoginWith: FC<LoginWithProps> = ({onLogin}) => {
+const LoginWith: FC<LoginWithProps> = ({isLoading, onLogin}) => {
   const form = useForm<EmailAndPassword>({
     resolver: zodResolver(emailAndPasswordSchema),
   });
@@ -108,6 +113,7 @@ const LoginWith: FC<LoginWithProps> = ({onLogin}) => {
               data-testid="continue-login"
               className="h-12 w-full rounded-full"
               type="submit"
+              isLoading={isLoading}
             >
               Continue
             </Button>

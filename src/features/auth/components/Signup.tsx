@@ -5,7 +5,8 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {format} from "date-fns";
 import {CalendarIcon} from "lucide-react";
 import {GoogleAuthProvider, GithubAuthProvider} from "firebase/auth";
-import {Button} from "@/components/shadcn-ui/button.tsx";
+import {nanoid} from "nanoid";
+import {Button} from "@/components/common/button.tsx";
 import {
   Form,
   FormControl,
@@ -36,13 +37,20 @@ import {
   signupSchema,
 } from "@/features/auth/schema.ts";
 import {useAuthStore} from "@/features/auth";
-import {AuthProvider, AuthWith, registerWith} from "@/services/security";
+import {
+  AuthProvider,
+  AuthWith,
+  getCachedAuth,
+  registerWith,
+} from "@/services/security";
 import {cn} from "@/lib/utils.ts";
+import {useLoading} from "@/hooks";
 
 export const Signup: FC = () => {
   const authStore = useAuthStore();
   const navigate = useNavigate();
   const stepper = useStepperContext();
+  const {queue, isLoading} = useLoading("signup");
 
   const stepNext = () => {
     stepper.nextStep();
@@ -50,7 +58,7 @@ export const Signup: FC = () => {
 
   const signup: AuthWith<void> = async (provider) => {
     try {
-      await registerWith(provider);
+      await queue(() => registerWith(provider));
       stepNext();
     } catch (e) {
       // TODO: handle error
@@ -60,7 +68,13 @@ export const Signup: FC = () => {
 
   const createUser: SubmitHandler<User> = async (user) => {
     try {
-      const whoami = await AuthProvider.register(user as any);
+      const whoami = await queue(() => {
+        user.email = getCachedAuth().email || user.email;
+        return AuthProvider.register({
+          ...(user as any),
+          id: nanoid(),
+        });
+      });
       authStore.setUser(whoami);
       navigate("/");
     } catch (e) {
@@ -82,11 +96,11 @@ export const Signup: FC = () => {
       </div>
 
       <StepperView step="signup-with">
-        <SignupWith onSignup={signup} />
+        <SignupWith onSignup={signup} isLoading={isLoading} />
       </StepperView>
 
       <StepperView step="user-info">
-        <SignupUserForm onCreate={createUser} />
+        <SignupUserForm onCreate={createUser} isLoading={isLoading} />
       </StepperView>
     </div>
   );
@@ -94,9 +108,10 @@ export const Signup: FC = () => {
 
 interface SignupWithProps {
   onSignup: AuthWith<void>;
+  isLoading: boolean;
 }
 
-const SignupWith: FC<SignupWithProps> = ({onSignup}) => {
+const SignupWith: FC<SignupWithProps> = ({onSignup, isLoading}) => {
   const form = useForm<EmailAndPassword>({
     resolver: zodResolver(emailAndPasswordSchema),
   });
@@ -145,6 +160,7 @@ const SignupWith: FC<SignupWithProps> = ({onSignup}) => {
               data-testid="continue-signup"
               className="h-12 w-full rounded-full"
               type="submit"
+              isLoading={isLoading}
             >
               Continue
             </Button>
@@ -186,19 +202,25 @@ const SignupWith: FC<SignupWithProps> = ({onSignup}) => {
 
 interface SignupUserFormProps {
   onCreate(user: User): void;
+  isLoading: boolean;
 }
 
-const SignupUserForm: FC<SignupUserFormProps> = ({onCreate}) => {
+const SignupUserForm: FC<SignupUserFormProps> = ({onCreate, isLoading}) => {
   const form = useForm<User>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
       categories: [],
+      // bind cached email to the to-be registered user
+      email: getCachedAuth().email ?? "",
     },
   });
 
   return (
     <Form {...form}>
-      <div className="mb-6 flex w-[40rem] flex-col items-center justify-center space-y-6">
+      <form
+        className="mb-6 flex w-[40rem] flex-col items-center justify-center space-y-6"
+        onSubmit={form.handleSubmit(onCreate)}
+      >
         <div className="w-full">
           <FormField
             name="first_name"
@@ -372,12 +394,13 @@ const SignupUserForm: FC<SignupUserFormProps> = ({onCreate}) => {
         <div className="w-full">
           <Button
             className="h-12 w-full rounded-full"
-            onClick={form.handleSubmit(onCreate)}
+            type="submit"
+            isLoading={isLoading}
           >
             Continue
           </Button>
         </div>
-      </div>
+      </form>
     </Form>
   );
 };

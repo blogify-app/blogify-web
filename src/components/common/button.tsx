@@ -1,9 +1,10 @@
 import React from "react";
-import {ReloadIcon} from "@radix-ui/react-icons";
 import {
   Button as _Button,
   ButtonProps as _ButtonProps,
 } from "@/components/shadcn-ui/button.tsx";
+import {cn} from "@/lib/utils.ts";
+import {Icons} from "@/components/common/icons.tsx";
 
 export interface ButtonProps extends _ButtonProps {
   isLoading?: boolean;
@@ -12,8 +13,15 @@ export interface ButtonProps extends _ButtonProps {
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({className, isLoading, children, ...props}, ref) => {
     return (
-      <_Button disabled={isLoading} ref={ref} {...props}>
-        <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+      <_Button
+        disabled={isLoading}
+        className={cn(className, "relative")}
+        ref={ref}
+        {...props}
+      >
+        {isLoading && (
+          <Icons.spinner className="absolute bottom-0 left-0 right-0 top-0 m-auto h-6 w-6 animate-spin" />
+        )}
         {children}
       </_Button>
     );
