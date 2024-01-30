@@ -76,7 +76,7 @@ export const Signup: FC = () => {
         });
       });
       authStore.setUser(whoami);
-      navigate("/");
+      navigate(`/users/${whoami.id}`);
     } catch (e) {
       // TODO: handle error
       console.error(e);

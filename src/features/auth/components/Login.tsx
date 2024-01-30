@@ -34,7 +34,7 @@ export const Login: FC = () => {
         return AuthProvider.login();
       });
       store.setUser(whoami);
-      navigate("/");
+      navigate(`/users/${whoami.id}`);
     } catch (e) {
       /* EMPTY */
       console.error(e);
