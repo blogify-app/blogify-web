@@ -36,7 +36,7 @@ import {
   type Signup as User,
   signupSchema,
 } from "@/features/auth/schema.ts";
-import {useAuthStore} from "@/features/auth";
+import {RedirectAuthenticated, useAuthStore} from "@/features/auth";
 import {
   AuthProvider,
   AuthWith,
@@ -84,25 +84,27 @@ export const Signup: FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center gap-20">
-      <div className="flex flex-col items-center justify-center gap-[0.125rem]">
-        <div className="text-4xl font-medium">Create an account</div>
-        <p>
-          Already have an account ?{" "}
-          <Button variant="link">
-            <Link to="/login">Login</Link>
-          </Button>
-        </p>
+    <RedirectAuthenticated>
+      <div className="flex flex-col items-center justify-center gap-20">
+        <div className="flex flex-col items-center justify-center gap-[0.125rem]">
+          <div className="text-4xl font-medium">Create an account</div>
+          <p>
+            Already have an account ?{" "}
+            <Button variant="link">
+              <Link to="/login">Login</Link>
+            </Button>
+          </p>
+        </div>
+
+        <StepperView step="signup-with">
+          <SignupWith onSignup={signup} isLoading={isLoading} />
+        </StepperView>
+
+        <StepperView step="user-info">
+          <SignupUserForm onCreate={createUser} isLoading={isLoading} />
+        </StepperView>
       </div>
-
-      <StepperView step="signup-with">
-        <SignupWith onSignup={signup} isLoading={isLoading} />
-      </StepperView>
-
-      <StepperView step="user-info">
-        <SignupUserForm onCreate={createUser} isLoading={isLoading} />
-      </StepperView>
-    </div>
+    </RedirectAuthenticated>
   );
 };
 

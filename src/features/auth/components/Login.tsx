@@ -18,7 +18,7 @@ import {
   EmailAndPassword,
   emailAndPasswordSchema,
 } from "@/features/auth/schema.ts";
-import {useAuthStore} from "@/features/auth";
+import {RedirectAuthenticated, useAuthStore} from "@/features/auth";
 import {AuthProvider, loginWith, AuthWith} from "@/services/security";
 import {useLoading} from "@/hooks";
 
@@ -42,19 +42,21 @@ export const Login: FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center gap-20">
-      <div className="flex flex-col items-center justify-center gap-[0.125rem]">
-        <div className="text-4xl font-medium">Login</div>
-        <p>
-          Don't have an account yet ?{" "}
-          <Button variant="link">
-            <Link to="/signup">Sign up</Link>
-          </Button>
-        </p>
-      </div>
+    <RedirectAuthenticated>
+      <div className="flex flex-col items-center justify-center gap-20">
+        <div className="flex flex-col items-center justify-center gap-[0.125rem]">
+          <div className="text-4xl font-medium">Login</div>
+          <p>
+            Don't have an account yet ?{" "}
+            <Button variant="link">
+              <Link to="/signup">Sign up</Link>
+            </Button>
+          </p>
+        </div>
 
-      <LoginWith onLogin={login} isLoading={isLoading} />
-    </div>
+        <LoginWith onLogin={login} isLoading={isLoading} />
+      </div>
+    </RedirectAuthenticated>
   );
 };
 
