@@ -60,15 +60,9 @@ describe("Comment", () => {
     );
   });
 
-  it("renders the comment author", () => {
+  it("should render the comment correctly", () => {
     cy.getByTestid("comment-author-username").contains("John Doe");
-  });
-
-  it("renders the comment creation date", () => {
     cy.getByTestid("comment-creation-date").contains("30/01/2024");
-  });
-
-  it("renders the comment content", () => {
     cy.getByTestid("comment-content").should("be.visible");
   });
 });

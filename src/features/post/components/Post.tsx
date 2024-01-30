@@ -19,21 +19,29 @@ export interface PostProps {
 }
 
 export const Post: FC<PostProps> = ({post}: PostProps) => {
-  const [postAuthor, setPostAuthor] = useState<User>({});
-  const [comments, setComments] = useState<CommentType[]>([]);
+  const [postAuthor, setPostAuthor] = useState<User>();
+  const [comments, setComments] = useState<CommentType[]>();
 
   useEffect(() => {
-    if (post?.author_id) {
-      UserProvider.getById(post.author_id!).then((author) =>
-        setPostAuthor(author)
-      );
-      CommentProvider.getMany({
-        params: {pid: post?.id!},
-        page: 0,
-        pageSize: 500,
-      }).then((comments) => setComments(comments));
-    }
+    const fetch = async () => {
+      if (post.author_id) {
+        try {
+          const user = await UserProvider.getById(post.author_id!);
+          const comments = await CommentProvider.getMany({
+            params: {pid: post.id!},
+            page: 0,
+            pageSize: 500,
+          });
+          setPostAuthor(user);
+          setComments(comments);
+        } catch (_e) {}
+      }
+
+      void fetch();
+    };
   }, [post, setPostAuthor]);
+
+  if (!postAuthor || !comments) return;
 
   return (
     <Layout>
@@ -42,7 +50,7 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
         className="mb-4 mt-40 flex w-full justify-center p-11 md:mt-20"
       >
         <p className="font-optical-sizing-auto normal font-title text-6xl font-bold">
-          {post?.title}
+          {post.title}
         </p>
       </div>
       <div className="flex w-full justify-center">
@@ -63,7 +71,7 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
             />
             {/* TODO: relative datetime (like: 1 week ago) for later */}
             <span className="mx-1">
-              {calculateReadDuration(post?.content).minutes} min read
+              {calculateReadDuration(post.content).minutes} min read
             </span>
           </div>
           <div className="flex items-center justify-center">
@@ -72,7 +80,7 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
               className="text-2xl"
             />
             <span className="mx-1">
-              {new Date(post?.creation_datetime!).toLocaleDateString()}
+              {new Date(post.creation_datetime!).toLocaleDateString()}
             </span>
           </div>
         </div>
@@ -90,7 +98,7 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
           )}
           <div data-testid="post-content" className="col-span-8 p-4">
             <div className="mx-10">
-              <Reader>{post?.content!}</Reader>
+              <Reader>{post.content!}</Reader>
             </div>
             <div data-testid="post-tags" className="mx-10 flex w-full py-10">
               <span className="mr-2">Tags : </span>
@@ -101,8 +109,8 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
               </div>
             </div>
             <div className="mx-10">
-              {comments.map((comment) => (
-                <Comment comment={comment} />
+              {comments.map((comment, index) => (
+                <Comment key={index} comment={comment} />
               ))}
             </div>
           </div>
