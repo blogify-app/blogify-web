@@ -1,11 +1,17 @@
+import {comments} from "../fixtures/comment";
 import {post1} from "../fixtures/post";
 
 describe("Post", () => {
   // TODO: more precise test
   beforeEach(() => {
-    cy.visit("/posts/1");
-    cy.intercept("GET", "/posts/1", post1());
+    cy.visit(`/posts/${post1().id}`);
+    cy.intercept("GET", `/posts/${post1().id}`, post1());
     cy.intercept("GET", `/users/${post1().author_id}`, post1());
+    cy.intercept(
+      "GET",
+      "/posts/post_1/comments?page=0&page_size=500",
+      comments()
+    );
   });
 
   it("renders the title", () => {
@@ -39,5 +45,24 @@ describe("Post", () => {
   it("renders the user infos", () => {
     cy.getByTestid("user-details").contains("See more about this author");
     cy.getByTestid("user-profile-picture").should("be.visible");
+  });
+});
+
+describe("Comment", () => {
+  beforeEach(() => {
+    cy.visit(`/posts/${post1().id}`);
+    cy.intercept("GET", `/posts/${post1().id}`, post1());
+    cy.intercept("GET", `/users/${post1().author_id}`, post1());
+    cy.intercept(
+      "GET",
+      "/posts/post_1/comments?page=0&page_size=500",
+      comments()
+    );
+  });
+
+  it("should render the comment correctly", () => {
+    cy.getByTestid("comment-author-username").contains("John Doe");
+    cy.getByTestid("comment-creation-date").contains("30/01/2024");
+    cy.getByTestid("comment-content").should("be.visible");
   });
 });
