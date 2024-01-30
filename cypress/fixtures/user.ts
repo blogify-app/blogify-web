@@ -1,4 +1,4 @@
-import {Sex, User, UserStatus} from "@/services/api/gen";
+import {Sex, User, UserStatus} from "../../src/services/api/gen";
 
 export const user1 = (): User => ({
   last_name: "Doe",
@@ -14,5 +14,12 @@ export const user1 = (): User => ({
     "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Molestias totam recusandae a reiciendis quas ducimus at tempora neque quasi eveniet, magni deleniti sapiente voluptas tenetur labore ad quod vero dignissimos?",
   status: UserStatus.ENABLED,
   sex: Sex.M,
+  categories: [
+    {
+      id: "string",
+      label: "string",
+    },
+  ],
+  is_followed: true,
   entrance_datetime: new Date("2024-01-19"),
 });
