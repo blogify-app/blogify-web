@@ -3,7 +3,7 @@ import {useCallback, useState} from "react";
 type QueueTask = <T>(cb: () => Promise<T>) => Promise<T>;
 
 export const useLoading = (id: string) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const queue: QueueTask = useCallback(
     async (fn) => {
