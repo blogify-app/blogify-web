@@ -228,67 +228,67 @@ export interface Post {
   /**
    *
    * @type {string}
-   * @memberof Home
+   * @memberof Post
    */
   id?: string;
   /**
    *
    * @type {string}
-   * @memberof Home
+   * @memberof Post
    */
   thumbnail_url?: string;
   /**
    *
    * @type {string}
-   * @memberof Home
+   * @memberof Post
    */
   description?: string;
   /**
    *
    * @type {string}
-   * @memberof Home
+   * @memberof Post
    */
   content?: string;
   /**
    *
    * @type {string}
-   * @memberof Home
+   * @memberof Post
    */
   title?: string;
   /**
    *
    * @type {Date}
-   * @memberof Home
+   * @memberof Post
    */
   creation_datetime?: Date;
   /**
    *
    * @type {Date}
-   * @memberof Home
+   * @memberof Post
    */
   updated_at?: Date;
   /**
    *
    * @type {string}
-   * @memberof Home
+   * @memberof Post
    */
   author_id?: string;
   /**
    *
    * @type {PostStatus}
-   * @memberof Home
+   * @memberof Post
    */
   status?: PostStatus;
   /**
    *
    * @type {Array<Category>}
-   * @memberof Home
+   * @memberof Post
    */
   categories?: Array<Category>;
   /**
    *
    * @type {ReactionStat}
-   * @memberof Home
+   * @memberof Post
    */
   reactions?: ReactionStat;
 }
@@ -2379,7 +2379,7 @@ export const PostingApiAxiosParamCreator = function (
      *
      * @summary Crupdate post by identifier.
      * @param {string} pid
-     * @param {Post} post Home to crupdate
+     * @param {Post} post Post to crupdate
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2960,7 +2960,7 @@ export const PostingApiFp = function (configuration?: Configuration) {
      *
      * @summary Crupdate post by identifier.
      * @param {string} pid
-     * @param {Post} post Home to crupdate
+     * @param {Post} post Post to crupdate
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -3282,7 +3282,7 @@ export const PostingApiFactory = function (
      *
      * @summary Crupdate post by identifier.
      * @param {string} pid
-     * @param {Post} post Home to crupdate
+     * @param {Post} post Post to crupdate
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -3456,7 +3456,7 @@ export class PostingApi extends BaseAPI {
    *
    * @summary Crupdate post by identifier.
    * @param {string} pid
-   * @param {Post} post Home to crupdate
+   * @param {Post} post Post to crupdate
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PostingApi
