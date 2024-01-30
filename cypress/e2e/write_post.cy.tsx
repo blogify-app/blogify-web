@@ -1,6 +1,6 @@
-import {Post} from "@/services/api/gen";
 // TODO: add alias for test fixture
 import {non_existent_id, post1} from "../fixtures/post.ts";
+import {Post} from "@/services/api/gen";
 
 describe("WritePost", () => {
   it("should display post", () => {
@@ -44,6 +44,7 @@ describe("WritePost", () => {
       });
     });
 
+    // TODO: firebase/auth internal error
     cy.loginThenRedirect(`/posts/write/${non_existent_id()}`);
 
     cy.waitForTinyMCELoaded();

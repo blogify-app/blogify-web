@@ -3,8 +3,8 @@ import ReactDOM from "react-dom/client";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {HomePage} from "@/pages/home";
 import {DummyAuthenticatedPage, LoginPage, SignupPage} from "@/pages/auth";
-import {Authenticated} from "@/features/auth";
 import {PostPage, WritePostPage} from "@/pages/post";
+import {Authenticated} from "@/features/auth";
 import "./index.css";
 
 // eslint-disable-next-line react-refresh/only-export-components
