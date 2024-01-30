@@ -45,6 +45,7 @@ import {
 } from "@/services/security";
 import {cn} from "@/lib/utils.ts";
 import {useLoading} from "@/hooks";
+import {toast} from "sonner";
 
 export const Signup: FC = () => {
   const authStore = useAuthStore();
@@ -61,8 +62,7 @@ export const Signup: FC = () => {
       await queue(() => registerWith(provider));
       stepNext();
     } catch (e) {
-      // TODO: handle error
-      console.error(e);
+      toast("Sign up failed");
     }
   };
 

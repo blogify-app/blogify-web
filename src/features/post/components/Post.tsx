@@ -13,6 +13,7 @@ import {
 import {CommentProvider, UserProvider} from "@/services/api";
 import {Comment} from "./Comment";
 import blankUserProfile from "@/assets/noun-user-picture.svg";
+import {toast} from "sonner";
 
 export interface PostProps {
   post: PostType;
@@ -34,7 +35,9 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
           });
           setPostAuthor(user);
           setComments(comments);
-        } catch (_e) {}
+        } catch (_e) {
+          toast("Could not get the post comment or user.");
+        }
       }
 
       void fetch();
