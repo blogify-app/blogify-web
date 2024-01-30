@@ -3,24 +3,42 @@ import {Error} from "@/common/error";
 import {useParams} from "react-router-dom";
 import {InlineMenu} from "@/common/inline-menu";
 import {Button} from "@/components/shadcn-ui/button";
-import {Post, PostStatus} from "@/services/api/gen";
+import {Category, Post, PostStatus, User} from "@/services/api/gen";
 import {CustomCard} from "@/common/card";
 import {FC, useEffect, useState} from "react";
+
+let user: User = {
+  first_name: "Ny Hasina",
+  last_name: "VAGNO",
+  photo_url: profilepic,
+  username: "hysnav",
+  bio: "You become what you believe",
+  about: "Java Champions",
+};
+
+let category1: Category = {
+  id: "cat_1",
+  label: "Mathematics",
+};
+
+let category2: Category = {
+  id: "cat_2",
+  label: "Machine Learning",
+};
 
 let post: Post = {
   id: "post_1",
   thumbnail_url: "image-uri",
-  description: "Deploy a SpringBoot Application on Azure",
+  description: "Deploy a SpringBoot Application on Azure, AWS or GCP",
   content: "content",
-  title: "Deploy a SpringBoot Application on Azure",
+  title: "Deploy a SpringBoot",
   creation_datetime: new Date(),
   updated_at: new Date(),
   author_id: "Author_id",
-  categories: [],
+  categories: [category1, category2],
   status: PostStatus.ARCHIVED,
   reactions: undefined,
 };
-
 export const ProfilePage: FC = () => {
   const [posts, setPosts] = useState<Post[]>([post]);
   const {id} = useParams();
@@ -39,16 +57,17 @@ export const ProfilePage: FC = () => {
         <div className="px-12">
           <img
             className="h-40 w-40 rounded-[100%]"
-            src={profilepic}
+            src={user?.photo_url}
             alt="user profile"
           />
         </div>
         <div>
-          <h1 className="text-3xl font-bold">Ny Hasina VAGNO</h1>
-          <p className="text-light text-sm">@hasnyvagno</p>
-          <p className="text-light text-xs text-gray-500">
-            Donne vie a tes idees
-          </p>
+          <h1 className="text-3xl font-bold">
+            {user?.first_name + " " + user?.last_name}
+          </h1>
+          <p className="text-light text-sm">{"@" + user?.username}</p>
+          <p className="text-light text-xs text-gray-500">{user?.bio}</p>
+          <p className="text-light text-xs text-gray-500">{user?.about}</p>
           <p className="text-light text-sm">Find out more about this channel</p>
           <div className="flex justify-between">
             <Button className="my-2 rounded-[25px] hover:bg-gray-600">
@@ -86,7 +105,7 @@ export const ProfilePage: FC = () => {
           </div>
         </div>
       ) : (
-        posts.map((post, k) => <CustomCard />)
+        posts.map((post, k) => <CustomCard user={user} post={post} />)
       )}
     </div>
   );
