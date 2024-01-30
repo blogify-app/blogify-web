@@ -11,7 +11,7 @@ export const Comment: FC<CommentProps> = ({comment}: CommentProps) => {
   const {user, ...commentDetails} = comment;
 
   return (
-    <div id="comment-container" className="grid grid-cols-6  ">
+    <div id="comment-container" className="grid grid-cols-6 ">
       <div id="comment-content" className="col-span-5 my-4">
         <div id="comment-header" className="grid grid-cols-5">
           <div className="col-span-3 flex items-center">
