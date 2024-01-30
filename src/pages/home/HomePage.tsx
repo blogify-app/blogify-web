@@ -11,8 +11,8 @@ export const HomePage: FC = () => {
   // NOTE: @example
   const logout = async () => {
     try {
-      await AuthProvider.logOut();
-      auth.setUser(null);
+      await AuthProvider.logout();
+      auth.nullify();
     } catch (e) {
       /* TODO: handle err */
     }
