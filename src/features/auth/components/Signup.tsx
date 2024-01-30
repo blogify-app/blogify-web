@@ -1,5 +1,5 @@
 import {FC} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {format} from "date-fns";
@@ -41,6 +41,7 @@ import {cn} from "@/lib/utils.ts";
 
 export const Signup: FC = () => {
   const authStore = useAuthStore();
+  const navigate = useNavigate();
   const stepper = useStepperContext();
 
   const stepNext = () => {
@@ -61,6 +62,7 @@ export const Signup: FC = () => {
     try {
       const whoami = await AuthProvider.register(user as any);
       authStore.setUser(whoami);
+      navigate("/");
     } catch (e) {
       // TODO: handle error
       console.error(e);

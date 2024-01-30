@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {HomePage} from "@/pages/home";
 import {DummyAuthenticatedPage, LoginPage, SignupPage} from "@/pages/auth";
+import {Authenticated} from "@/features/auth";
 import {PostPage, WritePostPage} from "@/pages/post";
 import "./index.css";
 
@@ -30,7 +31,11 @@ const ROUTER = createBrowserRouter([
   },
   {
     path: "/posts/write/:pid",
-    element: <WritePostPage />,
+    element: (
+      <Authenticated>
+        <WritePostPage />
+      </Authenticated>
+    ),
   },
 ]);
 

@@ -36,3 +36,14 @@ export const get_account_info_response = () => ({
     },
   ],
 });
+
+export const signed_in_user = () => ({
+  kind: "identitytoolkit#VerifyPasswordResponse",
+  localId: "local_id",
+  email: "cypress@gmail.com",
+  displayName: "",
+  idToken: "id_token",
+  registered: true,
+  refreshToken: "refresh_token",
+  expiresIn: "3600",
+});

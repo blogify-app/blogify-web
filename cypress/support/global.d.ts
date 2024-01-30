@@ -4,6 +4,7 @@ export declare global {
       getByTestid<Subject>(testid: string): Chainable<Subject>;
 
       waitForTinyMCELoaded(): Chainable;
+      loginThenRedirect(to?: string): Chainable;
     }
   }
 }

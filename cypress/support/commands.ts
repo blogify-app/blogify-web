@@ -1,5 +1,11 @@
 /// <reference types="cypress" />
 
+import {
+  get_account_info_response,
+  signed_in_user,
+} from "../fixtures/firebase.mock.ts";
+import {user1} from "../fixtures/user.ts";
+
 Cypress.Commands.add("getByTestid", <Subject = any>(id: string) => {
   return cy.get<Subject>(`[data-testid='${id}']`);
 });
@@ -28,4 +34,24 @@ Cypress.Commands.add("waitForTinyMCELoaded", () => {
           $doc.addEventListener("tinymceLoaded", onTinyMceLoaded);
         });
   });
+});
+
+Cypress.Commands.add("loginThenRedirect", (to) => {
+  cy.intercept(
+    "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=*",
+    get_account_info_response()
+  );
+
+  cy.intercept(
+    "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=*",
+    signed_in_user()
+  );
+
+  cy.visit("/login");
+
+  cy.getByTestid("email-field").type(user1().email!);
+  cy.getByTestid("password-field").type("dummy_password");
+  cy.getByTestid("continue-login").click();
+
+  to && cy.visit(to);
 });

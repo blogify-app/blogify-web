@@ -14,7 +14,8 @@ describe("WritePost", () => {
       });
     }).as("saveEditedPost");
 
-    cy.visit(`/posts/write/${post1().id}`);
+    cy.loginThenRedirect(`/posts/write/${post1().id}`);
+
     cy.waitForTinyMCELoaded();
 
     cy.wait("@getPost");
@@ -43,7 +44,8 @@ describe("WritePost", () => {
       });
     });
 
-    cy.visit(`/posts/write/${non_existent_id()}`);
+    cy.loginThenRedirect(`/posts/write/${non_existent_id()}`);
+
     cy.waitForTinyMCELoaded();
 
     cy.contains("The post you're trying to edit does not exist");
