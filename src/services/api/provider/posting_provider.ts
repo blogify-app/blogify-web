@@ -3,7 +3,6 @@ import {postingApi, DataProvider, DEFAULT_QUERY, Query} from "@/services/api";
 
 export interface PostProvider extends DataProvider<Post> {
   reactToPostById(pid: string, type: ReactionType): Promise<Reaction>;
-
   // pictures
   getPicture(picId: string, query: Query<{pid: string}>): Promise<PostPicture>;
   getPictures(pid: string): Promise<PostPicture[]>;

@@ -7,15 +7,6 @@ import {Category, Post, PostStatus, User} from "@/services/api/gen";
 import {CustomCard} from "@/common/card";
 import {FC, useEffect, useState} from "react";
 
-let user: User = {
-  first_name: "Ny Hasina",
-  last_name: "VAGNO",
-  photo_url: profilepic,
-  username: "hysnav",
-  bio: "You become what you believe",
-  about: "Java Champions",
-};
-
 let category1: Category = {
   id: "cat_1",
   label: "Mathematics",
@@ -26,30 +17,17 @@ let category2: Category = {
   label: "Machine Learning",
 };
 
-let post: Post = {
-  id: "post_1",
-  thumbnail_url: "image-uri",
-  description: "Deploy a SpringBoot Application on Azure, AWS or GCP",
-  content: "content",
-  title: "Deploy a SpringBoot",
-  creation_datetime: new Date(),
-  updated_at: new Date(),
-  author_id: "Author_id",
-  categories: [category1, category2],
-  status: PostStatus.ARCHIVED,
-  reactions: undefined,
-};
-export const ProfilePage: FC = () => {
-  const [posts, setPosts] = useState<Post[]>([post]);
-  const {id} = useParams();
+export interface UserProps {
+  user: User;
+  post: Post[];
+}
+
+export const Profile: FC<UserProps> = ({user, post}: UserProps) => {
+  const [posts, setPosts] = useState<Post[]>(post);
 
   function increment() {
     setPosts([]);
   }
-
-  useEffect(() => {
-    console.log(id); //Get user by id
-  });
 
   return (
     <div>
