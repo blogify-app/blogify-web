@@ -1,4 +1,4 @@
-import {Comment, CommentStatus, UserStatus} from "../../src/services/api/gen";
+import {Comment, CommentStatus} from "../../src/services/api/gen";
 import {user1} from "./user";
 
 export const comments = (): Comment[] => {
