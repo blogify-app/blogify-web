@@ -3,6 +3,36 @@ import React from "react";
 type IconProps = React.HTMLAttributes<SVGElement>;
 
 export const Icons = {
+  like: (props: IconProps) => (
+    <svg
+      className="h-6 w-6 hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring active:bg-gray-400 dark:text-white"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M9 14.3H5a2 2 0 0 1-1.6-.9 2 2 0 0 1-.3-1.8l2.4-7.2C5.8 3.5 6 3 7.4 3c2 0 4.2.7 6.1 1.3l1.4.4v9.8a32 32 0 0 0-4.2 5.5c-.1.4-.5.7-.9.9a1.7 1.7 0 0 1-2.1-.7c-.2-.4-.3-.8-.3-1.3L9 14.3Zm10.8-.3H17V6a2 2 0 1 1 4 0v6.8c0 .7-.5 1.2-1.2 1.2Z"
+        clip-rule="evenodd"
+      />
+    </svg>
+  ),
+  dislike: (props: IconProps) => (
+    <svg
+      className="h-6 w-6 hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring active:bg-gray-400 dark:text-white"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M15 9.7h4a2 2 0 0 1 1.6.9 2 2 0 0 1 .3 1.8l-2.4 7.2c-.3.9-.5 1.4-1.9 1.4-2 0-4.2-.7-6.1-1.3L9 19.3V9.5A32 32 0 0 0 13.2 4c.1-.4.5-.7.9-.9h1.2c.4.1.7.4 1 .7l.2 1.3L15 9.7ZM4.2 10H7v8a2 2 0 1 1-4 0v-6.8c0-.7.5-1.2 1.2-1.2Z"
+        clip-rule="evenodd"
+      />
+    </svg>
+  ),
   gitHub: (props: IconProps) => (
     <svg viewBox="0 0 438.549 438.549" {...props}>
       <path

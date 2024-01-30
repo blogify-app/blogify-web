@@ -2,8 +2,6 @@ import {FC, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {Post} from "@/features/post";
 import {Post as PostType} from "@/services/api/gen";
-import {PostProvider} from "@/services/api";
-import {useToast} from "@/hooks";
 
 export const PostPage: FC = () => {
   const [post, setPost] = useState<PostType | null>(null);
@@ -16,7 +14,7 @@ export const PostPage: FC = () => {
     const fetch = async () => {
       if (!id) return;
       try {
-        const post = await PostProvider.getById(id);
+        const post = post1();
         setPost(post);
       } catch (_e) {
         toast({
