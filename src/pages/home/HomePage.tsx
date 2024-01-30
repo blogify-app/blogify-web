@@ -4,6 +4,7 @@ import {Button} from "@/components/shadcn-ui/button";
 import {useAuthStore} from "@/features/auth";
 import {Reader} from "@/features/wisiwig";
 import {AuthProvider} from "@/services/security";
+import {toast} from "sonner";
 
 export const HomePage: FC = () => {
   const authStore = useAuthStore();
@@ -14,7 +15,7 @@ export const HomePage: FC = () => {
       await AuthProvider.logout();
       authStore.nullify();
     } catch (e) {
-      /* TODO: handle err */
+      toast("Log out failed");
     }
   };
 

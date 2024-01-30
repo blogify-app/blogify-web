@@ -21,6 +21,7 @@ import {
 import {RedirectAuthenticated, useAuthStore} from "@/features/auth";
 import {AuthProvider, loginWith, AuthWith} from "@/services/security";
 import {useLoading} from "@/hooks";
+import {toast} from "sonner";
 
 export const Login: FC = () => {
   const store = useAuthStore();
@@ -36,8 +37,7 @@ export const Login: FC = () => {
       store.setUser(whoami);
       navigate(`/users/${whoami.id}`);
     } catch (e) {
-      /* EMPTY */
-      console.error(e);
+      toast("Log in failed");
     }
   };
 

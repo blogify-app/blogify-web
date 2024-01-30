@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import {Toaster} from "@/components/shadcn-ui/sonner";
 import {HomePage} from "@/pages/home";
 import {DummyAuthenticatedPage, LoginPage, SignupPage} from "@/pages/auth";
 import {PostPage, WritePostPage} from "@/pages/post";
@@ -41,6 +42,7 @@ const ROUTER = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
+    <Toaster />
     <RouterProvider router={ROUTER} />
   </React.StrictMode>
 );
