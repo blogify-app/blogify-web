@@ -31,6 +31,15 @@ The Definitions Of Done (DoD) for our project are aligned with the professor's r
 
 Bootstrapped using [Proplate](https://github.com/YumeT023/proplate) from the [Modern-react-ts](https://github.com/YumeT023/modern-react-ts/tree/master) template.
 
+### Pages & Features Added
+
+- **Home Page:** An engaging landing page welcoming users to the Blogify community. (beta version)
+- **Sign In Page:** Allow users to log in to their accounts.
+- **Sign Up Page:** Enable new users to create an account.
+- **Blog Reading Page:** A dedicated page for reading blog posts with comments.
+- **User Profile Page:** Display user profiles with relevant information.
+- **Blogs List Page:** A page listing all available blogs.
+
 ### How to install locally?
 
 #### Requirements:
