@@ -28,11 +28,11 @@ import {
 import {type Signup as User, signupSchema} from "@/features/auth/schema.ts";
 import {cn} from "@/lib/utils.ts";
 
-interface ProfileEditionProps {
+interface ProfileEditProps {
   // onCreate(user: User): void;
 }
 
-export const ProfileEdition: FC<ProfileEditionProps> = () => {
+export const ProfileEdit: FC<ProfileEditProps> = () => {
   const form = useForm<User>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -42,7 +42,7 @@ export const ProfileEdition: FC<ProfileEditionProps> = () => {
 
   return (
     <Form {...form}>
-      <div className="mb-6 flex w-[40rem] flex-col items-center justify-center space-y-6">
+      <div className="bg-black-400 mb-6 flex w-[40rem] flex-col items-center justify-center space-y-6">
         <div className="w-full">
           <FormField
             name="first_name"
