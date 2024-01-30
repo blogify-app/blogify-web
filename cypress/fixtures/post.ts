@@ -30,4 +30,8 @@ export const post1 = (): Post => ({
   updated_at: new Date("2024-01-19"),
   author_id: "user_1",
   status: PostStatus.ARCHIVED,
+  reactions: {
+    likes: 1000,
+    dislikes: 200,
+  },
 });

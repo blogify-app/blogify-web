@@ -40,4 +40,14 @@ describe("Post", () => {
     cy.getByTestid("user-details").contains("See more about this author");
     cy.getByTestid("user-profile-picture").should("be.visible");
   });
+
+  it("renders like reactions", () => {
+    cy.getByTestid("like-reaction").contains(1000);
+    cy.getByTestid("like-reaction").should("be.visible");
+  });
+
+  it("renders dislike reaction", () => {
+    cy.getByTestid("dislike-reaction").contains(200);
+    cy.getByTestid("dislike-reaction").should("be.visible");
+  });
 });

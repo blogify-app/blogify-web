@@ -105,7 +105,9 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
                     clip-rule="evenodd"
                   />
                 </svg>
-                <label className="ml-2">{post.reactions?.likes}</label>
+                <label data-testid="like-reaction" className="ml-2">
+                  {post.reactions?.likes}
+                </label>
               </div>
               <div
                 className="mx-5 flex items-stretch justify-self-center"
@@ -126,7 +128,9 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
                     clip-rule="evenodd"
                   />
                 </svg>
-                <label className="ml-2">{post.reactions?.dislikes}</label>
+                <label data-testid="dislike-reaction" className="ml-2">
+                  {post.reactions?.dislikes}
+                </label>
               </div>
             </div>
             <div data-testid="post-tags" className="mx-10 flex w-full py-10">
