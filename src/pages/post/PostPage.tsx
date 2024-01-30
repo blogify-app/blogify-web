@@ -14,7 +14,7 @@ export const PostPage: FC = () => {
     const fetch = async () => {
       if (!id) return;
       try {
-        const post = post1();
+        const post = await PostProvider.getById(id);
         setPost(post);
       } catch (_e) {
         toast({
