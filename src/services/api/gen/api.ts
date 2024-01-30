@@ -2543,22 +2543,19 @@ export const PostingApiAxiosParamCreator = function (
      *
      * @summary get all pictures of a post
      * @param {string} pid
-     * @param {string} picId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getAllPostPictureById: async (
       pid: string,
-      picId: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'pid' is not null or undefined
       assertParamExists("getAllPostPictureById", "pid", pid);
-      // verify required parameter 'picId' is not null or undefined
-      assertParamExists("getAllPostPictureById", "picId", picId);
-      const localVarPath = `/posts/{pid}/pictures`
-        .replace(`{${"pid"}}`, encodeURIComponent(String(pid)))
-        .replace(`{${"picId"}}`, encodeURIComponent(String(picId)));
+      const localVarPath = `/posts/{pid}/pictures`.replace(
+        `{${"pid"}}`,
+        encodeURIComponent(String(pid))
+      );
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -2744,6 +2741,72 @@ export const PostingApiAxiosParamCreator = function (
 
       if (categories !== undefined) {
         localVarQueryParameter["categories"] = categories;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Get posts for a user.
+     * @param {string} uId
+     * @param {number} page
+     * @param {number} pageSize
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPostsByUserId: async (
+      uId: string,
+      page: number,
+      pageSize: number,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'uId' is not null or undefined
+      assertParamExists("getPostsByUserId", "uId", uId);
+      // verify required parameter 'page' is not null or undefined
+      assertParamExists("getPostsByUserId", "page", page);
+      // verify required parameter 'pageSize' is not null or undefined
+      assertParamExists("getPostsByUserId", "pageSize", pageSize);
+      const localVarPath = `/users/{uId}/posts`.replace(
+        `{${"uId"}}`,
+        encodeURIComponent(String(uId))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "GET",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication BearerAuth required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      if (page !== undefined) {
+        localVarQueryParameter["page"] = page;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter["page_size"] = pageSize;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -2985,13 +3048,11 @@ export const PostingApiFp = function (configuration?: Configuration) {
      *
      * @summary get all pictures of a post
      * @param {string} pid
-     * @param {string} picId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getAllPostPictureById(
       pid: string,
-      picId: string,
       options?: AxiosRequestConfig
     ): Promise<
       (
@@ -3000,11 +3061,7 @@ export const PostingApiFp = function (configuration?: Configuration) {
       ) => AxiosPromise<Array<PostPicture>>
     > {
       const localVarAxiosArgs =
-        await localVarAxiosParamCreator.getAllPostPictureById(
-          pid,
-          picId,
-          options
-        );
+        await localVarAxiosParamCreator.getAllPostPictureById(pid, options);
       const index = configuration?.serverIndex ?? 0;
       const operationBasePath =
         operationServerMap["PostingApi.getAllPostPictureById"]?.[index]?.url;
@@ -3098,6 +3155,41 @@ export const PostingApiFp = function (configuration?: Configuration) {
       const index = configuration?.serverIndex ?? 0;
       const operationBasePath =
         operationServerMap["PostingApi.getPosts"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
+    },
+    /**
+     *
+     * @summary Get posts for a user.
+     * @param {string} uId
+     * @param {number} page
+     * @param {number} pageSize
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getPostsByUserId(
+      uId: string,
+      page: number,
+      pageSize: number,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Post>>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getPostsByUserId(
+          uId,
+          page,
+          pageSize,
+          options
+        );
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["PostingApi.getPostsByUserId"]?.[index]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
@@ -3236,17 +3328,15 @@ export const PostingApiFactory = function (
      *
      * @summary get all pictures of a post
      * @param {string} pid
-     * @param {string} picId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getAllPostPictureById(
       pid: string,
-      picId: string,
       options?: any
     ): AxiosPromise<Array<PostPicture>> {
       return localVarFp
-        .getAllPostPictureById(pid, picId, options)
+        .getAllPostPictureById(pid, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -3295,6 +3385,25 @@ export const PostingApiFactory = function (
     ): AxiosPromise<Array<Post>> {
       return localVarFp
         .getPosts(page, pageSize, categories, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary Get posts for a user.
+     * @param {string} uId
+     * @param {number} page
+     * @param {number} pageSize
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPostsByUserId(
+      uId: string,
+      page: number,
+      pageSize: number,
+      options?: any
+    ): AxiosPromise<Array<Post>> {
+      return localVarFp
+        .getPostsByUserId(uId, page, pageSize, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -3399,18 +3508,13 @@ export class PostingApi extends BaseAPI {
    *
    * @summary get all pictures of a post
    * @param {string} pid
-   * @param {string} picId
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PostingApi
    */
-  public getAllPostPictureById(
-    pid: string,
-    picId: string,
-    options?: AxiosRequestConfig
-  ) {
+  public getAllPostPictureById(pid: string, options?: AxiosRequestConfig) {
     return PostingApiFp(this.configuration)
-      .getAllPostPictureById(pid, picId, options)
+      .getAllPostPictureById(pid, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -3465,6 +3569,27 @@ export class PostingApi extends BaseAPI {
   ) {
     return PostingApiFp(this.configuration)
       .getPosts(page, pageSize, categories, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Get posts for a user.
+   * @param {string} uId
+   * @param {number} page
+   * @param {number} pageSize
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PostingApi
+   */
+  public getPostsByUserId(
+    uId: string,
+    page: number,
+    pageSize: number,
+    options?: AxiosRequestConfig
+  ) {
+    return PostingApiFp(this.configuration)
+      .getPostsByUserId(uId, page, pageSize, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
