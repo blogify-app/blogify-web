@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {ChangeEvent, FC, useState} from "react";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {format} from "date-fns";
@@ -28,18 +28,29 @@ import {
 } from "@/components/shadcn-ui/radio-group.tsx";
 import {type Signup as User, signupSchema} from "@/features/auth/schema.ts";
 import {cn} from "@/lib/utils.ts";
+import placeholder from "@/assets/profil-pic-placeholder.png";
 
 interface ProfileEditProps {
   // onCreate(user: User): void;
 }
 
 export const ProfileEdit: FC<ProfileEditProps> = () => {
+  const [imageSrc, setImageSrc] = useState<string | null>();
   const form = useForm<User>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
       categories: [],
     },
   });
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files && event.target.files[0];
+
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImageSrc(imageUrl);
+    }
+  };
 
   return (
     <Form {...form}>
@@ -226,11 +237,15 @@ export const ProfileEdit: FC<ProfileEditProps> = () => {
         <div className="mb-6 mt-6 flex h-full w-1/2 w-[40rem] flex-col items-center space-y-4">
           <div className="w-full max-w-sm items-center gap-1.5">
             <Avatar className={"h-500 w-500"}>
-              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+              {imageSrc ? (
+                <AvatarImage src={imageSrc} alt="@shadcn" />
+              ) : (
+                <AvatarImage src={placeholder} alt="@shadcn" />
+              )}
             </Avatar>
           </div>
           <div className="grid w-full max-w-sm items-center gap-1.5">
-            <Input id="picture" type="file" />
+            <Input id="picture" type="file" onChange={handleFileChange} />
           </div>
         </div>
       </div>
