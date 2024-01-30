@@ -1,8 +1,8 @@
 import {Sex, User, UserStatus, Whoami} from "../../src/services/api/gen";
 
 export const user1 = (): User => ({
-  last_name: "Doe",
-  first_name: "John",
+  last_name: "worker",
+  first_name: "Blogify",
   birth_date: "2024-01-19",
   email: "john@doe.com",
   id: "user_1",

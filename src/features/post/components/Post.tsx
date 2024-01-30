@@ -1,50 +1,45 @@
-import {FC, useEffect, useState} from "react";
+import {FC, useState} from "react";
 import {Link} from "react-router-dom";
 import {Icon} from "@iconify/react";
 import {Badge} from "@/components/shadcn-ui/badge";
 import {Layout} from "@/layout";
 import {Reader} from "@/features/wisiwig";
 import {calculateReadDuration} from "@/features/post/utils";
-import {
-  Comment as CommentType,
-  Post as PostType,
-  User,
-} from "@/services/api/gen";
-import {CommentProvider, UserProvider} from "@/services/api";
+import {Comment as CommentType, Post as PostType} from "@/services/api/gen";
 import {Comment} from "./Comment";
 import blankUserProfile from "@/assets/noun-user-picture.svg";
-import {toast} from "sonner";
+import {user1} from "../../../../cypress/fixtures/user.ts";
 
 export interface PostProps {
   post: PostType;
 }
 
 export const Post: FC<PostProps> = ({post}: PostProps) => {
-  const [postAuthor, setPostAuthor] = useState<User>();
-  const [comments, setComments] = useState<CommentType[]>();
+  const author = user1();
+  const [comments] = useState<CommentType[]>([]);
 
-  useEffect(() => {
-    const fetch = async () => {
-      if (post.author_id) {
-        try {
-          const user = await UserProvider.getById(post.author_id!);
-          const comments = await CommentProvider.getMany({
-            params: {pid: post.id!},
-            page: 0,
-            pageSize: 500,
-          });
-          setPostAuthor(user);
-          setComments(comments);
-        } catch (_e) {
-          toast("Could not get the post comment or user.");
-        }
-      }
-
-      void fetch();
-    };
-  }, [post, setPostAuthor]);
-
-  if (!postAuthor || !comments) return;
+  // TODO: to restore
+  // useEffect(() => {
+  //   const fetch = async () => {
+  //     if (post.author_id) {
+  //       try {
+  //         const user = await UserProvider.getById(post?.author_id!);
+  //         const comments = await CommentProvider.getMany({
+  //           params: {pid: post.id!},
+  //           page: 0,
+  //           pageSize: 500,
+  //         });
+  //         setPostAuthor(user);
+  //         setComments(comments);
+  //       } catch (_e) {
+  //         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  //         toast("Could not get the post comment or user.");
+  //       }
+  //     }
+  //
+  //     void fetch();
+  //   };
+  // }, [post, setPostAuthor]);
 
   return (
     <Layout>
@@ -64,7 +59,7 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
           <div className="flex items-center justify-center">
             <Icon icon="material-symbols-light:face-6" className="text-2xl" />
             <span className="mx-1">
-              by <strong>{postAuthor?.username}</strong>
+              by <strong>{author?.username}</strong>
             </span>
           </div>
           <div className="flex items-center justify-center">
@@ -137,9 +132,9 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
               to=""
               className="mb-5 text-left font-title text-2xl hover:text-slate-700 focus:text-slate-200 active:font-semibold"
             >
-              {postAuthor?.first_name} {postAuthor?.last_name}
+              {author?.first_name} {author?.last_name}
             </Link>
-            <p className="overflow-hidden truncate">{postAuthor?.about}</p>
+            <p className="overflow-hidden truncate">{author?.about}</p>
             <Link
               to=""
               className=" my-3 underline hover:text-slate-700 focus:text-slate-700 active:font-semibold"
