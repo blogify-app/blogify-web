@@ -4,3 +4,4 @@ export * from "./WritePost";
 // common
 export * from "./TitleInput";
 export * from "./PostCard";
+export * from "./Comment";
