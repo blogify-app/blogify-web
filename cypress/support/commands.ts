@@ -39,14 +39,12 @@ Cypress.Commands.add("waitForTinyMCELoaded", () => {
 
 Cypress.Commands.add("loginThenRedirect", (to) => {
   cy.intercept("/v1/accounts:lookup?key=*", get_account_info_response());
-
+  cy.intercept("**/signin", whoami1()).as("signInBackend");
   cy.intercept(
     "POST",
     "/v1/accounts:signInWithPassword?key=*",
     signed_in_user()
   ).as("signInWithPassword");
-
-  cy.intercept("**/signin", whoami1());
 
   cy.visit("/login");
 
@@ -55,6 +53,7 @@ Cypress.Commands.add("loginThenRedirect", (to) => {
   cy.getByTestid("continue-login").click();
 
   cy.wait("@signInWithPassword");
+  cy.wait("@signInBackend");
 
   to && cy.visit(to);
 });
