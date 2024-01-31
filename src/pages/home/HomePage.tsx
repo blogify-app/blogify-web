@@ -1,14 +1,4 @@
 import {FC} from "react";
-import {Home} from "@/features/home/components";
+import {Navigate} from "react-router-dom";
 
-export const HomePage: FC = () => {
-  return (
-    <div>
-      <div>
-        <Home />
-      </div>
-
-      <div className="px-4"></div>
-    </div>
-  );
-};
+export const HomePage: FC = () => <Navigate to="/posts" />;
