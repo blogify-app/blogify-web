@@ -1,12 +1,11 @@
 describe("Home", () => {
-  beforeEach(() => {
+  it("should redirect to /posts when landing on /", () => {
     cy.visit("/");
-  });
 
-  it("should contain connection page", () => {
-    cy.contains("Login");
-    cy.contains("Logout");
-
-    cy.get("em").contains("None");
+    cy.window()
+      .its("location")
+      .should((location) => {
+        expect(location.pathname).to.eq("/posts");
+      });
   });
 });
