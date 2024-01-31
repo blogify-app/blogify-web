@@ -1,5 +1,5 @@
 import {comments} from "../fixtures/comment";
-import {post1} from "../fixtures/post";
+import {non_existent_id, post1} from "../fixtures/post";
 
 describe("Post", () => {
   describe("Display", () => {
@@ -51,6 +51,18 @@ describe("Post", () => {
       cy.getByTestid("comment-author-username").contains("John Doe");
       cy.getByTestid("comment-creation-date").contains("11/3/2024");
       cy.getByTestid("comment-content").should("be.visible");
+    });
+
+    it("should notify when unable to get post", () => {
+      cy.visit(`/posts/${non_existent_id()}`);
+
+      cy.intercept("GET", `**/posts/${non_existent_id()}`, (req) => {
+        req.reply({
+          statusCode: 404,
+        });
+      });
+
+      cy.contains("Could not get the post content.");
     });
   });
 });
