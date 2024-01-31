@@ -8,7 +8,9 @@ export interface CommentProps {
 }
 
 export const Comment: FC<CommentProps> = ({comment}: CommentProps) => {
-  const {user, ...commentDetails} = comment;
+  const {user, content, creation_datetime} = comment;
+
+  if (!user) return null;
 
   return (
     <div id="comment-container" className="grid grid-cols-6 ">
@@ -19,7 +21,7 @@ export const Comment: FC<CommentProps> = ({comment}: CommentProps) => {
               <AvatarImage
                 data-testid="avatar"
                 className="h-10 w-10 rounded-full"
-                src={user?.photo_url}
+                src={user.photo_url}
               />
               <AvatarFallback data-testid="avatar">
                 <Icon
@@ -29,25 +31,25 @@ export const Comment: FC<CommentProps> = ({comment}: CommentProps) => {
               </AvatarFallback>
             </Avatar>
             <p className="mx-3 font-bold" data-testid="comment-author-username">
-              {user?.username}
+              {user.username}
             </p>
-            <p
-              className="mx-4 text-slate-500"
-              data-testid="comment-creation-date"
-            >
-              {
-                new Date(
-                  commentDetails?.creation_datetime!
-                ).toLocaleDateString()!
-              }
-            </p>
+            {creation_datetime && (
+              <p
+                className="mx-4 text-slate-500"
+                data-testid="comment-creation-date"
+              >
+                {new Date(creation_datetime).toLocaleDateString()}
+              </p>
+            )}
           </div>
           <div className="col-span-1"></div>
           <div className="col-span-1 flex flex-col items-center"></div>
         </div>
-        <div data-testid="comment-content" className=" my-5 text-slate-500">
-          {commentDetails?.content}
-        </div>
+        {content && (
+          <div data-testid="comment-content" className=" my-5 text-slate-500">
+            {content}
+          </div>
+        )}
       </div>
     </div>
   );
