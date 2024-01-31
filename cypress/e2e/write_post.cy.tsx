@@ -4,9 +4,9 @@ import {Post} from "@/services/api/gen";
 
 describe("WritePost", () => {
   it("should display post", () => {
-    cy.intercept("GET", `/posts/${post1().id}`, post1()).as("getPost");
+    cy.intercept("GET", `**/posts/${post1().id}`, post1()).as("getPost");
 
-    cy.intercept("PUT", `/posts/${post1().id}`, (req) => {
+    cy.intercept("PUT", `**/posts/${post1().id}`, (req) => {
       const post: Post = req.body;
       expect(post.title).to.eq("Edited post title");
       req.reply({
@@ -28,14 +28,14 @@ describe("WritePost", () => {
   });
 
   it("should suggest creating new post when trying to write non-existent", () => {
-    cy.intercept("GET", `/posts/${non_existent_id()}`, (req) => {
+    cy.intercept("GET", `**/posts/${non_existent_id()}`, (req) => {
       // simulate 404 not found
       req.reply({
         statusCode: 404,
       });
     });
 
-    cy.intercept("PUT", `/posts/*`, (req) => {
+    cy.intercept("PUT", `**/posts/*`, (req) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(req.body.title).to.eq("Draft");
       req.reply({
