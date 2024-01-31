@@ -4,7 +4,7 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {Toaster} from "@/components/shadcn-ui/sonner";
 import {HomePage} from "@/pages/home";
 import {DummyAuthenticatedPage, LoginPage, SignupPage} from "@/pages/auth";
-import {PostPage, WritePostPage} from "@/pages/post";
+import {PostListPage, PostPage, WritePostPage} from "@/pages/post";
 import {Authenticated} from "@/features/auth";
 import "./index.css";
 
@@ -25,6 +25,10 @@ const ROUTER = createBrowserRouter([
   {
     path: "/authenticated",
     element: <DummyAuthenticatedPage />,
+  },
+  {
+    path: "/posts",
+    element: <PostListPage />,
   },
   {
     path: "/posts/:id",
