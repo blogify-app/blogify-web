@@ -21,3 +21,10 @@ import "@cypress/code-coverage/support";
 
 // Alternatively you can use CommonJS syntax:
 // require("./commands.ts");
+
+Cypress.on("uncaught:exception", (err, _runnable) => {
+  // FIXME: Disable firebase internal error since we are not using the real login but mock them in tests
+  if (err.message.includes("Firebase: Error (auth/internal-error).")) {
+    return false;
+  }
+});
