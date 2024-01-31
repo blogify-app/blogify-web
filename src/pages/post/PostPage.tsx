@@ -6,7 +6,7 @@ import {Post as PostType} from "@/services/api/gen";
 import {PostProvider} from "@/services/api";
 
 export const PostPage: FC = () => {
-  const [post, setPost] = useState<PostType>({});
+  const [post, setPost] = useState<PostType | null>(null);
 
   const params = useParams();
   const id = params.id;
