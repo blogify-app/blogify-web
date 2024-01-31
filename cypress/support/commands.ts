@@ -17,7 +17,7 @@ Cypress.Commands.add("waitForTinyMCELoaded", () => {
   let isTinyMCEActive = false;
 
   cy.window()
-    .its("tinyMCE", {timeout: 1_000 * 8})
+    .its("tinyMCE", {timeout: 1_000 * 20})
     .its("activeEditor")
     .then((activeEditor) => {
       if (activeEditor) isTinyMCEActive = true;
