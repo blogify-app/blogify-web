@@ -68,13 +68,13 @@ export const Signup: FC = () => {
 
   const createUser: SubmitHandler<User> = async (user) => {
     try {
-      const whoami = await queue(() => {
-        user.email = getCachedAuth().email || user.email;
-        return AuthProvider.register({
+      const whoami = await queue(() =>
+        AuthProvider.register({
           ...(user as any),
           id: nanoid(),
-        });
-      });
+          entrance_datetime: new Date(),
+        })
+      );
       authStore.setUser(whoami);
       navigate(`/users/${whoami.id}`);
     } catch (e) {
@@ -214,6 +214,7 @@ const SignupUserForm: FC<SignupUserFormProps> = ({onCreate, isLoading}) => {
       categories: [],
       // bind cached email to the to-be registered user
       email: getCachedAuth().email ?? "",
+      provider_id: getCachedAuth().id ?? "",
     },
   });
 

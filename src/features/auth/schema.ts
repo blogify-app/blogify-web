@@ -16,7 +16,7 @@ export const signupSchema = z.object({
       label: z.string(),
     })
   ),
-  providerId: z.string().optional(),
+  provider_id: z.string().optional(),
   email: z.string().email(),
 });
 

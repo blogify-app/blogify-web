@@ -13,6 +13,7 @@ export type AuthWith<T = UserCredential> = (
 ) => Promise<T>;
 
 const AUTH_ID_TOKEN = "auth_id_token";
+const AUTH_PROVIDER_ID = "auth_provider_id";
 const AUTH_EMAIL = "auth_email";
 
 const cacheCredential = async (credential: UserCredential) => {
@@ -20,12 +21,14 @@ const cacheCredential = async (credential: UserCredential) => {
   if (!user) return credential;
   localStorage.setItem(AUTH_EMAIL, user.email ?? "");
   localStorage.setItem(AUTH_ID_TOKEN, await user.getIdToken());
+  localStorage.setItem(AUTH_PROVIDER_ID, user.uid);
   return credential;
 };
 
 export const getCachedAuth = () => ({
   token: localStorage.getItem(AUTH_ID_TOKEN),
   email: localStorage.getItem(AUTH_EMAIL),
+  id: localStorage.getItem(AUTH_PROVIDER_ID),
 });
 
 export const loginWith: AuthWith = async (
@@ -56,4 +59,5 @@ export const logout = async (): Promise<void> => {
   await signOut(auth);
   localStorage.removeItem(AUTH_ID_TOKEN);
   localStorage.removeItem(AUTH_EMAIL);
+  localStorage.removeItem(AUTH_PROVIDER_ID);
 };
