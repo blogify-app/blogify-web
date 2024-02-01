@@ -36,34 +36,42 @@ export const NavBar: FC = () => {
         <NavigationMenu>
           <NavigationMenuList className="flex flex-col flex-wrap md:flex-row">
             <NavigationMenuItem className="mx-4 w-40">
-              <NavigationMenuLink
-                data-testid="home-menu"
-                className={navigationMenuTriggerStyle()}
-              >
-                Home
-              </NavigationMenuLink>
+              <Link to="/">
+                <NavigationMenuLink
+                  data-testid="home-menu"
+                  className={navigationMenuTriggerStyle()}
+                >
+                  Home
+                </NavigationMenuLink>
+              </Link>
             </NavigationMenuItem>
             <NavigationMenuItem className="mx-4 w-40">
-              <NavigationMenuLink
-                data-testid="about-menu"
-                className={navigationMenuTriggerStyle()}
-              >
-                About
-              </NavigationMenuLink>
+              <Link to="/posts">
+                <NavigationMenuLink
+                  data-testid="about-menu"
+                  className={navigationMenuTriggerStyle()}
+                >
+                  Posts
+                </NavigationMenuLink>
+              </Link>
             </NavigationMenuItem>
             <NavigationMenuItem className="mx-4 w-40">
-              <NavigationMenuLink
-                data-testid="profile-menu"
-                className={navigationMenuTriggerStyle()}
-              >
-                Profile
-              </NavigationMenuLink>
+              {/* TODO: change this to the profile link */}
+              <Link to="/">
+                <NavigationMenuLink
+                  data-testid="profile-menu"
+                  className={navigationMenuTriggerStyle()}
+                >
+                  Profile
+                </NavigationMenuLink>
+              </Link>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
       </div>
       <div className="col-span-1 flex justify-evenly align-middle">
-        <Link to="">
+        {/* TODO: change this to the profile link */}
+        <Link to="/">
           <Avatar>
             <AvatarImage data-testid="avatar" src="random_link" />
             <AvatarFallback data-testid="avatar">
