@@ -17,6 +17,6 @@ describe("Navbar", () => {
 
     cy.contains("Home");
     cy.contains("Profile");
-    cy.contains("About");
+    cy.contains("Posts");
   });
 });
