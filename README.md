@@ -1,3 +1,7 @@
+<div>
+<img alt="Codecov" src="https://img.shields.io/codecov/c/github/blogify-app/blogify-web">
+</div>
+
 # Blogify 📑✨
 
 Welcome to Blogify, where words come to life and stories find their digital home! Blogify is more than just a blog app; it's a vibrant community of passionate writers, storytellers, and readers coming together to share, explore, and engage in the art of blogging.
