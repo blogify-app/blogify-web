@@ -49,8 +49,12 @@ const ROUTER = createBrowserRouter([
     element: <ProfilePage />,
   },
   {
-    path: "/users/edit",
-    element: <ProfileEditPage />,
+    path: "/users/edit/:id",
+    element: (
+        <Authenticated>
+          <ProfileEditPage />
+        </Authenticated>
+    ),
   },
 ]);
 
