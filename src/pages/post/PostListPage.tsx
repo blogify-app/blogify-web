@@ -9,26 +9,32 @@ import image5 from "@/assets/images/pic5.png";
 import image6 from "@/assets/images/pic6.png";
 
 export const PostListPage: FC = () => {
-  return (
-    <Layout header={<AnonymousHeader />}>
-      <div className="p-6 pl-10">
-        <h1 className="text-xl font-semibold">Recent blog posts</h1>
-      </div>
-
-      <div
-        data-testid="post-title"
-        className="mb-2 flex w-full justify-center p-5"
-      >
-        <PostCard image={image1} />
-        <PostCard image={image2} />
-        <PostCard image={image3} />
-      </div>
-
-      <div data-testid="post-title" className="flex w-full justify-center px-5">
-        <PostCard image={image4} />
-        <PostCard image={image5} />
-        <PostCard image={image6} />
-      </div>
-    </Layout>
-  );
+    return (
+        <Layout header={<AnonymousHeader/>}>
+            <div className="container mb-5">
+                <h1 className="text-xl font-semibold px-1 py-5">Recent blog posts</h1>
+                <div className="grid grid-cols-2 gap-4 mb-7">
+                    <PostCard image={image1} direction='col'/>
+                    <div className="grid grid-rows-2 gap-6">
+                        <PostCard image={image6} direction='row'/>
+                        <PostCard image={image3} direction='row'/>
+                    </div>
+                </div>
+                <div>
+                    <PostCard image={image4} direction='row'/>
+                </div>
+            </div>
+            <div className="container">
+                <h1 className="text-xl font-semibold px-1 py-4">All blog posts</h1>
+                <div className="grid grid-cols-3 gap-4">
+                    <PostCard image={image1} direction='col'/>
+                    <PostCard image={image2} direction='col'/>
+                    <PostCard image={image3} direction='col'/>
+                    <PostCard image={image4} direction='col'/>
+                    <PostCard image={image5} direction='col'/>
+                    <PostCard image={image2} direction='col'/>
+                </div>
+            </div>
+        </Layout>
+    );
 };
