@@ -26,20 +26,36 @@ import {
   RadioGroup,
   RadioGroupItem,
 } from "@/components/shadcn-ui/radio-group.tsx";
-import {type Signup as User, signupSchema} from "@/features/auth/schema.ts";
 import {cn} from "@/lib/utils.ts";
 import placeholder from "@/assets/profil-pic-placeholder.png";
+import {useAuthStore} from "@/features/auth";
+import {
+  profileEditSchema,
+  type ProfileEdit as User,
+} from "@/features/profile/schema";
 
 interface ProfileEditProps {
   // onCreate(user: User): void;
 }
 
 export const ProfileEdit: FC<ProfileEditProps> = () => {
+  const authStore = useAuthStore();
+  const currentUser = authStore.user;
   const [imageSrc, setImageSrc] = useState<string | null>();
+  const birthDate = currentUser?.birth_date
+    ? new Date(currentUser.birth_date)
+    : undefined;
+
   const form = useForm<User>({
-    resolver: zodResolver(signupSchema),
+    resolver: zodResolver(profileEditSchema),
     defaultValues: {
-      categories: [],
+      first_name: currentUser?.first_name,
+      last_name: currentUser?.last_name,
+      username: currentUser?.username,
+      sex: currentUser?.sex,
+      birth_date: birthDate,
+      bio: currentUser?.bio,
+      about: currentUser?.about,
     },
   });
 
