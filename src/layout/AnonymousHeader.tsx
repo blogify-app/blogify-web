@@ -10,13 +10,13 @@ const AnonymousHeaderComponent: FC<AnonymousHeaderProps> = ({page}) => {
   return (
     <div className="mx-auto my-0 flex h-full w-[95%] items-center justify-between bg-white">
       <div className="logo w-30 h-15 col-span-1">
-        <a
-          href="#"
+        <Link
           data-testid="blogify-logo"
           className="text-4xl font-bold tracking-tight"
+          to="/posts"
         >
           BLOGIFY
-        </a>
+        </Link>
       </div>
       <div data-testid="auth-button" className="space-x-3">
         {page === "sign_up" && (
