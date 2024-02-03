@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {FC, useEffect, useState} from "react";
 import {AnonymousHeader, Layout} from "@/layout";
 import {PostCard} from "@/features/post";
 import image1 from "@/assets/images/pic1.png";
@@ -7,8 +7,25 @@ import image3 from "@/assets/images/pic3.png";
 import image4 from "@/assets/images/pic4.png";
 import image5 from "@/assets/images/pic5.png";
 import image6 from "@/assets/images/pic6.png";
+import {PostProvider} from "@/services/api";
+import {toast} from "sonner";
 
 export const PostListPage: FC = () => {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const posts = await PostProvider.getMany();
+        setPosts(posts);
+      } catch (_e) {
+        toast("Could not get posts content.");
+      }
+    };
+
+    void fetch();
+  }, []);
+
   return (
     <Layout header={<AnonymousHeader />}>
       <div className="container mb-5">
