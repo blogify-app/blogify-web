@@ -49,7 +49,7 @@ describe("Post", () => {
       );
 
       cy.getByTestid("comment-author-username").contains("John Doe");
-      cy.getByTestid("comment-creation-date").contains("02/01/2024");
+      cy.getByTestid("comment-creation-date").contains("01/02/2024");
       cy.getByTestid("comment-content").should("be.visible");
     });
 
