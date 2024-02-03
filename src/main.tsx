@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import {Toaster} from "@/components/shadcn-ui/sonner";
+import {Toaster} from "@/components/shadcn-ui/toaster";
 import {HomePage} from "@/pages/home";
 import {DummyAuthenticatedPage, LoginPage, SignupPage} from "@/pages/auth";
 import {PostListPage, PostPage, WritePostPage} from "@/pages/post";

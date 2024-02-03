@@ -32,7 +32,7 @@ describe("Authentication", () => {
 
   describe("Validation", () => {
     it("should validate login form", () => {
-      cy.visit("/protected");
+      cy.visit("/login");
       // try to continue login without filling anyfields
       cy.getByTestid("continue-login").click();
 
@@ -52,7 +52,29 @@ describe("Authentication", () => {
     });
   });
 
-  describe.only("Signup", () => {
+  describe("Login", () => {
+    it("should notify when login failed", () => {
+      cy.visit("/login");
+      cy.intercept(
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=*",
+        {
+          statusCode: 500,
+          body: {
+            message: "error",
+          },
+        }
+      );
+      cy.getByTestid("email-field").type("correct@gmail.com");
+
+      cy.getByTestid("password-field").type("long_password");
+
+      // TODO: test that it lands on profile page
+      cy.getByTestid("continue-login").click();
+      cy.contains("Log in failed");
+    });
+  });
+
+  describe("Signup", () => {
     it("should sign up user", () => {
       cy.intercept(
         "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=*",
@@ -76,6 +98,45 @@ describe("Authentication", () => {
       cy.getByTestid("continue-signup").click();
 
       // step(2)
+    });
+
+    it("should notify when the sign up failed", () => {
+      cy.intercept(
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=*",
+        {
+          statusCode: 500,
+          body: {
+            message: "error",
+          },
+        }
+      );
+
+      cy.intercept("/signin", {
+        statusCode: 500,
+        body: {
+          message: "error",
+        },
+      });
+
+      cy.intercept(
+        "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=*",
+        {
+          statusCode: 500,
+          body: {
+            message: "error",
+          },
+        }
+      );
+
+      // TODO: test for social media oauth
+      cy.visit("/signup");
+
+      const {email, password} = user_to_signup();
+      cy.getByTestid("email-field").type(email);
+      cy.getByTestid("password-field").type(password);
+      cy.getByTestid("continue-signup").click();
+
+      cy.contains("Sign up failed");
     });
   });
 });

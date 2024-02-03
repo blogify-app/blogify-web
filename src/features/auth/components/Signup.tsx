@@ -44,14 +44,14 @@ import {
   registerWith,
 } from "@/services/security";
 import {cn} from "@/lib/utils.ts";
-import {useLoading} from "@/hooks";
-import {toast} from "sonner";
+import {useLoading, useToast} from "@/hooks";
 
 export const Signup: FC = () => {
   const authStore = useAuthStore();
   const navigate = useNavigate();
   const stepper = useStepperContext();
   const {queue, isLoading} = useLoading("signup");
+  const toast = useToast();
 
   const stepNext = () => {
     stepper.nextStep();
@@ -62,7 +62,9 @@ export const Signup: FC = () => {
       await queue(() => registerWith(provider));
       stepNext();
     } catch (e) {
-      toast("Sign up failed");
+      toast({
+        message: "Sign up failed",
+      });
     }
   };
 

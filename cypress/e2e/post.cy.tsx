@@ -34,6 +34,18 @@ describe("Post", () => {
       cy.getByTestid("user-details").contains("See more about this author");
       cy.getByTestid("user-profile-picture").should("be.visible");
     });
+
+    it("should notify when unable to get post", () => {
+      cy.visit(`/posts/${non_existent_id()}`);
+
+      cy.intercept("GET", `**/posts/${non_existent_id()}`, (req) => {
+        req.reply({
+          statusCode: 404,
+        });
+      });
+
+      cy.contains("Could not get the post content.");
+    });
   });
 
   describe("Comment", () => {
@@ -49,20 +61,24 @@ describe("Post", () => {
       );
 
       cy.getByTestid("comment-author-username").contains("John Doe");
-      cy.getByTestid("comment-creation-date").contains("11/3/2024");
+      cy.getByTestid("comment-creation-date").contains("1/2/2024");
       cy.getByTestid("comment-content").should("be.visible");
     });
 
-    it("should notify when unable to get post", () => {
-      cy.visit(`/posts/${non_existent_id()}`);
+    it("should notify when unable to get comment or user", () => {
+      cy.visit(`/posts/${post1().id}`);
 
-      cy.intercept("GET", `**/posts/${non_existent_id()}`, (req) => {
-        req.reply({
-          statusCode: 404,
-        });
+      // TODO: more precise test
+      cy.intercept("GET", `**/posts/${post1().id}`, post1());
+      cy.intercept("GET", `**/users/${post1().author_id}`, post1());
+      cy.intercept("GET", "**/posts/post_1/comments?page=0&page_size=500", {
+        statusCode: 500,
+        body: {
+          message: "error",
+        },
       });
 
-      cy.contains("Could not get the post content.");
+      cy.contains("Could not get the post comment or user.");
     });
   });
 });
