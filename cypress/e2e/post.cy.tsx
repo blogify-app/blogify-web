@@ -37,7 +37,7 @@ describe("Post", () => {
   });
 
   describe("Comment", () => {
-    it.only("should render the comment correctly", () => {
+    it("should render the comment correctly", () => {
       cy.visit(`/posts/${post1().id}`);
 
       cy.intercept("GET", `**/posts/${post1().id}`, post1());
@@ -49,7 +49,7 @@ describe("Post", () => {
       );
 
       cy.getByTestid("comment-author-username").contains("John Doe");
-      cy.getByTestid("comment-creation-date").contains("01/02/2024");
+      cy.getByTestid("comment-creation-date").contains("1/2/2024");
       cy.getByTestid("comment-content").should("be.visible");
     });
 
