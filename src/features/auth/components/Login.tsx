@@ -20,13 +20,13 @@ import {
 } from "@/features/auth/schema.ts";
 import {RedirectAuthenticated, useAuthStore} from "@/features/auth";
 import {AuthProvider, loginWith, AuthWith} from "@/services/security";
-import {useLoading} from "@/hooks";
-import {toast} from "sonner";
+import {useLoading, useToast} from "@/hooks";
 
 export const Login: FC = () => {
   const store = useAuthStore();
   const navigate = useNavigate();
   const {queue, isLoading} = useLoading("login");
+  const toast = useToast();
 
   const login: AuthWith<void> = async (provider) => {
     try {
@@ -37,7 +37,9 @@ export const Login: FC = () => {
       store.setUser(whoami);
       navigate(`/users/${whoami.id}`);
     } catch (e) {
-      toast("Log in failed");
+      toast({
+        message: "Log in failed",
+      });
     }
   };
 

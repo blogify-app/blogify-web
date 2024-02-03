@@ -1,6 +1,5 @@
 import {FC, useEffect, useState} from "react";
 import {Link} from "react-router-dom";
-import {toast} from "sonner";
 import {Icon} from "@iconify/react";
 import {Badge} from "@/components/shadcn-ui/badge";
 import {Layout} from "@/layout";
@@ -14,6 +13,7 @@ import {
 import {Comment} from "@/features/post";
 import blankUserProfile from "@/assets/noun-user-picture.svg";
 import {CommentProvider, UserProvider} from "@/services/api";
+import {useToast} from "@/hooks";
 
 export interface PostProps {
   post: PostType;
@@ -22,6 +22,7 @@ export interface PostProps {
 export const Post: FC<PostProps> = ({post}: PostProps) => {
   const [author, setAuthor] = useState<UserType>();
   const [comments, setComments] = useState<CommentType[]>([]);
+  const toast = useToast();
 
   // TODO: to restore
   useEffect(() => {
@@ -38,7 +39,9 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
         setComments(comments);
       } catch (_e) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        toast("Could not get the post comment or user.");
+        toast({
+          message: "Could not get the post comment or user.",
+        });
       }
     };
     void fetch();
