@@ -1,8 +1,8 @@
-import {Post, PostStatus} from "@/services/api/gen";
+import {Post, PostStatus, User} from "@/services/api/gen";
 
-export const createDraftPost = (pid: string, uid: string): Post => ({
+export const createDraftPost = (pid: string, user: User): Post => ({
   id: pid,
-  author_id: uid,
+  author: user,
   content: "<h1>Start writing</h1>",
   title: "Draft",
   status: PostStatus.DRAFT,

@@ -5,22 +5,17 @@ import {Badge} from "@/components/shadcn-ui/badge";
 import {Layout} from "@/layout";
 import {Reader} from "@/features/wisiwig";
 import {calculateReadDuration} from "@/features/post/utils";
-import {
-  Comment as CommentType,
-  Post as PostType,
-  User as UserType,
-} from "@/services/api/gen";
 import {Comment} from "@/features/post";
-import blankUserProfile from "@/assets/noun-user-picture.svg";
-import {CommentProvider, UserProvider} from "@/services/api";
+import {Comment as CommentType, Post as PostType} from "@/services/api/gen";
+import {CommentProvider} from "@/services/api";
 import {useToast} from "@/hooks";
+import blankUserProfile from "@/assets/noun-user-picture.svg";
 
 export interface PostProps {
   post: PostType;
 }
 
 export const Post: FC<PostProps> = ({post}: PostProps) => {
-  const [author, setAuthor] = useState<UserType>();
   const [comments, setComments] = useState<CommentType[]>([]);
   const toast = useToast();
 
@@ -29,13 +24,11 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
     const fetch = async () => {
       if (!post) return;
       try {
-        const user = await UserProvider.getById(post.author_id!);
         const comments = await CommentProvider.getMany({
           params: {pid: post.id!},
           page: 0,
           pageSize: 500,
         });
-        setAuthor(user);
         setComments(comments);
       } catch (_e) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
@@ -46,6 +39,8 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
     };
     void fetch();
   }, [post]);
+
+  const {author} = post;
 
   return (
     <Layout>

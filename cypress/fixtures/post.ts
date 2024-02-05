@@ -1,4 +1,5 @@
 import {Post, PostStatus} from "../../src/services/api/gen"; // alias path does not work here
+import {user1} from "./user";
 
 export const non_existent_id = () => "non_existent_pid";
 
@@ -30,6 +31,6 @@ export const post1 = (): Post => ({
   title: "Lorem ipsum dolor sit amet consectetur",
   creation_datetime: new Date("2024-01-19"),
   updated_at: new Date("2024-01-19"),
-  author_id: "user_1",
+  author: user1(),
   status: PostStatus.ARCHIVED,
 });

@@ -10,7 +10,7 @@ import {PostProvider} from "@/services/api";
 export const WritePostPage = () => {
   const user = useAuthStore((auth) => auth.user!);
 
-  const [post, setPost] = useState(createDraftPost(nanoid(), user.id!));
+  const [post, setPost] = useState(createDraftPost(nanoid(), user));
   const [isExistent, setIsExistent] = useState(true);
 
   const pid = useParams().pid!;

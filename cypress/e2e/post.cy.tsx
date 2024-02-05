@@ -8,7 +8,6 @@ describe("Post", () => {
 
       // TODO: more precise test
       cy.intercept("GET", `**/posts/${post1().id}`, post1());
-      cy.intercept("GET", `**/users/${post1().author_id}`, post1());
       cy.intercept(
         "GET",
         "**/posts/post_1/comments?page=0&page_size=500",
@@ -53,7 +52,6 @@ describe("Post", () => {
       cy.visit(`/posts/${post1().id}`);
 
       cy.intercept("GET", `**/posts/${post1().id}`, post1());
-      cy.intercept("GET", `**/users/${post1().author_id}`, post1());
       cy.intercept(
         "GET",
         "**/posts/post_1/comments?page=0&page_size=500",
@@ -70,7 +68,6 @@ describe("Post", () => {
 
       // TODO: more precise test
       cy.intercept("GET", `**/posts/${post1().id}`, post1());
-      cy.intercept("GET", `**/users/${post1().author_id}`, post1());
       cy.intercept("GET", "**/posts/post_1/comments?page=0&page_size=500", {
         statusCode: 500,
         body: {
