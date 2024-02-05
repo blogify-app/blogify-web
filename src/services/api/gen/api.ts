@@ -228,67 +228,67 @@ export interface Post {
   /**
    *
    * @type {string}
-   * @memberof Home
+   * @memberof Post
    */
   id?: string;
   /**
    *
    * @type {string}
-   * @memberof Home
+   * @memberof Post
    */
   thumbnail_url?: string;
   /**
    *
    * @type {string}
-   * @memberof Home
+   * @memberof Post
    */
   description?: string;
   /**
    *
    * @type {string}
-   * @memberof Home
+   * @memberof Post
    */
   content?: string;
   /**
    *
    * @type {string}
-   * @memberof Home
+   * @memberof Post
    */
   title?: string;
   /**
    *
    * @type {Date}
-   * @memberof Home
+   * @memberof Post
    */
   creation_datetime?: Date;
   /**
    *
    * @type {Date}
-   * @memberof Home
+   * @memberof Post
    */
   updated_at?: Date;
   /**
    *
-   * @type {string}
-   * @memberof Home
+   * @type {User}
+   * @memberof Post
    */
-  author_id?: string;
+  author?: User;
   /**
    *
    * @type {PostStatus}
-   * @memberof Home
+   * @memberof Post
    */
   status?: PostStatus;
   /**
    *
    * @type {Array<Category>}
-   * @memberof Home
+   * @memberof Post
    */
   categories?: Array<Category>;
   /**
    *
    * @type {ReactionStat}
-   * @memberof Home
+   * @memberof Post
    */
   reactions?: ReactionStat;
 }
@@ -854,6 +854,60 @@ export const CategoryApiAxiosParamCreator = function (
   return {
     /**
      *
+     * @summary crupdate list of Categories.
+     * @param {Array<Category>} category Post to crupdate
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    crupdateCategories: async (
+      category: Array<Category>,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'category' is not null or undefined
+      assertParamExists("crupdateCategories", "category", category);
+      const localVarPath = `/categories`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "PUT",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication BearerAuth required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      localVarHeaderParameter["Content-Type"] = "application/json";
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        category,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
      * @summary Get all Categories.
      * @param {string} [label] Filter categories by label.
      * @param {*} [options] Override http request option.
@@ -913,6 +967,35 @@ export const CategoryApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
+     * @summary crupdate list of Categories.
+     * @param {Array<Category>} category Post to crupdate
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async crupdateCategories(
+      category: Array<Category>,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<Array<Category>>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.crupdateCategories(category, options);
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["CategoryApi.crupdateCategories"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
+    },
+    /**
+     *
      * @summary Get all Categories.
      * @param {string} [label] Filter categories by label.
      * @param {*} [options] Override http request option.
@@ -958,6 +1041,21 @@ export const CategoryApiFactory = function (
   return {
     /**
      *
+     * @summary crupdate list of Categories.
+     * @param {Array<Category>} category Post to crupdate
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    crupdateCategories(
+      category: Array<Category>,
+      options?: any
+    ): AxiosPromise<Array<Category>> {
+      return localVarFp
+        .crupdateCategories(category, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary Get all Categories.
      * @param {string} [label] Filter categories by label.
      * @param {*} [options] Override http request option.
@@ -981,6 +1079,23 @@ export const CategoryApiFactory = function (
  * @extends {BaseAPI}
  */
 export class CategoryApi extends BaseAPI {
+  /**
+   *
+   * @summary crupdate list of Categories.
+   * @param {Array<Category>} category Post to crupdate
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof CategoryApi
+   */
+  public crupdateCategories(
+    category: Array<Category>,
+    options?: AxiosRequestConfig
+  ) {
+    return CategoryApiFp(this.configuration)
+      .crupdateCategories(category, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
   /**
    *
    * @summary Get all Categories.
@@ -1756,7 +1871,7 @@ export const FollowingApiAxiosParamCreator = function (
      * @param {string} id
      * @param {number} page
      * @param {number} pageSize
-     * @param {string} [name] Filters follower by first name or lastname.
+     * @param {string} [namePost] Filters follower by first name or lastname.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1764,7 +1879,7 @@ export const FollowingApiAxiosParamCreator = function (
       id: string,
       page: number,
       pageSize: number,
-      name?: string,
+      namePost?: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -1804,8 +1919,8 @@ export const FollowingApiAxiosParamCreator = function (
         localVarQueryParameter["page_size"] = pageSize;
       }
 
-      if (name !== undefined) {
-        localVarQueryParameter["name"] = name;
+      if (namePost !== undefined) {
+        localVarQueryParameter["namePost"] = namePost;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -1982,7 +2097,7 @@ export const FollowingApiFp = function (configuration?: Configuration) {
      * @param {string} id
      * @param {number} page
      * @param {number} pageSize
-     * @param {string} [name] Filters follower by first name or lastname.
+     * @param {string} [namePost] Filters follower by first name or lastname.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1990,7 +2105,7 @@ export const FollowingApiFp = function (configuration?: Configuration) {
       id: string,
       page: number,
       pageSize: number,
-      name?: string,
+      namePost?: string,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<User>>
@@ -2000,7 +2115,7 @@ export const FollowingApiFp = function (configuration?: Configuration) {
           id,
           page,
           pageSize,
-          name,
+          namePost,
           options
         );
       const index = configuration?.serverIndex ?? 0;
@@ -2107,7 +2222,7 @@ export const FollowingApiFactory = function (
      * @param {string} id
      * @param {number} page
      * @param {number} pageSize
-     * @param {string} [name] Filters follower by first name or lastname.
+     * @param {string} [namePost] Filters follower by first name or lastname.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2115,11 +2230,11 @@ export const FollowingApiFactory = function (
       id: string,
       page: number,
       pageSize: number,
-      name?: string,
+      namePost?: string,
       options?: any
     ): AxiosPromise<Array<User>> {
       return localVarFp
-        .getFollowedByUserId(id, page, pageSize, name, options)
+        .getFollowedByUserId(id, page, pageSize, namePost, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -2183,7 +2298,7 @@ export class FollowingApi extends BaseAPI {
    * @param {string} id
    * @param {number} page
    * @param {number} pageSize
-   * @param {string} [name] Filters follower by first name or lastname.
+   * @param {string} [namePost] Filters follower by first name or lastname.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FollowingApi
@@ -2192,11 +2307,11 @@ export class FollowingApi extends BaseAPI {
     id: string,
     page: number,
     pageSize: number,
-    name?: string,
+    namePost?: string,
     options?: AxiosRequestConfig
   ) {
     return FollowingApiFp(this.configuration)
-      .getFollowedByUserId(id, page, pageSize, name, options)
+      .getFollowedByUserId(id, page, pageSize, namePost, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -2379,7 +2494,7 @@ export const PostingApiAxiosParamCreator = function (
      *
      * @summary Crupdate post by identifier.
      * @param {string} pid
-     * @param {Post} post Home to crupdate
+     * @param {Post} post Post to crupdate
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2825,6 +2940,68 @@ export const PostingApiAxiosParamCreator = function (
     },
     /**
      *
+     * @summary Submit post thumbnail.
+     * @param {string} pid
+     * @param {File} [file]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    putPostThumbnail: async (
+      pid: string,
+      file?: File,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'pid' is not null or undefined
+      assertParamExists("putPostThumbnail", "pid", pid);
+      const localVarPath = `/posts/{pid}/thumbnail`.replace(
+        `{${"pid"}}`,
+        encodeURIComponent(String(pid))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "PUT",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+      const localVarFormParams = new ((configuration &&
+        configuration.formDataCtor) ||
+        FormData)();
+
+      // authentication BearerAuth required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      if (file !== undefined) {
+        localVarFormParams.append("file", file as any);
+      }
+
+      localVarHeaderParameter["Content-Type"] = "multipart/form-data";
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = localVarFormParams;
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
      * @summary React to a post by identifier.
      * @param {string} pid
      * @param {ReactionType} type
@@ -2960,7 +3137,7 @@ export const PostingApiFp = function (configuration?: Configuration) {
      *
      * @summary Crupdate post by identifier.
      * @param {string} pid
-     * @param {Post} post Home to crupdate
+     * @param {Post} post Post to crupdate
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -3200,6 +3377,34 @@ export const PostingApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary Submit post thumbnail.
+     * @param {string} pid
+     * @param {File} [file]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async putPostThumbnail(
+      pid: string,
+      file?: File,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Post>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.putPostThumbnail(pid, file, options);
+      const index = configuration?.serverIndex ?? 0;
+      const operationBasePath =
+        operationServerMap["PostingApi.putPostThumbnail"]?.[index]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, operationBasePath || basePath);
+    },
+    /**
+     *
      * @summary React to a post by identifier.
      * @param {string} pid
      * @param {ReactionType} type
@@ -3282,7 +3487,7 @@ export const PostingApiFactory = function (
      *
      * @summary Crupdate post by identifier.
      * @param {string} pid
-     * @param {Post} post Home to crupdate
+     * @param {Post} post Post to crupdate
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -3408,6 +3613,23 @@ export const PostingApiFactory = function (
     },
     /**
      *
+     * @summary Submit post thumbnail.
+     * @param {string} pid
+     * @param {File} [file]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    putPostThumbnail(
+      pid: string,
+      file?: File,
+      options?: any
+    ): AxiosPromise<Post> {
+      return localVarFp
+        .putPostThumbnail(pid, file, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary React to a post by identifier.
      * @param {string} pid
      * @param {ReactionType} type
@@ -3456,7 +3678,7 @@ export class PostingApi extends BaseAPI {
    *
    * @summary Crupdate post by identifier.
    * @param {string} pid
-   * @param {Post} post Home to crupdate
+   * @param {Post} post Post to crupdate
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PostingApi
@@ -3590,6 +3812,25 @@ export class PostingApi extends BaseAPI {
   ) {
     return PostingApiFp(this.configuration)
       .getPostsByUserId(uId, page, pageSize, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Submit post thumbnail.
+   * @param {string} pid
+   * @param {File} [file]
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PostingApi
+   */
+  public putPostThumbnail(
+    pid: string,
+    file?: File,
+    options?: AxiosRequestConfig
+  ) {
+    return PostingApiFp(this.configuration)
+      .putPostThumbnail(pid, file, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
