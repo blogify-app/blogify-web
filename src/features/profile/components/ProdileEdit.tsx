@@ -87,7 +87,7 @@ export const ProfileEdit: FC<ProfileEditProps> = () => {
               name="first_name"
               control={form.control}
               render={({field}) => (
-                <FormItem className="text-md">
+                <FormItem className="text-md" data-testid="first_name_input">
                   <FormLabel>First name</FormLabel>
                   <FormControl className="h-12">
                     <Input {...field} />
@@ -102,7 +102,7 @@ export const ProfileEdit: FC<ProfileEditProps> = () => {
               name="last_name"
               control={form.control}
               render={({field}) => (
-                <FormItem className="text-md">
+                <FormItem className="text-md" data-testid="last_name_input">
                   <FormLabel>Last name</FormLabel>
                   <FormControl className="h-12">
                     <Input {...field} />
@@ -118,7 +118,7 @@ export const ProfileEdit: FC<ProfileEditProps> = () => {
               name="username"
               control={form.control}
               render={({field}) => (
-                <FormItem className="text-md">
+                <FormItem className="text-md" data-testid="username_input">
                   <FormLabel>User name</FormLabel>
                   <FormControl className="h-12">
                     <Input {...field} />
@@ -134,7 +134,7 @@ export const ProfileEdit: FC<ProfileEditProps> = () => {
               control={form.control}
               name="sex"
               render={({field}) => (
-                <FormItem className="space-y-3">
+                <FormItem className="space-y-3" data-testid="sex_input">
                   <FormLabel>Sex</FormLabel>
                   <FormControl>
                     <RadioGroup
@@ -177,13 +177,17 @@ export const ProfileEdit: FC<ProfileEditProps> = () => {
               name="birth_date"
               control={form.control}
               render={({field}) => (
-                <FormItem className="text-md flex flex-col">
+                <FormItem
+                  className="text-md flex flex-col"
+                  data-testid="birth_date_input"
+                >
                   <FormLabel>Date of birth</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl className="w-full">
                         <Button
                           variant={"outline"}
+                          data-testid="date_button"
                           className={cn(
                             "w-full pl-3 text-left font-normal",
                             !field.value && "text-muted-foreground"
@@ -192,7 +196,9 @@ export const ProfileEdit: FC<ProfileEditProps> = () => {
                           {field.value ? (
                             format(field.value, "PPP")
                           ) : (
-                            <span>Pick a date</span>
+                            <span data-testid="date_span_button">
+                              Pick a date
+                            </span>
                           )}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
@@ -201,6 +207,7 @@ export const ProfileEdit: FC<ProfileEditProps> = () => {
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
+                        data-testid="birth_calendar"
                         selected={field.value}
                         onSelect={field.onChange}
                         disabled={(date) =>
@@ -224,7 +231,7 @@ export const ProfileEdit: FC<ProfileEditProps> = () => {
               name="bio"
               control={form.control}
               render={({field}) => (
-                <FormItem className="text-md">
+                <FormItem className="text-md" data-testid="bio_input">
                   <FormLabel>Bio</FormLabel>
                   <FormControl className="h-12">
                     <Input {...field} />
@@ -240,7 +247,7 @@ export const ProfileEdit: FC<ProfileEditProps> = () => {
               name="about"
               control={form.control}
               render={({field}) => (
-                <FormItem className="text-md">
+                <FormItem className="text-md" data-testid="about_input">
                   <FormLabel>About</FormLabel>
                   <FormControl className="h-12">
                     <Textarea {...field} />
