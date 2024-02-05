@@ -43,7 +43,7 @@ interface ProfileEditProps {
 export const ProfileEdit: FC<ProfileEditProps> = () => {
   const authStore = useAuthStore();
   const currentUser = authStore.user;
-  const [imageSrc, setImageSrc] = useState<string | null>();
+  const [imageSrc, setImageSrc] = useState<string | undefined>(placeholder);
   const birthDate = currentUser?.birth_date
     ? new Date(currentUser.birth_date)
     : undefined;
@@ -270,11 +270,11 @@ export const ProfileEdit: FC<ProfileEditProps> = () => {
         <div className="mb-6 mt-6 flex h-full w-1/2 w-[40rem] flex-col items-center space-y-4">
           <div className="w-full max-w-sm items-center gap-1.5">
             <Avatar className={"h-500 w-500"}>
-              {imageSrc ? (
-                <AvatarImage src={imageSrc} alt="@shadcn" />
-              ) : (
-                <AvatarImage src={placeholder} alt="@shadcn" />
-              )}
+              <AvatarImage
+                src={imageSrc}
+                alt="@shadcn"
+                data-testid="avatar_image"
+              />
             </Avatar>
           </div>
           <div className="grid w-full max-w-sm items-center gap-1.5">
