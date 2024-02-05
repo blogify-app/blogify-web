@@ -30,9 +30,11 @@ import {cn} from "@/lib/utils.ts";
 import placeholder from "@/assets/profil-pic-placeholder.png";
 import {useAuthStore} from "@/features/auth";
 import {
-  profileEditSchema,
   type ProfileEdit as User,
+  profileEditSchema,
 } from "@/features/profile/schema";
+import {Query, UserProvider} from "@/services/api";
+import {UserPictureType} from "@/services/api/gen";
 
 interface ProfileEditProps {
   // onCreate(user: User): void;
@@ -59,12 +61,20 @@ export const ProfileEdit: FC<ProfileEditProps> = () => {
     },
   });
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
 
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setImageSrc(imageUrl);
+      const pictureQuery: Query<{type: UserPictureType}> = {
+        page: 1,
+        pageSize: 10,
+        params: {
+          type: "PROFILE",
+        },
+      };
+      await UserProvider.putPicture(currentUser?.id ?? "", file, pictureQuery);
     }
   };
 
