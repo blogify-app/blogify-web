@@ -5,12 +5,15 @@ import {Badge} from "@/components/shadcn-ui/badge";
 import {Layout} from "@/layout";
 import {Reader} from "@/features/wisiwig";
 import {calculateReadDuration} from "@/features/post/utils";
-import {Comment} from "@/features/post";
-import {Comment as CommentType, Post as PostType} from "@/services/api/gen";
-import {CommentProvider} from "@/services/api";
-import {useToast} from "@/hooks";
 import blankUserProfile from "@/assets/noun-user-picture.svg";
-import {toast} from "sonner";
+import {
+  Comment as CommentType,
+  Post as PostType,
+  ReactionType,
+} from "@/services/api/gen";
+import {Comment} from "@/features/post";
+import {CommentProvider, PostProvider} from "@/services/api";
+import {useToast} from "@/hooks";
 import {Icons} from "@/components/common/icons";
 
 export interface PostProps {

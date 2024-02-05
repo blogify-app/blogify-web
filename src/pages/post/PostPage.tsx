@@ -2,6 +2,8 @@ import {FC, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {Post} from "@/features/post";
 import {Post as PostType} from "@/services/api/gen";
+import {PostProvider} from "@/services/api";
+import {useToast} from "@/hooks";
 
 export const PostPage: FC = () => {
   const [post, setPost] = useState<PostType | null>(null);
