@@ -28,27 +28,23 @@ import {
 } from "@/components/shadcn-ui/radio-group.tsx";
 import {cn} from "@/lib/utils.ts";
 import placeholder from "@/assets/profil-pic-placeholder.png";
-import {useAuthStore} from "@/features/auth";
-import {
-  type ProfileEdit as User,
-  profileEditSchema,
-} from "@/features/profile/schema";
+import {User} from "@/services/api/gen";
+import {profileEditSchema} from "@/features/profile/schema";
 import {Query, UserProvider} from "@/services/api";
 import {UserPictureType} from "@/services/api/gen";
 
 interface ProfileEditProps {
-  // onCreate(user: User): void;
+  user: User;
 }
 
-export const ProfileEdit: FC<ProfileEditProps> = () => {
-  const authStore = useAuthStore();
-  const currentUser = authStore.user;
+export const ProfileEdit: FC<ProfileEditProps> = ({user}: ProfileEditProps) => {
+  const currentUser = user;
   const [imageSrc, setImageSrc] = useState<string | undefined>(placeholder);
   const birthDate = currentUser?.birth_date
     ? new Date(currentUser.birth_date)
-    : undefined;
+    : new Date();
 
-  const form = useForm<User>({
+  const form = useForm({
     resolver: zodResolver(profileEditSchema),
     defaultValues: {
       first_name: currentUser?.first_name,
