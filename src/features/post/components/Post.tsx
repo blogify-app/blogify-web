@@ -26,14 +26,15 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
       try {
         const comments = await CommentProvider.getMany({
           params: {pid: post.id!},
-          page: 0,
+          page: 1,
           pageSize: 500,
         });
+
         setComments(comments);
       } catch (_e) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         toast({
-          message: "Could not get the post comment or user.",
+          message: "Could not get the post comment.",
         });
       }
     };
@@ -130,14 +131,14 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
           </div>
           <div className="container col-span-6 flex flex-col justify-center">
             <Link
-              to=""
+              to={`/users/${author?.id || ""}`}
               className="mb-5 text-left font-title text-2xl hover:text-slate-700 focus:text-slate-200 active:font-semibold"
             >
               {author?.first_name} {author?.last_name}
             </Link>
             <p className="overflow-hidden truncate">{author?.about}</p>
             <Link
-              to=""
+              to={`/users/${author?.id || ""}`}
               className=" my-3 underline hover:text-slate-700 focus:text-slate-700 active:font-semibold"
             >
               See more about this author
