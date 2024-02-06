@@ -42,7 +42,7 @@ export const user1_modified = (): User => ({
   profile_banner_url: "string",
   username: "John Doe",
   about:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Molestias totam recusandae a reiciendis quas ducimus at tempora neque quasi eveniet, magni deleniti sapiente voluptas tenetur labore ad quod vero dignissimos?",
+    "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Molestias totam recusandae a reiciendis quas ducimus at tempora neque quasi eveniet, magni deleniti sapiente voluptas tenetur labore ad quod vero dignissimos?",
   status: UserStatus.ENABLED,
   sex: Sex.M,
   categories: [
