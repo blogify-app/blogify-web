@@ -1,4 +1,5 @@
 import {FC, useEffect, useState} from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 import {Link} from "react-router-dom";
 import {Icon} from "@iconify/react";
 import {Badge} from "@/components/shadcn-ui/badge";
@@ -19,25 +20,25 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
   const [comments, setComments] = useState<CommentType[]>([]);
   const toast = useToast();
 
+  const fetch = async () => {
+    if (!post) return;
+    try {
+      const comments = await CommentProvider.getMany({
+        params: {pid: post.id!},
+        page: 1,
+        pageSize: 500,
+      });
+      setComments(comments);
+    } catch (_e) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      toast({
+        message: "Could not get the post comment or user.",
+      });
+    }
+  };
+
   // TODO: to restore
   useEffect(() => {
-    const fetch = async () => {
-      if (!post) return;
-      try {
-        const comments = await CommentProvider.getMany({
-          params: {pid: post.id!},
-          page: 1,
-          pageSize: 500,
-        });
-
-        setComments(comments);
-      } catch (_e) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        toast({
-          message: "Could not get the post comment.",
-        });
-      }
-    };
     void fetch();
   }, [post]);
 
@@ -108,10 +109,20 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
                 <Badge className="mx-1">Hello</Badge>
               </div>
             </div>
-            <div className="mx-10">
-              {comments.map((comment, index) => (
-                <Comment key={index} comment={comment} />
-              ))}
+            <div className="mx-10 h-[90vh] overflow-auto">
+              <InfiniteScroll
+                dataLength={comments.length} //This is important field to render the next data
+                next={fetch}
+                hasMore={false}
+                loader={<h4>Loading...</h4>}
+                endMessage={
+                  <p style={{textAlign: "center"}}>No more data to load.</p>
+                }
+              >
+                {comments.map((comment, index) => (
+                  <Comment key={index} comment={comment} />
+                ))}
+              </InfiniteScroll>
             </div>
           </div>
         </div>
