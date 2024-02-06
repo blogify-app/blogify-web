@@ -1,5 +1,5 @@
 import {ChangeEvent, FC, useState} from "react";
-import {useForm} from "react-hook-form";
+import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {format} from "date-fns";
 import {CalendarIcon} from "lucide-react";
@@ -43,17 +43,18 @@ export const ProfileEdit: FC<ProfileEditProps> = ({user}: ProfileEditProps) => {
   const birthDate = currentUser?.birth_date
     ? new Date(currentUser.birth_date)
     : new Date();
+  const [currentBirthDate, setCurrentBirthDate] = useState(birthDate);
 
-  const form = useForm({
+  const form = useForm<User>({
     resolver: zodResolver(profileEditSchema),
     defaultValues: {
       first_name: currentUser?.first_name,
       last_name: currentUser?.last_name,
       username: currentUser?.username,
       sex: currentUser?.sex,
-      birth_date: birthDate,
       bio: currentUser?.bio,
       about: currentUser?.about,
+      id: currentUser?.id,
     },
   });
 
@@ -71,6 +72,24 @@ export const ProfileEdit: FC<ProfileEditProps> = ({user}: ProfileEditProps) => {
         },
       };
       await UserProvider.putPicture(currentUser?.id ?? "", file, pictureQuery);
+    }
+  };
+
+  const onCreate: SubmitHandler<User> = async (userInfos) => {
+    const newUser: User = {
+      id: userInfos?.id,
+      last_name: userInfos?.last_name,
+      first_name: userInfos?.first_name,
+      birth_date: currentBirthDate.toISOString(),
+      bio: userInfos?.bio,
+      about: userInfos?.about,
+      sex: userInfos?.sex,
+    };
+    try {
+      await UserProvider.crupdateById(userInfos?.id ?? "", newUser);
+    } catch (e) {
+      // TODO: handle error
+      console.error(e);
     }
   };
 
@@ -204,8 +223,8 @@ export const ProfileEdit: FC<ProfileEditProps> = ({user}: ProfileEditProps) => {
                       <Calendar
                         mode="single"
                         data-testid="birth_calendar"
-                        selected={field.value}
-                        onSelect={field.onChange}
+                        selected={currentBirthDate}
+                        onSelect={(date) => date && setCurrentBirthDate(date)}
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
@@ -257,7 +276,7 @@ export const ProfileEdit: FC<ProfileEditProps> = ({user}: ProfileEditProps) => {
           <div className="w-full">
             <Button
               className="h-12 w-full rounded-full"
-              // onClick={form.handleSubmit(onCreate)}
+              onClick={form.handleSubmit(onCreate)}
             >
               Continue
             </Button>

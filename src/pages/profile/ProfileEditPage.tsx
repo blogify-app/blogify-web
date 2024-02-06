@@ -17,7 +17,8 @@ export const ProfileEditPage: FC = () => {
         const user = await UserProvider.getById(id);
         setUser(user);
       } catch (_e) {
-        /* empty */
+        // TODO: handle error
+        console.error(_e);
       }
     };
 
