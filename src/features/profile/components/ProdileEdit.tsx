@@ -102,10 +102,10 @@ export const ProfileEdit: FC<ProfileEditProps> = ({user}: ProfileEditProps) => {
               name="first_name"
               control={form.control}
               render={({field}) => (
-                <FormItem className="text-md" data-testid="first_name_input">
+                <FormItem className="text-md" data-testid="first_name_item">
                   <FormLabel>First name</FormLabel>
                   <FormControl className="h-12">
-                    <Input {...field} />
+                    <Input {...field} data-testid="first_name_input" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -276,6 +276,7 @@ export const ProfileEdit: FC<ProfileEditProps> = ({user}: ProfileEditProps) => {
           <div className="w-full">
             <Button
               className="h-12 w-full rounded-full"
+              data-testid="submit_button"
               onClick={form.handleSubmit(onCreate)}
             >
               Continue
