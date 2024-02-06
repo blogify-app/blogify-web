@@ -9,7 +9,7 @@ type UserActivity = {
 
 export const CustomCard: FC<UserActivity> = ({user, post}) => {
   return (
-    <div className="m-6 w-80 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
+    <div className="col-span-2 m-6 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
       <a href="#">
         <img src={mockimage} alt="Content thumbails" />
       </a>

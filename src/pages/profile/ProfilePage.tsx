@@ -15,6 +15,7 @@ export const ProfilePage: FC = () => {
       if (!id) return;
       try {
         const user = await UserProvider.getById(id);
+        
         setUser(user);
       } catch (_e) {}
     };
@@ -30,11 +31,15 @@ export const ProfilePage: FC = () => {
         const filteredPost: Post[] = allPost.filter(
           (post) => post.author_id === id
         );
+        
         post.push(filteredPost);
-      } catch (_e) {}
+      } catch (e) {
+        console.log(e);
+      }
     };
 
     void fetchUser();
+    void fetchPost();
   }, [id]);
 
   if (!user) return null;

@@ -1,21 +1,10 @@
-import profilepic from "@/assets/profile.jpg";
 import {Error} from "@/common/error";
-import {useParams} from "react-router-dom";
 import {InlineMenu} from "@/common/inline-menu";
 import {Button} from "@/components/shadcn-ui/button";
-import {Category, Post, PostStatus, User} from "@/services/api/gen";
+import { Post, User} from "@/services/api/gen";
 import {CustomCard} from "@/common/card";
-import {FC, useEffect, useState} from "react";
+import {FC, useState} from "react";
 
-let category1: Category = {
-  id: "cat_1",
-  label: "Mathematics",
-};
-
-let category2: Category = {
-  id: "cat_2",
-  label: "Machine Learning",
-};
 
 export interface UserProps {
   user: User;
@@ -26,7 +15,7 @@ export const Profile: FC<UserProps> = ({user, post}: UserProps) => {
   const [posts, setPosts] = useState<Post[]>(post);
 
   function increment() {
-    setPosts([]);
+    setPosts(post);
   }
 
   return (
@@ -58,7 +47,7 @@ export const Profile: FC<UserProps> = ({user, post}: UserProps) => {
         </div>
       </div>
       <InlineMenu action={increment} />
-      <hr className="mx-12" />
+      <hr className="mx-6" />
       {posts.length == 0 ? (
         <div className="grid grid-cols-3 gap-4">
           <div className="col-start-2 row-start-10 text-center text-xs">
@@ -83,7 +72,13 @@ export const Profile: FC<UserProps> = ({user, post}: UserProps) => {
           </div>
         </div>
       ) : (
-        posts.map((post, k) => <CustomCard user={user} post={post} />)
+        <div className="grid grid-cols-8 gap-4 p-10 h-auto">
+         {
+           posts.map((post, k) =>
+                <CustomCard key={k} user={user} post={post} /> 
+              )
+         }
+        </div>
       )}
     </div>
   );
