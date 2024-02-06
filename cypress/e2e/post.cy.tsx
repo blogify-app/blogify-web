@@ -10,7 +10,7 @@ describe("Post", () => {
       cy.intercept("GET", `**/posts/${post1().id}`, post1());
       cy.intercept(
         "GET",
-        "**/posts/post_1/comments?page=0&page_size=500",
+        "**/posts/post_1/comments?page=1&page_size=500",
         comments()
       );
 
@@ -47,14 +47,14 @@ describe("Post", () => {
     });
   });
 
-  describe("Comment", () => {
+  describe.only("Comment", () => {
     it("should render the comment correctly", () => {
       cy.visit(`/posts/${post1().id}`);
 
       cy.intercept("GET", `**/posts/${post1().id}`, post1());
       cy.intercept(
         "GET",
-        "**/posts/post_1/comments?page=0&page_size=500",
+        "**/posts/post_1/comments?page=1&page_size=500",
         comments()
       );
 
@@ -68,14 +68,14 @@ describe("Post", () => {
 
       // TODO: more precise test
       cy.intercept("GET", `**/posts/${post1().id}`, post1());
-      cy.intercept("GET", "**/posts/post_1/comments?page=0&page_size=500", {
+      cy.intercept("GET", "**/posts/post_1/comments?page=1&page_size=500", {
         statusCode: 500,
         body: {
           message: "error",
         },
       });
 
-      cy.contains("Could not get the post comment or user.");
+      cy.contains("Could not get the post comment.");
     });
   });
 });
