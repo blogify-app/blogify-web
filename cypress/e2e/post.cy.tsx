@@ -47,7 +47,7 @@ describe("Post", () => {
     });
   });
 
-  describe.only("Comment", () => {
+  describe("Comment", () => {
     it("should render the comment correctly", () => {
       cy.visit(`/posts/${post1().id}`);
 
@@ -63,7 +63,7 @@ describe("Post", () => {
       cy.getByTestid("comment-content").should("be.visible");
     });
 
-    it("should notify when unable to get comment or user", () => {
+    it.only("should notify when unable to get comment or user", () => {
       cy.visit(`/posts/${post1().id}`);
 
       // TODO: more precise test

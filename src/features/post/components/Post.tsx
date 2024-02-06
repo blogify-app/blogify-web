@@ -32,7 +32,7 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
     } catch (_e) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       toast({
-        message: "Could not get the post comment or user.",
+        message: "Could not get the post comment.",
       });
     }
   };
