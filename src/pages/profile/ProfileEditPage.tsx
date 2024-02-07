@@ -52,7 +52,7 @@ export const ProfileEditPage: FC = () => {
         className="mx-[2.8rem] h-full pt-[3.8rem] md:mx-[11rem]"
         data-testid="profile_edit_layout"
       >
-        <ProfileEdit user={user} profilePic={picURL} />
+        <ProfileEdit currentUser={user} profilePic={picURL} />
       </div>
     </Layout>
   );

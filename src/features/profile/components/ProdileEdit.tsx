@@ -33,15 +33,14 @@ import {profileEditSchema} from "@/features/profile/schema";
 import {UserProvider} from "@/services/api";
 
 interface ProfileEditProps {
-  user: User;
+  currentUser: User;
   profilePic: string;
 }
 
 export const ProfileEdit: FC<ProfileEditProps> = ({
-  user,
+  currentUser,
   profilePic,
 }: ProfileEditProps) => {
-  const currentUser = user;
   const [imageSrc, setImageSrc] = useState<string | undefined>(
     profilePic ?? placeholder
   );
@@ -52,12 +51,12 @@ export const ProfileEdit: FC<ProfileEditProps> = ({
   const form = useForm<User>({
     resolver: zodResolver(profileEditSchema),
     defaultValues: {
-      first_name: currentUser?.first_name,
-      last_name: currentUser?.last_name,
-      username: currentUser?.username,
+      first_name: currentUser?.first_name ?? "",
+      last_name: currentUser?.last_name ?? "",
+      username: currentUser?.username ?? "",
       sex: currentUser?.sex,
-      bio: currentUser?.bio,
-      about: currentUser?.about,
+      bio: currentUser?.bio ?? "",
+      about: currentUser?.about ?? "",
       id: currentUser?.id,
     },
   });
