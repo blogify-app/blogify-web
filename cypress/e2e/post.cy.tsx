@@ -2,6 +2,23 @@ import {comments} from "../fixtures/comment";
 import {non_existent_id, post1} from "../fixtures/post";
 
 describe("Post", () => {
+  describe("Reaction", () => {
+    it("should render the reaction correctly", () => {
+      cy.visit(`/posts/${post1().id}`);
+
+      cy.intercept("GET", `**/posts/${post1().id}`, post1());
+
+      cy.getByTestid("like-reaction").contains(1000);
+      cy.getByTestid("dislike-reaction").contains(200);
+
+      cy.getByTestid("like-svg").should("be.visible");
+      cy.getByTestid("dislike-svg").should("be.visible");
+
+      cy.getByTestid("like").should("be.visible");
+      cy.getByTestid("dislike").should("be.visible");
+    });
+  });
+
   describe("Display", () => {
     it("should render the post correctly", () => {
       cy.visit(`/posts/${post1().id}`);
