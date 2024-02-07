@@ -1,21 +1,21 @@
 import {FC, useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import {Icon} from "@iconify/react";
-import {Badge} from "@/components/shadcn-ui/badge";
 import {Layout} from "@/layout";
+import {Icons} from "@/components/common/icons";
+import {Badge} from "@/components/shadcn-ui/badge";
 import {Reader} from "@/features/wisiwig";
 import {calculateReadDuration} from "@/features/post/utils";
-import {useLoading, useToast} from "@/hooks";
-import {Icons} from "@/components/common/icons";
 import {AddComment, Comment} from "@/features/post";
+import {useAuthStore} from "@/features/auth";
 import {
   Comment as CommentType,
   Post as PostType,
   ReactionType,
 } from "@/services/api/gen";
 import {CommentProvider, PostProvider} from "@/services/api";
+import {useLoading, useToast} from "@/hooks";
 import blankUserProfile from "@/assets/noun-user-picture.svg";
-import {useAuthStore} from "@/features/auth";
 
 export interface PostProps {
   post: PostType;
@@ -27,6 +27,7 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
   const [isRefresh, setIsRefresh] = useState(false);
   const toast = useToast();
   const store = useAuthStore();
+
   const {user} = store;
 
   const reactToPost = async (pid: string, reactionType: ReactionType) => {

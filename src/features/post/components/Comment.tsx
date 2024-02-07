@@ -1,13 +1,13 @@
-import {Dispatch, FC, SetStateAction, useEffect, useState} from "react";
-import {Icon} from "@iconify/react/dist/iconify.js";
+import {FC, Dispatch, SetStateAction, useEffect, useState} from "react";
+import {Controller, useForm} from "react-hook-form";
 import {uuidv4} from "@firebase/util";
 import {Avatar, AvatarFallback, AvatarImage} from "@radix-ui/react-avatar";
-import {CommentStatus, Comment as CommentType} from "@/services/api/gen";
+import {Icon} from "@iconify/react/dist/iconify.js";
+import {useAuthStore} from "@/features/auth";
 import {Button} from "@/components/common/button";
 import {Textarea} from "@/components/shadcn-ui/textarea";
-import {useAuthStore} from "@/features/auth";
-import {Controller, useForm} from "react-hook-form";
 import {CommentProvider, UserProvider} from "@/services/api";
+import {CommentStatus, Comment as CommentType} from "@/services/api/gen";
 
 export interface CommentProps {
   comment: CommentType;
