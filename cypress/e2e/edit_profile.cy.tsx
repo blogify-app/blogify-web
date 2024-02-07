@@ -1,5 +1,6 @@
 import {user1, user1_modified} from "../fixtures/user";
 import "cypress-file-upload";
+import {UserProvider} from "@/services/api";
 
 describe("Edit profile", () => {
   it("should display the layout and component of Profile Edit Page", () => {
@@ -39,7 +40,7 @@ describe("Edit profile", () => {
       });
   });
 
-  it("should test update user infos function", () => {
+  it("update user infos should success", () => {
     cy.visit(`/users/edit/${user1().id}`);
 
     cy.getByTestid("first_name_input")
@@ -57,5 +58,7 @@ describe("Edit profile", () => {
         },
       });
     });
+
+    cy.stub(UserProvider, "crupdateById").resolves();
   });
 });

@@ -27,11 +27,9 @@ import {
   RadioGroupItem,
 } from "@/components/shadcn-ui/radio-group.tsx";
 import {cn} from "@/lib/utils.ts";
-import placeholder from "@/assets/profil-pic-placeholder.png";
 import {User} from "@/services/api/gen";
 import {profileEditSchema} from "@/features/profile/schema";
-import {Query, UserProvider} from "@/services/api";
-import {UserPictureType} from "@/services/api/gen";
+import {UserProvider} from "@/services/api";
 
 interface ProfileEditProps {
   user: User;
@@ -39,11 +37,12 @@ interface ProfileEditProps {
 
 export const ProfileEdit: FC<ProfileEditProps> = ({user}: ProfileEditProps) => {
   const currentUser = user;
-  const [imageSrc, setImageSrc] = useState<string | undefined>(placeholder);
-  const birthDate = currentUser?.birth_date
-    ? new Date(currentUser.birth_date)
-    : new Date();
-  const [currentBirthDate, setCurrentBirthDate] = useState(birthDate);
+  const [imageSrc, setImageSrc] = useState<string | undefined>(
+    user.profile_banner_url
+  );
+  const [currentBirthDate, setCurrentBirthDate] = useState(
+    currentUser?.birth_date ? new Date(currentUser.birth_date) : new Date()
+  );
 
   const form = useForm<User>({
     resolver: zodResolver(profileEditSchema),
@@ -64,29 +63,27 @@ export const ProfileEdit: FC<ProfileEditProps> = ({user}: ProfileEditProps) => {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setImageSrc(imageUrl);
-      const pictureQuery: Query<{type: UserPictureType}> = {
+      await UserProvider.putPicture(currentUser?.id ?? "", file, {
         page: 1,
         pageSize: 10,
         params: {
           type: "PROFILE",
         },
-      };
-      await UserProvider.putPicture(currentUser?.id ?? "", file, pictureQuery);
+      });
     }
   };
 
   const onCreate: SubmitHandler<User> = async (userInfos) => {
-    const newUser: User = {
-      id: userInfos?.id,
-      last_name: userInfos?.last_name,
-      first_name: userInfos?.first_name,
-      birth_date: currentBirthDate.toISOString(),
-      bio: userInfos?.bio,
-      about: userInfos?.about,
-      sex: userInfos?.sex,
-    };
     try {
-      await UserProvider.crupdateById(userInfos?.id ?? "", newUser);
+      await UserProvider.crupdateById(userInfos?.id ?? "", {
+        id: userInfos?.id,
+        last_name: userInfos?.last_name,
+        first_name: userInfos?.first_name,
+        birth_date: currentBirthDate.toISOString(),
+        bio: userInfos?.bio,
+        about: userInfos?.about,
+        sex: userInfos?.sex,
+      });
     } catch (e) {
       // TODO: handle error
       console.error(e);
@@ -208,13 +205,7 @@ export const ProfileEdit: FC<ProfileEditProps> = ({user}: ProfileEditProps) => {
                             !field.value && "text-muted-foreground"
                           )}
                         >
-                          {field.value ? (
-                            format(field.value, "PPP")
-                          ) : (
-                            <span data-testid="date_span_button">
-                              Pick a date
-                            </span>
-                          )}
+                          {format(currentBirthDate, "PPP")}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
                       </FormControl>
