@@ -30,7 +30,9 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
       await queue(() => PostProvider.reactToPostById(pid, reactionType));
       window.location.replace(`/posts/${post.id}`);
     } catch (e) {
-      window.location.replace(`/login`);
+      toast({
+        message: "You should connect or have an account",
+      });
     }
   };
 
@@ -116,7 +118,8 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
               <Reader>{post.content!}</Reader>
             </div>
             <div className="flex items-stretch justify-self-center">
-              <div
+              <button
+                data-testid="like"
                 className="mx-5 flex items-stretch justify-self-center"
                 onClick={() =>
                   reactToPost(post.id as string, ReactionType.LIKE)
@@ -126,8 +129,9 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
                 <label data-testid="like-reaction" className="ml-2">
                   {post.reactions?.likes}
                 </label>
-              </div>
-              <div
+              </button>
+              <button
+                data-testid="dislike"
                 className="mx-5 flex items-stretch justify-self-center"
                 onClick={() =>
                   reactToPost(post.id as string, ReactionType.DISLIKE)
@@ -137,7 +141,7 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
                 <label data-testid="dislike-reaction" className="ml-2">
                   {post.reactions?.dislikes}
                 </label>
-              </div>
+              </button>
             </div>
             <div data-testid="post-tags" className="mx-10 flex w-full py-10">
               <span className="mr-2">Tags : </span>
