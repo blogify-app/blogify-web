@@ -1,4 +1,4 @@
-import {createPosts, post1, postWithoutThumbnail} from "../fixtures/post.ts";
+import {createPosts, post1, postWithoutThumbnail, postWithoutValues} from "../fixtures/post.ts";
 
 describe("PostList", () => {
   it("should render all posts", () => {
@@ -29,6 +29,14 @@ describe("PostList", () => {
 
     cy.intercept("GET", `**/posts?page=*&page_size=*`, postWithoutThumbnail());
     cy.getByTestid("default-thumbnail")
+  });
+
+  it("should not break the UI when some values are null", () => {
+    cy.visit("/posts");
+
+    cy.intercept("GET", `**/posts?page=*&page_size=*`, postWithoutValues());
+    cy.contains("Recent blog posts");
+    cy.contains("All blog posts");
   });
 
 });
