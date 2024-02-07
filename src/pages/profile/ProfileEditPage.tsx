@@ -7,6 +7,7 @@ import {User} from "@/services/api/gen";
 
 export const ProfileEditPage: FC = () => {
   const [user, setUser] = useState<User>({});
+  const [picURL, setPicURL] = useState("");
   const params = useParams();
   const id = params.id;
 
@@ -22,7 +23,25 @@ export const ProfileEditPage: FC = () => {
       }
     };
 
+    const fetchProfilePic = async () => {
+      if (!id) return;
+      try {
+        const profilePic = await UserProvider.getPicture(id, {
+          page: 1,
+          pageSize: 1,
+          params: {
+            type: "PROFILE",
+          },
+        });
+        setPicURL(profilePic.url ?? "");
+      } catch (_e) {
+        // TODO: handle error
+        console.error(_e);
+      }
+    };
+
     void fetchUser();
+    void fetchProfilePic();
   }, [id]);
 
   if (!user) return null;
@@ -33,7 +52,7 @@ export const ProfileEditPage: FC = () => {
         className="mx-[2.8rem] h-full pt-[3.8rem] md:mx-[11rem]"
         data-testid="profile_edit_layout"
       >
-        <ProfileEdit user={user} />
+        <ProfileEdit user={user} profilePic={picURL} />
       </div>
     </Layout>
   );

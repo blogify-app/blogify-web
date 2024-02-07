@@ -34,12 +34,16 @@ import {UserProvider} from "@/services/api";
 
 interface ProfileEditProps {
   user: User;
+  profilePic: string;
 }
 
-export const ProfileEdit: FC<ProfileEditProps> = ({user}: ProfileEditProps) => {
+export const ProfileEdit: FC<ProfileEditProps> = ({
+  user,
+  profilePic,
+}: ProfileEditProps) => {
   const currentUser = user;
   const [imageSrc, setImageSrc] = useState<string | undefined>(
-    user.profile_banner_url ?? placeholder
+    profilePic ?? placeholder
   );
   const [currentBirthDate, setCurrentBirthDate] = useState(
     currentUser?.birth_date ? new Date(currentUser.birth_date) : new Date()
@@ -66,7 +70,7 @@ export const ProfileEdit: FC<ProfileEditProps> = ({user}: ProfileEditProps) => {
       setImageSrc(imageUrl);
       await UserProvider.putPicture(currentUser?.id ?? "", file, {
         page: 1,
-        pageSize: 10,
+        pageSize: 1,
         params: {
           type: "PROFILE",
         },
