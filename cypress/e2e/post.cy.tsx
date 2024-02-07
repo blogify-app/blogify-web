@@ -47,7 +47,7 @@ describe("Post", () => {
     });
   });
 
-  describe.only("Comment", () => {
+  describe("Comment", () => {
     it("should render the comment correctly", () => {
       cy.visit(`/posts/${post1().id}`);
 
