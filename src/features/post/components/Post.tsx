@@ -116,7 +116,7 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
                   reactToPost(post.id as string, ReactionType.LIKE)
                 }
               >
-                <Icons.like />
+                <Icons.like data-testid="like-svg" />
                 <label data-testid="like-reaction" className="ml-2">
                   {post.reactions?.likes}
                 </label>
@@ -127,7 +127,7 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
                   reactToPost(post.id as string, ReactionType.DISLIKE)
                 }
               >
-                <Icons.dislike />
+                <Icons.dislike data-testid="dislike-svg" />
                 <label data-testid="dislike-reaction" className="ml-2">
                   {post.reactions?.dislikes}
                 </label>

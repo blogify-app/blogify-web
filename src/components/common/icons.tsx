@@ -3,8 +3,9 @@ import React from "react";
 type IconProps = React.HTMLAttributes<SVGElement>;
 
 export const Icons = {
-  like: () => (
+  like: (props: IconProps) => (
     <svg
+      {...props}
       className="h-6 w-6 hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring active:bg-gray-400 dark:text-white"
       aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
@@ -18,8 +19,9 @@ export const Icons = {
       />
     </svg>
   ),
-  dislike: () => (
+  dislike: (props: IconProps) => (
     <svg
+      {...props}
       className="h-6 w-6 hover:bg-gray-400 focus:bg-gray-400 focus:outline-none focus:ring active:bg-gray-400 dark:text-white"
       aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
