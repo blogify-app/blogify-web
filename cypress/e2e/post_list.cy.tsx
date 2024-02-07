@@ -48,4 +48,34 @@ describe("PostList", () => {
     cy.contains("Tools");
   });
 
+  it("should show error message when posts are not displayed due to the backend", () => {
+    cy.visit("/posts");
+
+    cy.intercept("GET", `**/posts?page=*&page_size=*`, {
+      statusCode: 500,
+      body: {
+        message: "error",
+      },
+    });
+
+    cy.contains("Could not get posts list.");
+  });
+
+  it.only("test pagination", () => {
+    cy.visit("/posts");
+
+    cy.intercept("GET", `**/posts?page=*&page_size=*`, createPosts(10));
+
+    cy.getByTestid("next-page").click();
+    cy.contains("2");
+
+    cy.getByTestid("next-page").click();
+    cy.contains("3");
+
+    cy.getByTestid("prev-page").click();
+    cy.contains("2");
+
+  });
+
+
 });

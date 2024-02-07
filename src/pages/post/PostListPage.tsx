@@ -1,6 +1,6 @@
 import {FC, useEffect, useState} from "react";
-import {toast} from "sonner";
 import {AnonymousHeader, Layout} from "@/layout";
+import {useToast} from "@/hooks";
 import {PostCard} from "@/features/post";
 import {PostProvider} from "@/services/api";
 import {Post} from "@/services/api/gen";
@@ -9,6 +9,8 @@ import {Button} from "@/components/common/button";
 export const PostListPage: FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const toast = useToast();
 
   useEffect(() => {
     const fetch = async () => {
@@ -20,7 +22,9 @@ export const PostListPage: FC = () => {
         });
         setPosts(posts);
       } catch (_e) {
-        toast("Could not get posts content.");
+        toast({
+          message: "Could not get posts list.",
+        });
       }
     };
 
@@ -57,11 +61,15 @@ export const PostListPage: FC = () => {
             setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))
           }
           disabled={currentPage === 1}
+          data-testid="prev-page"
         >
           Previous Page
         </Button>
         <span>{currentPage}</span>
-        <Button onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>
+        <Button
+            onClick={() => setCurrentPage((prevPage) => prevPage + 1)}
+            data-testid="next-page"
+        >
           Next Page
         </Button>
       </div>
