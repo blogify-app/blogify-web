@@ -1,17 +1,18 @@
 import {Error} from "@/common/error";
 import {InlineMenu} from "@/common/inline-menu";
 import {Button} from "@/components/shadcn-ui/button";
-import { Post, User} from "@/services/api/gen";
+import { Post, User, UserPicture} from "@/services/api/gen";
 import {CustomCard} from "@/common/card";
 import {FC} from "react";
-
+import defaultPic from "@/assets/noun-user-picture.svg"
 
 export interface UserProps {
+  pic: UserPicture | undefined;
   user: User;
   post: Post[] | undefined;
 }
 
-export const Profile: FC<UserProps> = ({user, post}: UserProps) => {
+export const Profile: FC<UserProps> = ({pic, user, post}: UserProps) => {
 
   return (
     <div>
@@ -19,7 +20,7 @@ export const Profile: FC<UserProps> = ({user, post}: UserProps) => {
         <div className="px-12">
           <img
             className="h-40 w-40 rounded-[100%]"
-            src={user?.photo_url}
+            src={pic?.url == null ? defaultPic : pic?.url}
             alt="user profile"
           />
         </div>
