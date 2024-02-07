@@ -39,4 +39,13 @@ describe("PostList", () => {
     cy.contains("All blog posts");
   });
 
+  it("should display all tags of a post", () => {
+    cy.visit("/posts");
+
+    cy.intercept("GET", `**/posts?page=*&page_size=*`, [post1()]);
+    cy.contains("Mathematics");
+    cy.contains("Podcasts");
+    cy.contains("Tools");
+  });
+
 });
