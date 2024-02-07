@@ -31,7 +31,7 @@ export const Comment: FC<CommentProps> = ({comment}: CommentProps) => {
               </AvatarFallback>
             </Avatar>
             <p className="mx-3 font-bold" data-testid="comment-author-username">
-              {user.username}
+              {user.username || `${user.first_name} ${user.last_name}`}
             </p>
             {creation_datetime && (
               <p

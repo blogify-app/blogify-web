@@ -7,10 +7,10 @@ describe("Post", () => {
       cy.visit(`/posts/${post1().id}`);
 
       // TODO: more precise test
-      cy.intercept("GET", `**/posts/${post1().id}`, post1());
+      cy.intercept("GET", `**/posts/post_1`, post1());
       cy.intercept(
         "GET",
-        "**/posts/post_1/comments?page=1&page_size=500",
+        "**/posts/post_1/comments?page=*&page_size=*",
         comments()
       );
 
@@ -37,7 +37,7 @@ describe("Post", () => {
     it("should notify when unable to get post", () => {
       cy.visit(`/posts/${non_existent_id()}`);
 
-      cy.intercept("GET", `**/posts/${non_existent_id()}`, (req) => {
+      cy.intercept("GET", `/Prod/posts/${non_existent_id()}`, (req) => {
         req.reply({
           statusCode: 404,
         });
@@ -47,14 +47,14 @@ describe("Post", () => {
     });
   });
 
-  describe("Comment", () => {
+  describe.only("Comment", () => {
     it("should render the comment correctly", () => {
       cy.visit(`/posts/${post1().id}`);
 
-      cy.intercept("GET", `**/posts/${post1().id}`, post1());
+      cy.intercept("GET", `/Prod/posts/post_1`, post1());
       cy.intercept(
         "GET",
-        "**/posts/post_1/comments?page=1&page_size=500",
+        "/Prod/posts/post_1/comments?page=*&page_size=*",
         comments()
       );
 
@@ -63,12 +63,12 @@ describe("Post", () => {
       cy.getByTestid("comment-content").should("be.visible");
     });
 
-    it.only("should notify when unable to get comment or user", () => {
+    it("should notify when unable to get comment", () => {
       cy.visit(`/posts/${post1().id}`);
 
       // TODO: more precise test
-      cy.intercept("GET", `**/posts/${post1().id}`, post1());
-      cy.intercept("GET", "**/posts/post_1/comments?page=1&page_size=500", {
+      cy.intercept("GET", `/Prod/posts/post_1`, post1());
+      cy.intercept("GET", "/Prod/posts/post_1/comments?page=*&page_size=*", {
         statusCode: 500,
         body: {
           message: "error",
@@ -76,6 +76,27 @@ describe("Post", () => {
       });
 
       cy.contains("Could not get the post comment.");
+    });
+
+    it("should well render infinite-scroll", () => {
+      const commentsData = [
+        ...comments(),
+        ...comments(),
+        ...comments(),
+        ...comments(),
+      ];
+      cy.visit(`/posts/${post1().id}`);
+
+      cy.intercept("GET", `/Prod/posts/post_1`, post1());
+      cy.intercept(
+        "GET",
+        "/Prod/posts/post_1/comments?page=*&page_size=*",
+        commentsData
+      ).as("getComments");
+      cy.contains("No more comment to load.");
+      cy.get(".infinite-scroll-component")
+        .children()
+        .should("have.length", commentsData.length + 1); // + 1 because of 'No more data to load'
     });
   });
 });

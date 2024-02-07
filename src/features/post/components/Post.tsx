@@ -18,6 +18,7 @@ export interface PostProps {
 
 export const Post: FC<PostProps> = ({post}: PostProps) => {
   const [comments, setComments] = useState<CommentType[]>([]);
+  const [hasMore, setHasMore] = useState(true);
   const toast = useToast();
 
   const fetch = async () => {
@@ -111,12 +112,15 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
             </div>
             <div className="mx-10 h-[90vh] overflow-auto">
               <InfiniteScroll
-                dataLength={comments.length} //This is important field to render the next data
+                data-testid="comment-scroll"
+                dataLength={comments.length}
                 next={fetch}
                 hasMore={false}
-                loader={<h4>Loading...</h4>}
+                loader={<p className="align-middle">Loading...</p>}
                 endMessage={
-                  <p style={{textAlign: "center"}}>No more data to load.</p>
+                  <p className="text-center text-xs">
+                    No more comment to load.
+                  </p>
                 }
               >
                 {comments.map((comment, index) => (
