@@ -5,6 +5,7 @@ import {format} from "date-fns";
 import {CalendarIcon} from "lucide-react";
 import {Avatar, AvatarImage} from "@/components/shadcn-ui/avatar";
 import {Button} from "@/components/shadcn-ui/button.tsx";
+import placeholder from "@/assets/pic_placeholder.jpg";
 import {
   Form,
   FormControl,
@@ -38,7 +39,7 @@ interface ProfileEditProps {
 export const ProfileEdit: FC<ProfileEditProps> = ({user}: ProfileEditProps) => {
   const currentUser = user;
   const [imageSrc, setImageSrc] = useState<string | undefined>(
-    user.profile_banner_url
+    user.profile_banner_url ?? placeholder
   );
   const [currentBirthDate, setCurrentBirthDate] = useState(
     currentUser?.birth_date ? new Date(currentUser.birth_date) : new Date()

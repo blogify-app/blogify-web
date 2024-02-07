@@ -1,10 +1,9 @@
 import {user1, user1_modified} from "../fixtures/user";
 import "cypress-file-upload";
-import {UserProvider} from "@/services/api";
 
 describe("Edit profile", () => {
   it("should display the layout and component of Profile Edit Page", () => {
-    cy.visit(`/users/edit/${user1().id}`);
+    cy.loginThenRedirect(`/users/edit/${user1().id}`);
 
     cy.intercept("GET", `**/users/${user1().id}`, (req) => {
       req.reply({
@@ -27,7 +26,7 @@ describe("Edit profile", () => {
   });
 
   it("should show image placeholder", () => {
-    cy.visit(`/users/edit/${user1().id}`);
+    cy.loginThenRedirect(`/users/edit/${user1().id}`);
 
     cy.get('img[alt="@shadcn"]').should("be.visible");
 
@@ -41,7 +40,7 @@ describe("Edit profile", () => {
   });
 
   it("update user infos should success", () => {
-    cy.visit(`/users/edit/${user1().id}`);
+    cy.loginThenRedirect(`/users/edit/${user1().id}`);
 
     cy.getByTestid("first_name_input")
       .type("Blogify modified", {delay: 50})
@@ -58,7 +57,5 @@ describe("Edit profile", () => {
         },
       });
     });
-
-    cy.stub(UserProvider, "crupdateById").resolves();
   });
 });
