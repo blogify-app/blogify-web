@@ -1,13 +1,13 @@
 import {FC, useEffect, useRef, useState} from "react";
 import {Editor} from "tinymce";
+import {nanoid} from "nanoid";
 import {Button} from "@/components/common/button.tsx";
 import {DescriptionInput, TitleInput} from "@/features/post";
 import {RichTextEditor} from "@/features/wisiwig";
 import {Post, PostPicture} from "@/services/api/gen";
 import {DEFAULT_QUERY, PostProvider} from "@/services/api";
+import {transformHtmlContent} from "@/features/post/lib";
 import {useLoading, useToast} from "@/hooks";
-import {nanoid} from "nanoid";
-import {transformHtmlContent} from "@/features/post/lib/dynamic_content.ts";
 
 export interface WritePostProps {
   post: Post;
