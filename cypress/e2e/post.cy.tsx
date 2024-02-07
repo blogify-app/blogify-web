@@ -1,4 +1,4 @@
-import {comments} from "../fixtures/comment";
+import {comments, createComment1} from "../fixtures/comment";
 import {non_existent_id, post1} from "../fixtures/post";
 
 describe("Post", () => {
@@ -93,6 +93,42 @@ describe("Post", () => {
       });
 
       cy.contains("Could not get the post comment.");
+    });
+
+    it("can add a comment", () => {
+      cy.loginThenRedirect(`/posts/${post1().id}`);
+
+      cy.intercept("GET", "**/posts/post_1", post1());
+      cy.intercept(
+        "GET",
+        "**/posts/post_1/comments?page=1&page_size=500",
+        comments()
+      );
+      cy.intercept("PUT", "**/posts/post_1/comments/**", createComment1());
+
+      cy.intercept("GET", "**/posts/post_1/comments?page=1&page_size=500", [
+        ...comments(),
+        createComment1(),
+      ]);
+
+      cy.getByTestid("comment-input").type("Dummy fuckn comment !!!!");
+      cy.getByTestid("add-comment-button").click();
+
+      cy.contains(createComment1()?.content!);
+    });
+
+    it("cannot add a comment when not authenticated", () => {
+      cy.visit(`/posts/${post1().id}`);
+
+      cy.intercept("GET", "**/posts/post_1", post1());
+      cy.intercept(
+        "GET",
+        "**/posts/post_1/comments?page=1&page_size=500",
+        comments()
+      );
+      cy.contains(
+        "You are not authenticated. If you want to write comments log in or sign up."
+      );
     });
   });
 });

@@ -35,4 +35,18 @@ export const comment2 = (): Comment => ({
   status: CommentStatus.ENABLED,
 });
 
+export const createComment1 = (): Comment => ({
+  id: "comment_3",
+  user: user1(),
+  post_id: "post_1",
+  content: `Dummy fuckn comment !!!`,
+  creation_datetime: new Date(2024, 0, 2),
+  reply_to_id: "",
+  reactions: {
+    likes: 0,
+    dislikes: 0,
+  },
+  status: CommentStatus.ENABLED,
+});
+
 export const comments = () => [comment1(), comment2()];
