@@ -1,9 +1,8 @@
 import {FC} from "react";
-import mockimage from "@/assets/daisy_fields.jpg";
 import {Post, User} from "@/services/api/gen";
 
 type UserActivity = {
-  user: User;
+  user: User | undefined;
   post: Post;
 };
 
@@ -11,12 +10,12 @@ export const CustomCard: FC<UserActivity> = ({post}) => {
   return (
     <div className="col-span-2 m-6 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
       <a href="#">
-        <img src={post?.thumbnail_url} alt="Content thumbails" />
+        <img className="h-40" src={post?.thumbnail_url} alt="Content thumbails" />
       </a>
       <div className="p-5">
         <p className="text-xs text-red-800">
           {post?.author?.first_name + " " + post?.author?.last_name} -{" "}
-          <span>{post?.creation_datetime?.toUTCString.toString().slice(0, 17)}</span>
+          <span>{post?.creation_datetime?.toString()}</span>
         </p>
         <a href="#">
           <h5 className="text-md mb-2 font-bold tracking-tight text-gray-900 dark:text-white">
