@@ -1,11 +1,13 @@
-import {FC, useRef, useState} from "react";
+import {FC, useEffect, useRef, useState} from "react";
 import {Editor} from "tinymce";
+import {nanoid} from "nanoid";
 import {Button} from "@/components/common/button.tsx";
 import {DescriptionInput, TitleInput} from "@/features/post";
 import {RichTextEditor} from "@/features/wisiwig";
-import {Post} from "@/services/api/gen";
-import {PostProvider} from "@/services/api";
-import {useLoading} from "@/hooks";
+import {Post, PostPicture} from "@/services/api/gen";
+import {DEFAULT_QUERY, PostProvider} from "@/services/api";
+import {transformHtmlContent} from "@/features/post/lib";
+import {useLoading, useToast} from "@/hooks";
 
 export interface WritePostProps {
   post: Post;
@@ -14,11 +16,30 @@ export interface WritePostProps {
 
 export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
   const {queue, isLoading} = useLoading("crupdate_post");
+  const toast = useToast();
 
   const [editor, setEditor] = useState<Editor | null>(null);
+  const [pictures, setPictures] = useState<PostPicture[]>([]);
 
   const titleInputRef = useRef<HTMLInputElement>(null);
   const descriptionInputRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const fetchPictures = async () => {
+      if (!isExistent) return null;
+      try {
+        const pictures = await PostProvider.getPictures(post.id!);
+        setPictures(pictures);
+      } catch (e) {
+        console.error(e);
+        toast({
+          variant: "destructive",
+          message: "unable to get post " + post.id + " pictures",
+        });
+      }
+    };
+    void fetchPictures();
+  }, [isExistent, post]);
 
   // bind title/content to the post object
   const syncPost = () => {
@@ -43,8 +64,12 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
   const save = async () => {
     syncPost();
     post.updated_at = new Date();
+    // shouldn't update post content itself
+    const content = transformHtmlContent(post.content ?? "", pictures);
     try {
-      await queue(() => PostProvider.crupdateById(post.id!, post));
+      await queue(() =>
+        PostProvider.crupdateById(post.id!, {...post, content})
+      );
     } catch (e) {
       // TODO: handle error
     }
@@ -101,6 +126,21 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
           className="rounded border border-gray-200 p-2"
         >
           <RichTextEditor
+            onImageUpload={async (blobInfo) => {
+              const file = new File([blobInfo.blob()], blobInfo.filename(), {
+                type: "image/png",
+              });
+              const picId = nanoid();
+              const uploaded = await PostProvider.uploadPicture(picId, file, {
+                ...DEFAULT_QUERY,
+                params: {
+                  pid: post.id!,
+                },
+              });
+              setPictures((pictures) => pictures.concat(uploaded));
+              // uploaded.url
+              return uploaded.url!;
+            }}
             disabled={!editor}
             onInit={(_, e) => {
               setEditor(e);

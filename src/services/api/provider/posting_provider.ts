@@ -70,8 +70,8 @@ export const PostProvider: PostProvider = {
       .data;
   },
 
-  getPictures(_picId: string): Promise<PostPicture[]> {
-    throw new Error("Function not implemented.");
+  async getPictures(pid: string): Promise<PostPicture[]> {
+    return (await postingApi().getAllPostPictureById(pid)).data;
   },
 
   crupdate(_payload: Post): Promise<Post> {
