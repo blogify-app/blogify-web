@@ -9,6 +9,7 @@ describe("WritePost", () => {
     cy.intercept("PUT", `**/posts/${post1().id}`, (req) => {
       const post: Post = req.body;
       expect(post.title).to.eq("Edited post title");
+      expect(post.description).to.eq("Added description");
       req.reply({
         body: post,
       });
@@ -24,6 +25,7 @@ describe("WritePost", () => {
 
     // edit
     cy.getByTestid("post-title").clear().type("Edited post title");
+    cy.getByTestid("post-description").clear().type("Added description");
     cy.getByTestid("save-post").click();
   });
 
@@ -53,6 +55,10 @@ describe("WritePost", () => {
 
     // fallbacks correctly to draft post
     cy.getByTestid("post-title").should("have.value", "Draft");
+    cy.getByTestid("post-description").should(
+      "have.value",
+      "Add some description"
+    );
 
     // Create new
     cy.getByTestid("create-new-post").click();

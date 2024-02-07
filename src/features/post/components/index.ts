@@ -1,7 +1,8 @@
 export * from "./Post";
+export * from "./PostCard";
 export * from "./WritePost";
+export * from "./Comment";
 
 // common
 export * from "./TitleInput";
-export * from "./PostCard";
-export * from "./Comment";
+export * from "./DescriptionInput.tsx";

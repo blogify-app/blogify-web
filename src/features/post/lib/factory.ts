@@ -5,11 +5,11 @@ export const createDraftPost = (pid: string, user: User): Post => ({
   author: user,
   content: "<h1>Start writing</h1>",
   title: "Draft",
+  description: "Add some description",
   status: PostStatus.DRAFT,
   creation_datetime: new Date(),
   categories: [],
 
   // nullish
   thumbnail_url: undefined,
-  description: undefined,
 });

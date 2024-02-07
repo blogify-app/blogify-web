@@ -1,11 +1,11 @@
 import {FC, useRef, useState} from "react";
-import {useNavigate} from "react-router-dom";
 import {Editor} from "tinymce";
-import {Button} from "@/components/shadcn-ui/button";
-import {TitleInput} from "@/features/post";
+import {Button} from "@/components/common/button.tsx";
+import {DescriptionInput, TitleInput} from "@/features/post";
 import {RichTextEditor} from "@/features/wisiwig";
 import {Post} from "@/services/api/gen";
 import {PostProvider} from "@/services/api";
+import {useLoading} from "@/hooks";
 
 export interface WritePostProps {
   post: Post;
@@ -13,23 +13,25 @@ export interface WritePostProps {
 }
 
 export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
-  const navigate = useNavigate();
+  const {queue, isLoading} = useLoading("crupdate_post");
 
   const [editor, setEditor] = useState<Editor | null>(null);
 
   const titleInputRef = useRef<HTMLInputElement>(null);
+  const descriptionInputRef = useRef<HTMLTextAreaElement>(null);
 
   // bind title/content to the post object
   const syncPost = () => {
     post.title = titleInputRef.current?.value || "";
+    post.description = descriptionInputRef.current?.value || "";
     post.content = editor?.getContent() || "";
   };
 
   const createNewPost = async () => {
     try {
       syncPost();
-      await PostProvider.crupdateById(post.id!, post);
-      navigate(`/posts/write/${post.id}`);
+      await queue(() => PostProvider.crupdateById(post.id!, post));
+      window.location.replace(`/posts/write/${post.id}`);
     } catch (e) {
       // TODO: handle error
     }
@@ -42,7 +44,7 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
     syncPost();
     post.updated_at = new Date();
     try {
-      await PostProvider.crupdateById(post.id!, post);
+      await queue(() => PostProvider.crupdateById(post.id!, post));
     } catch (e) {
       // TODO: handle error
     }
@@ -59,7 +61,6 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
             ref={titleInputRef}
             defaultValue={post.title}
           />
-
           {!isExistent ? (
             <div className="flex">
               <span className="text-muted-foreground">
@@ -69,6 +70,7 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
                 data-testid="create-new-post"
                 className="inline-block"
                 onClick={createNewPost}
+                isLoading={isLoading}
               >
                 create new
               </Button>
@@ -76,12 +78,22 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
           ) : (
             <Button
               data-testid="save-post"
-              disabled={!isExistent || !editor}
+              disabled={!editor || isLoading}
               onClick={save}
+              isLoading={isLoading}
             >
               Save
             </Button>
           )}
+        </div>
+
+        <div>
+          <DescriptionInput
+            data-testid="post-description"
+            name="description"
+            ref={descriptionInputRef}
+            defaultValue={post.description}
+          />
         </div>
 
         <div

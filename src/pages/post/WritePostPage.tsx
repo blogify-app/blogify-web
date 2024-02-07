@@ -33,7 +33,9 @@ export const WritePostPage = () => {
   return (
     <Layout>
       {/* TODO: Add loader */}
-      <WritePost post={post} isExistent={isExistent} key={post.id} />
+      <div className="h-full w-full pt-5">
+        <WritePost post={post} isExistent={isExistent} key={post.id} />
+      </div>
     </Layout>
   );
 };
