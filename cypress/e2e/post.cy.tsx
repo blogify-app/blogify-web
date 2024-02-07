@@ -106,13 +106,13 @@ describe("Post", () => {
       );
       cy.intercept("PUT", "**/posts/post_1/comments/**", createComment1());
 
-      cy.getByTestid("comment-input").type("Dummy fuckn comment !!!!");
-      cy.getByTestid("add-comment-button").click();
-
       cy.intercept("GET", "**/posts/post_1/comments?page=1&page_size=500", [
         ...comments(),
         createComment1(),
       ]);
+
+      cy.getByTestid("comment-input").type("Dummy fuckn comment !!!!");
+      cy.getByTestid("add-comment-button").click();
 
       cy.contains(createComment1()?.content!);
     });
