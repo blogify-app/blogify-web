@@ -7,7 +7,7 @@ type UserActivity = {
   post: Post;
 };
 
-export const CustomCard: FC<UserActivity> = ({user, post}) => {
+export const CustomCard: FC<UserActivity> = ({post}) => {
   return (
     <div className="col-span-2 m-6 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
       <a href="#">
@@ -15,8 +15,8 @@ export const CustomCard: FC<UserActivity> = ({user, post}) => {
       </a>
       <div className="p-5">
         <p className="text-xs text-red-800">
-          {user?.first_name + " " + user?.last_name} -{" "}
-          <span>{post?.creation_datetime?.toUTCString().slice(0, 17)}</span>
+          {post?.author?.first_name + " " + post?.author?.last_name} -{" "}
+          <span>{post?.creation_datetime?.toUTCString.toString().slice(0, 17)}</span>
         </p>
         <a href="#">
           <h5 className="text-md mb-2 font-bold tracking-tight text-gray-900 dark:text-white">

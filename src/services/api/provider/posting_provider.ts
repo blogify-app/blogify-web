@@ -6,6 +6,7 @@ export interface PostProvider extends DataProvider<Post> {
   // pictures
   getPicture(picId: string, query: Query<{pid: string}>): Promise<PostPicture>;
   getPictures(pid: string): Promise<PostPicture[]>;
+  getPostsByUserId(userId: string | undefined, query: Query<{}>) : Promise<Post[]>;
   uploadPicture(
     picId: string,
     file: File,
@@ -80,4 +81,8 @@ export const PostProvider: PostProvider = {
   crupdateMany(_toCrupdate: Post[]): Promise<Post[]> {
     throw new Error("Function not implemented.");
   },
+
+  async getPostsByUserId(userId:string, query = DEFAULT_QUERY): Promise<Post[]>{
+    return (await postingApi().getPostsByUserId(userId, query.page, query.pageSize)).data
+  }
 };

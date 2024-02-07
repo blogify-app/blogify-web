@@ -3,20 +3,15 @@ import {InlineMenu} from "@/common/inline-menu";
 import {Button} from "@/components/shadcn-ui/button";
 import { Post, User} from "@/services/api/gen";
 import {CustomCard} from "@/common/card";
-import {FC, useState} from "react";
+import {FC} from "react";
 
 
 export interface UserProps {
   user: User;
-  post: Post[];
+  post: Post[] | undefined;
 }
 
 export const Profile: FC<UserProps> = ({user, post}: UserProps) => {
-  const [posts, setPosts] = useState<Post[]>(post);
-
-  function increment() {
-    setPosts(post);
-  }
 
   return (
     <div>
@@ -46,9 +41,9 @@ export const Profile: FC<UserProps> = ({user, post}: UserProps) => {
           </div>
         </div>
       </div>
-      <InlineMenu action={increment} />
+      <InlineMenu action={()=>{}} />
       <hr className="mx-6" />
-      {posts.length == 0 ? (
+      {post?.length == 0 ? (
         <div className="grid grid-cols-3 gap-4">
           <div className="col-start-2 row-start-10 text-center text-xs">
             <Error
@@ -74,8 +69,8 @@ export const Profile: FC<UserProps> = ({user, post}: UserProps) => {
       ) : (
         <div className="grid grid-cols-8 gap-4 p-10 h-auto">
          {
-           posts.map((post, k) =>
-                <CustomCard key={k} user={user} post={post} /> 
+           post?.map((pst, k) =>
+                <CustomCard key={k} user={user} post={pst} /> 
               )
          }
         </div>
