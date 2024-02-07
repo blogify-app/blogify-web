@@ -1,6 +1,7 @@
 import {FC} from "react";
 import {Editor as TinyMCE, IAllProps} from "@tinymce/tinymce-react";
 import {TINY_MCE_API_KEY} from "@/config/env.ts";
+import {NOOP_FN} from "@/lib/noop.ts";
 
 // FIXME: Doesn't apply since tiny_mce style is scoped in a shadow host
 // import "@/features/wisiwig/themes/poimandres.css";
@@ -45,7 +46,7 @@ const TOOLBAR_LAYOUT = [
 
 // Intentionally type as any for simplicity
 // Refer to https://www.tiny.cloud/docs/tinymce/latest/editor-important-options/ for more info.
-const TINY_MCE_CONFIGURATION: any = {
+const TINY_MCE_CONFIGURATION: IAllProps["init"] = {
   plugins: ACTIVE_PLUGINS,
   toolbar: TOOLBAR_LAYOUT,
   toolbar_mode: "sliding",
@@ -58,6 +59,9 @@ const TINY_MCE_CONFIGURATION: any = {
   // control its height by element's height wrapping it
   height: "100%",
   content_css: "writer",
+  images_upload_handler: () => {
+    return Promise.resolve("");
+  },
 };
 
 export interface RichTextEditorProps {
@@ -65,6 +69,7 @@ export interface RichTextEditorProps {
   id?: string;
   disabled?: boolean;
   onInit: IAllProps["onInit"];
+  onImageUpload?: (typeof TINY_MCE_CONFIGURATION)["images_upload_handler"];
 }
 
 /**
@@ -75,6 +80,7 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
   id,
   children = "",
   disabled = false,
+  onImageUpload = NOOP_FN,
 }) => {
   const onEditorInit: IAllProps["onInit"] = (ev, editor) => {
     onInit && onInit(ev, editor);
@@ -88,7 +94,10 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
         disabled={disabled}
         onInit={onEditorInit}
         apiKey={TINY_MCE_API_KEY}
-        init={TINY_MCE_CONFIGURATION}
+        init={{
+          ...TINY_MCE_CONFIGURATION,
+          images_upload_handler: onImageUpload,
+        }}
       />
     </div>
   );
