@@ -42,8 +42,9 @@ export const PostCard: FC<PostCardProps> = ({post, direction}) => {
         ) : (
           <img
             src={defaultThumbnail}
-            alt="Content thumbails"
+            alt="Default thumbails"
             className="w-full object-cover"
+            data-testid="default-thumbnail"
           />
         )}
       </div>
