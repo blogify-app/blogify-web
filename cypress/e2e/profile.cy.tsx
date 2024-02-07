@@ -31,18 +31,20 @@ describe("Profile page", () => {
     });
 
     it("User without posts", () => {
-      cy.visit(`/users/${user1().id}`);
-
-      cy.intercept("GET", `**/users/${user1()?.id}`, user1());
-      cy.intercept(
-        "GET",
-        `**/users/${user1()?.id}/posts?page=1&page_size=50`,
-        []
-      );
       cy.intercept(
         "GET",
         `**/users/${user1()?.id}/pictures?type=PROFILE`,
         userPicture()
+      );
+
+      cy.visit(`/users/${user1().id}`);
+
+      cy.intercept("GET", `**/users/${user1()?.id}`, user1());
+
+      cy.intercept(
+        "GET",
+        `**/users/${user1()?.id}/posts?page=1&page_size=50`,
+        []
       );
 
       cy.getByTestid("missing-post-message").contains(
