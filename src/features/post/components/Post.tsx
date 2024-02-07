@@ -13,20 +13,26 @@ import {
 } from "@/services/api/gen";
 import {Comment} from "@/features/post";
 import {CommentProvider, PostProvider} from "@/services/api";
-import {useToast} from "@/hooks";
+import {useLoading, useToast} from "@/hooks";
 import {Icons} from "@/components/common/icons";
 
 export interface PostProps {
   post: PostType;
 }
 
-const reactToPost = (pid: string, reactionType: ReactionType) => {
-  PostProvider.reactToPostById(pid, reactionType);
-};
-
 export const Post: FC<PostProps> = ({post}: PostProps) => {
+  const {queue} = useLoading("reacting_post");
   const [comments, setComments] = useState<CommentType[]>([]);
   const toast = useToast();
+
+  const reactToPost = async (pid: string, reactionType: ReactionType) => {
+    try {
+      await queue(() => PostProvider.reactToPostById(pid, reactionType));
+      window.location.replace(`/posts/${post.id}`);
+    } catch (e) {
+      window.location.replace(`/login`);
+    }
+  };
 
   // TODO: to restore
   useEffect(() => {
