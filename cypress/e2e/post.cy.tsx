@@ -13,6 +13,9 @@ describe("Post", () => {
 
       cy.getByTestid("like-svg").should("be.visible");
       cy.getByTestid("dislike-svg").should("be.visible");
+
+      cy.getByTestid("like").should("be.visible");
+      cy.getByTestid("dislike").should("be.visible");
     });
   });
 
