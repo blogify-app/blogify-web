@@ -49,8 +49,8 @@ export const post1 = (): Post => ({
   ],
   reactions: {
     likes: 1000,
-    dislikes: 200
-  }
+    dislikes: 200,
+  },
 });
 
 export const post1Liked = (): Post => ({
@@ -99,8 +99,8 @@ export const post1Liked = (): Post => ({
   ],
   reactions: {
     likes: 1001,
-    dislikes: 200
-  }
+    dislikes: 200,
+  },
 });
 
 // Set "any" on purpose to avoid problems with null not assigned to string
