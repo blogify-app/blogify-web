@@ -8,7 +8,6 @@ import {Textarea} from "@/components/shadcn-ui/textarea";
 import {useAuthStore} from "@/features/auth";
 import {Controller, useForm} from "react-hook-form";
 import {CommentProvider, UserProvider} from "@/services/api";
-import {useToast} from "@/hooks";
 
 export interface CommentProps {
   comment: CommentType;
