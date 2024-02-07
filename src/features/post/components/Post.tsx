@@ -5,16 +5,17 @@ import {Badge} from "@/components/shadcn-ui/badge";
 import {Layout} from "@/layout";
 import {Reader} from "@/features/wisiwig";
 import {calculateReadDuration} from "@/features/post/utils";
-import blankUserProfile from "@/assets/noun-user-picture.svg";
+import {useLoading, useToast} from "@/hooks";
+import {Icons} from "@/components/common/icons";
+import {AddComment, Comment} from "@/features/post";
 import {
   Comment as CommentType,
   Post as PostType,
   ReactionType,
 } from "@/services/api/gen";
-import {Comment} from "@/features/post";
 import {CommentProvider, PostProvider} from "@/services/api";
-import {useLoading, useToast} from "@/hooks";
-import {Icons} from "@/components/common/icons";
+import blankUserProfile from "@/assets/noun-user-picture.svg";
+import {useAuthStore} from "@/features/auth";
 
 export interface PostProps {
   post: PostType;
@@ -23,7 +24,10 @@ export interface PostProps {
 export const Post: FC<PostProps> = ({post}: PostProps) => {
   const {queue} = useLoading("reacting_post");
   const [comments, setComments] = useState<CommentType[]>([]);
+  const [isRefresh, setIsRefresh] = useState(false);
   const toast = useToast();
+  const store = useAuthStore();
+  const {user} = store;
 
   const reactToPost = async (pid: string, reactionType: ReactionType) => {
     try {
@@ -56,9 +60,20 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
       }
     };
     void fetch();
-  }, [post]);
+  }, [post, isRefresh]);
 
   const {author} = post;
+
+  useEffect(() => {
+    if (!user) {
+      toast({
+        message:
+          "You are not authenticated. If you want to write comments log in or sign up.",
+        variant: "default",
+        title: "Info",
+      });
+    }
+  }, [user]);
 
   return (
     <Layout>
@@ -155,6 +170,13 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
               {comments.map((comment, index) => (
                 <Comment key={index} comment={comment} />
               ))}
+              {user && (
+                <AddComment
+                  postId={post?.id!}
+                  setIsRefresh={setIsRefresh}
+                  isRefresh={isRefresh}
+                />
+              )}
             </div>
           </div>
         </div>
