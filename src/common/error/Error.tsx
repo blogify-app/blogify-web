@@ -10,7 +10,7 @@ export const Error: FC<ErrorProps> = ({others, message, children}) => {
   return (
     <div>
       <div>{children}</div>
-      <div>{message}</div>
+      <div data-testid="missing-post-message">{message}</div>
       <div>{others}</div>
     </div>
   );

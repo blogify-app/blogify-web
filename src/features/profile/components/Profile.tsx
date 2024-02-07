@@ -6,8 +6,8 @@ import {CustomCard} from "@/common/card";
 import {FC} from "react";
 import defaultPic from "@/assets/noun-user-picture.svg";
 import {useAuthStore} from "@/features/auth";
-import { useNavigate } from "react-router-dom";
-import { nanoid } from "nanoid";
+import {useNavigate} from "react-router-dom";
+import {nanoid} from "nanoid";
 
 export interface UserProps {
   pic: UserPicture | undefined;
@@ -30,12 +30,24 @@ export const Profile: FC<UserProps> = ({pic, user, post}: UserProps) => {
           />
         </div>
         <div>
-          <h1 className="text-3xl font-bold">
+          <h1 data-testid="user-fullname" className="text-3xl font-bold">
             {user?.first_name + " " + user?.last_name}
           </h1>
-          <p className="text-light text-sm">{"@" + user?.username}</p>
-          <p className="text-light text-xs text-gray-500">{user?.bio}</p>
-          <p className="text-light text-xs text-gray-500">{user?.about}</p>
+          <p data-testid="user-name" className="text-light text-sm">
+            {"@" + user?.username}
+          </p>
+          <p
+            data-testid="user-bio"
+            className="text-light text-xs text-gray-500"
+          >
+            {user?.bio}
+          </p>
+          <p
+            data-testid="user-about"
+            className="text-light text-xs text-gray-500"
+          >
+            {user?.about}
+          </p>
           <p className="text-light text-sm">Find out more about this channel</p>
           <div className="flex justify-between">
             {userAuth?.id == user?.id ? (
@@ -66,7 +78,10 @@ export const Profile: FC<UserProps> = ({pic, user, post}: UserProps) => {
               </Button>
             )}
             {userAuth?.id == user?.id && (
-              <Button className="m-2 rounded-[25px] hover:bg-gray-600" onClick={()=>navigate(`/posts/write/${nanoid()}`)}>
+              <Button
+                className="m-2 rounded-[25px] hover:bg-gray-600"
+                onClick={() => navigate(`/posts/write/${nanoid()}`)}
+              >
                 Manage contents
               </Button>
             )}
@@ -80,7 +95,11 @@ export const Profile: FC<UserProps> = ({pic, user, post}: UserProps) => {
           <div className="col-start-2 row-start-10 text-center text-xs">
             <Error
               others={
-                <Button className="m-3 rounded-[25px] px-4 py-2 text-sm text-white hover:bg-gray-600">
+                <Button
+                  data-testid="create-post"
+                  onClick={() => navigate(`/posts/write/${nanoid()}`)}
+                  className="m-3 rounded-[25px] px-4 py-2 text-sm text-white hover:bg-gray-600"
+                >
                   Create
                 </Button>
               }
