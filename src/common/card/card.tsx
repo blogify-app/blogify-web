@@ -1,5 +1,6 @@
 import {FC} from "react";
 import {Post, User} from "@/services/api/gen";
+import { useNavigate } from "react-router-dom";
 
 type UserActivity = {
   user: User | undefined;
@@ -7,8 +8,10 @@ type UserActivity = {
 };
 
 export const CustomCard: FC<UserActivity> = ({post}) => {
+  const navigate = useNavigate()
+
   return (
-    <div className="col-span-2 m-6 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
+    <div className="col-span-2 m-6 bg-white shadow dark:border-gray-700 dark:bg-gray-800" onClick={()=>navigate(`/post/${post?.id}`)}>
       <a href="#">
         <img
           className="h-40"

@@ -6,6 +6,8 @@ import {CustomCard} from "@/common/card";
 import {FC} from "react";
 import defaultPic from "@/assets/noun-user-picture.svg";
 import {useAuthStore} from "@/features/auth";
+import { useNavigate } from "react-router-dom";
+import { nanoid } from "nanoid";
 
 export interface UserProps {
   pic: UserPicture | undefined;
@@ -15,6 +17,7 @@ export interface UserProps {
 
 export const Profile: FC<UserProps> = ({pic, user, post}: UserProps) => {
   const userAuth = useAuthStore((auth) => auth.user!);
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -63,7 +66,7 @@ export const Profile: FC<UserProps> = ({pic, user, post}: UserProps) => {
               </Button>
             )}
             {userAuth?.id == user?.id && (
-              <Button className="m-2 rounded-[25px] hover:bg-gray-600">
+              <Button className="m-2 rounded-[25px] hover:bg-gray-600" onClick={()=>navigate(`/posts/write/${nanoid()}`)}>
                 Manage contents
               </Button>
             )}
