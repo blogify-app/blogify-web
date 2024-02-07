@@ -1,44 +1,70 @@
 import {FC} from "react";
 import {useNavigate} from "react-router-dom";
+import {Post} from "@/services/api/gen";
+import {formatDate} from "@/common/utils";
+import defaultThumbnail from "@/assets/images/default-thumbnail.jpg";
 
 interface PostCardProps {
-  image: string;
+  post: Post;
+  direction: string;
 }
 
-export const PostCard: FC<PostCardProps> = ({image}) => {
+export const PostCard: FC<PostCardProps> = ({post, direction}) => {
   const navigate = useNavigate();
 
+  if (!post) return null;
+
+  const {
+    id = "",
+    thumbnail_url = "",
+    description = "",
+    title = "",
+    author = {},
+    creation_datetime = "",
+    categories = [],
+  } = post || {};
+
+  const {last_name, first_name} = author ?? {};
+
   return (
-    <div className="w-120 m-6 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
-      {/* TODO: it'snt supposed to be like that */}
-      <div className="pl-5" onClick={() => navigate("/posts/1")}>
-        <a href="">
-          <img src={image} alt="Content thumbails" height="280" width="360" />
-        </a>
+    <div className={`grid grid-${direction === "col" ? "" : "cols"}-2 gap-4`}>
+      <div
+        data-testid={`${id}`}
+        className="max-h-56 cursor-pointer overflow-hidden"
+        onClick={() => navigate(`/posts/${id}`)}
+      >
+        {thumbnail_url ? (
+          <img
+            src={thumbnail_url}
+            alt="Content thumbails"
+            className="w-full object-cover"
+          />
+        ) : (
+          <img
+            src={defaultThumbnail}
+            alt="Default thumbails"
+            className="w-full object-cover"
+            data-testid="default-thumbnail"
+          />
+        )}
       </div>
-      <div className="p-5">
-        <p className="text-xs text-red-800">
-          Ny Hasina VAGNO - <span>Jan 29, 2024</span>
+      <div className="bg-white">
+        <p className="text-xs/8 text-purple-700">
+          {first_name ?? ""} {last_name ?? ""} •{" "}
+          <span>{formatDate(creation_datetime as string)}</span>
         </p>
         <a href="#">
-          <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-            Noteworthy technology
-          </h5>
+          <h5 className="mb-2 text-lg font-semibold">{title}</h5>
         </a>
-        <p className="mb-3 text-xs font-normal text-gray-700 dark:text-gray-400">
-          Here are the biggest enterprise technology acquisitions of 2021 so
-          far, in reverse chronological order.
-        </p>
-        <div className="flex space-x-2 text-xs font-light text-violet-800">
-          <div className="rounded-[8px] bg-purple-100 px-3 py-1">
-            technology
-          </div>
-          <div className="rounded-[8px] bg-purple-100 px-3 py-1">
-            mathematics
-          </div>
-          <div className="rounded-[8px] bg-purple-100 px-3 py-1">
-            mathematics
-          </div>
+        <p className="mb-3 text-xs text-gray-400">{description}</p>
+        <div className="flex space-x-2 pb-5 pt-2 text-xs font-normal">
+          {categories.map((categorie) => {
+            return (
+              <div className="rounded-[8px] bg-green-100 px-3 py-1 text-green-800">
+                {categorie.label}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
