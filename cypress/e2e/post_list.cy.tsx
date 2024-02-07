@@ -1,4 +1,9 @@
-import {createPosts, post1, postWithoutThumbnail, postWithoutValues} from "../fixtures/post.ts";
+import {
+  createPosts,
+  post1,
+  postWithoutThumbnail,
+  postWithoutValues,
+} from "../fixtures/post.ts";
 
 describe("PostList", () => {
   it("should render all posts", () => {
@@ -18,17 +23,17 @@ describe("PostList", () => {
 
     cy.getByTestid("post_1").click();
     cy.window()
-        .its("location")
-        .should((location) => {
-          expect(location.pathname).to.eq("/posts/post_1");
-        });
+      .its("location")
+      .should((location) => {
+        expect(location.pathname).to.eq("/posts/post_1");
+      });
   });
 
   it("should render the default thumbnail when no picture is provided", () => {
     cy.visit("/posts");
 
     cy.intercept("GET", `**/posts?page=*&page_size=*`, postWithoutThumbnail());
-    cy.getByTestid("default-thumbnail")
+    cy.getByTestid("default-thumbnail");
   });
 
   it("should not break the UI when some values are null", () => {
@@ -61,7 +66,7 @@ describe("PostList", () => {
     cy.contains("Could not get posts list.");
   });
 
-  it.only("test pagination", () => {
+  it("test pagination", () => {
     cy.visit("/posts");
 
     cy.intercept("GET", `**/posts?page=*&page_size=*`, createPosts(10));
@@ -74,8 +79,5 @@ describe("PostList", () => {
 
     cy.getByTestid("prev-page").click();
     cy.contains("2");
-
   });
-
-
 });

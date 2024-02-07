@@ -67,8 +67,8 @@ export const PostListPage: FC = () => {
         </Button>
         <span>{currentPage}</span>
         <Button
-            onClick={() => setCurrentPage((prevPage) => prevPage + 1)}
-            data-testid="next-page"
+          onClick={() => setCurrentPage((prevPage) => prevPage + 1)}
+          data-testid="next-page"
         >
           Next Page
         </Button>

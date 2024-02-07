@@ -29,7 +29,7 @@ export const PostCard: FC<PostCardProps> = ({post, direction}) => {
   return (
     <div className={`grid grid-${direction === "col" ? "" : "cols"}-2 gap-4`}>
       <div
-          data-testid={`${id}`}
+        data-testid={`${id}`}
         className="max-h-56 cursor-pointer overflow-hidden"
         onClick={() => navigate(`/posts/${id}`)}
       >
