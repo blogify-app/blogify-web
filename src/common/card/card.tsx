@@ -10,7 +10,11 @@ export const CustomCard: FC<UserActivity> = ({post}) => {
   return (
     <div className="col-span-2 m-6 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
       <a href="#">
-        <img className="h-40" src={post?.thumbnail_url} alt="Content thumbails" />
+        <img
+          className="h-40"
+          src={post?.thumbnail_url}
+          alt="Content thumbails"
+        />
       </a>
       <div className="p-5">
         <p className="text-xs text-red-800">

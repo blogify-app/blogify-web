@@ -10,7 +10,10 @@ export interface UserProvider extends DataProvider<User> {
     query: PictureQuery
   ): Promise<UserPicture>;
   deletePicture(uid: string, query: PictureQuery): Promise<UserPicture>;
-  getPicture(uid: string | undefined, query: PictureQuery): Promise<UserPicture>;
+  getPicture(
+    uid: string | undefined,
+    query: PictureQuery
+  ): Promise<UserPicture>;
 }
 
 export const UserProvider: UserProvider = {

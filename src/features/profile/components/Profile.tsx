@@ -1,11 +1,11 @@
 import {Error} from "@/common/error";
 import {InlineMenu} from "@/common/inline-menu";
 import {Button} from "@/components/shadcn-ui/button";
-import { Post, User, UserPicture} from "@/services/api/gen";
+import {Post, User, UserPicture} from "@/services/api/gen";
 import {CustomCard} from "@/common/card";
 import {FC} from "react";
-import defaultPic from "@/assets/noun-user-picture.svg"
-import { useAuthStore } from "@/features/auth";
+import defaultPic from "@/assets/noun-user-picture.svg";
+import {useAuthStore} from "@/features/auth";
 
 export interface UserProps {
   pic: UserPicture | undefined;
@@ -35,27 +35,42 @@ export const Profile: FC<UserProps> = ({pic, user, post}: UserProps) => {
           <p className="text-light text-xs text-gray-500">{user?.about}</p>
           <p className="text-light text-sm">Find out more about this channel</p>
           <div className="flex justify-between">
-            {
-              userAuth?.id == user?.id ? <Button className="my-2 rounded-[25px] hover:bg-gray-600">
-              <svg className="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M17.1 12.6v-1.8A5.4 5.4 0 0 0 13 5.6V3a1 1 0 0 0-2 0v2.4a5.4 5.4 0 0 0-4 5.5v1.8c0 2.4-1.9 3-1.9 4.2 0 .6 0 1.2.5 1.2h13c.5 0 .5-.6.5-1.2 0-1.2-1.9-1.8-1.9-4.2ZM8.8 19a3.5 3.5 0 0 0 6.4 0H8.8Z"/>
-              </svg>
-              Customize channel
-            </Button> :
+            {userAuth?.id == user?.id ? (
               <Button className="my-2 rounded-[25px] hover:bg-gray-600">
-              <svg className="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M17.1 12.6v-1.8A5.4 5.4 0 0 0 13 5.6V3a1 1 0 0 0-2 0v2.4a5.4 5.4 0 0 0-4 5.5v1.8c0 2.4-1.9 3-1.9 4.2 0 .6 0 1.2.5 1.2h13c.5 0 .5-.6.5-1.2 0-1.2-1.9-1.8-1.9-4.2ZM8.8 19a3.5 3.5 0 0 0 6.4 0H8.8Z"/>
-              </svg>
-              Follow
-            </Button>
-            }
-            { userAuth?.id == user?.id && <Button className="m-2 rounded-[25px] hover:bg-gray-600">
-              Manage contents
-            </Button> }
+                <svg
+                  className="h-6 w-6 text-white dark:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M17.1 12.6v-1.8A5.4 5.4 0 0 0 13 5.6V3a1 1 0 0 0-2 0v2.4a5.4 5.4 0 0 0-4 5.5v1.8c0 2.4-1.9 3-1.9 4.2 0 .6 0 1.2.5 1.2h13c.5 0 .5-.6.5-1.2 0-1.2-1.9-1.8-1.9-4.2ZM8.8 19a3.5 3.5 0 0 0 6.4 0H8.8Z" />
+                </svg>
+                Customize channel
+              </Button>
+            ) : (
+              <Button className="my-2 rounded-[25px] hover:bg-gray-600">
+                <svg
+                  className="h-6 w-6 text-white dark:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M17.1 12.6v-1.8A5.4 5.4 0 0 0 13 5.6V3a1 1 0 0 0-2 0v2.4a5.4 5.4 0 0 0-4 5.5v1.8c0 2.4-1.9 3-1.9 4.2 0 .6 0 1.2.5 1.2h13c.5 0 .5-.6.5-1.2 0-1.2-1.9-1.8-1.9-4.2ZM8.8 19a3.5 3.5 0 0 0 6.4 0H8.8Z" />
+                </svg>
+                Follow
+              </Button>
+            )}
+            {userAuth?.id == user?.id && (
+              <Button className="m-2 rounded-[25px] hover:bg-gray-600">
+                Manage contents
+              </Button>
+            )}
           </div>
         </div>
       </div>
-      <InlineMenu action={()=>{}} />
+      <InlineMenu action={() => {}} />
       <hr className="mx-6" />
       {post?.length == 0 ? (
         <div className="grid grid-cols-3 gap-4">
@@ -81,12 +96,8 @@ export const Profile: FC<UserProps> = ({pic, user, post}: UserProps) => {
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-8 gap-4 p-10 h-auto">
-         {
-           post?.map((pst, k) =>
-                <CustomCard key={k} user={user} post={pst} /> 
-              )
-         }
+        <div className="grid h-auto grid-cols-8 gap-4 p-10">
+          {post?.map((pst, k) => <CustomCard key={k} user={user} post={pst} />)}
         </div>
       )}
     </div>
