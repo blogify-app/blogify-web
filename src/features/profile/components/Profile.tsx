@@ -1,24 +1,67 @@
-import {FC} from "react";
+import {FC, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {nanoid} from "nanoid";
 import {Button} from "@/components/shadcn-ui/button";
 import {InlineMenu} from "@/common/inline-menu";
 import {CustomCard} from "@/common/card";
 import {useAuthStore} from "@/features/auth";
-import {Post, User, UserPicture} from "@/services/api/gen";
+import {Post, User, UserPicture, UserPictureType} from "@/services/api/gen";
+import {DEFAULT_QUERY, PostProvider, UserProvider} from "@/services/api";
+import {useToast} from "@/hooks";
 import defaultPic from "@/assets/noun-user-picture.svg";
 
 export interface ProfileProps {
-  pic: UserPicture | undefined;
   user: User;
-  posts: Post[];
 }
 
-export const Profile: FC<ProfileProps> = ({pic, user, posts}) => {
+export const Profile: FC<ProfileProps> = ({user}) => {
   const authStore = useAuthStore();
+  const toast = useToast();
   const navigate = useNavigate();
 
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [picture, setPicture] = useState<UserPicture>();
+
   const isSelf = user.id === authStore.user?.id;
+
+  const uid = user.id;
+  useEffect(() => {
+    const getUserPosts = async () => {
+      try {
+        const posts = await PostProvider.getPostsByUserId(uid, {
+          page: 1,
+          pageSize: 50,
+          params: {},
+        });
+        setPosts(posts);
+      } catch (e) {
+        toast({
+          variant: "destructive",
+          message: "Unable to fetch user posts",
+        });
+      }
+    };
+
+    const getUserPic = async () => {
+      try {
+        const userPicture = await UserProvider.getPicture(uid, {
+          ...DEFAULT_QUERY,
+          params: {
+            type: UserPictureType.PROFILE,
+          },
+        });
+        setPicture(userPicture);
+      } catch (e) {
+        toast({
+          variant: "destructive",
+          message: "Unable to fetch user posts",
+        });
+      }
+    };
+
+    void getUserPic();
+    void getUserPosts();
+  }, [uid]);
 
   return (
     <div>
@@ -26,7 +69,7 @@ export const Profile: FC<ProfileProps> = ({pic, user, posts}) => {
         <div className="px-12">
           <img
             className="h-40 w-40 rounded-[100%]"
-            src={pic?.url || defaultPic}
+            src={picture?.url || defaultPic}
             alt="user profile"
           />
         </div>
