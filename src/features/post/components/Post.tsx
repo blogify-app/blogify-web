@@ -27,12 +27,7 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
   const {queue, isLoading} = useLoading("reacting_post");
   const [comments, setComments] = useState<CommentType[]>([]);
   const [isRefresh, setIsRefresh] = useState(false);
-  const [reactions, setReactions] = useState<ReactionStat>(
-    post.reactions || {
-      likes: 0,
-      dislikes: 0,
-    }
-  );
+  const [reactions, setReactions] = useState<ReactionStat>(post.reactions!);
   const toast = useToast();
   const store = useAuthStore();
 
@@ -42,10 +37,10 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
     try {
       await queue(() => PostProvider.reactToPostById(pid, reactionType));
       if (reactionType === ReactionType.DISLIKE) {
-        setReactions((prev) => ({...prev, dislikes: (prev.dislikes || 0) + 1}));
+        setReactions((prev) => ({...prev, dislikes: prev.dislikes! + 1}));
       }
       if (reactionType === ReactionType.LIKE) {
-        setReactions((prev) => ({...prev, likes: (prev.likes || 0) + 1}));
+        setReactions((prev) => ({...prev, likes: prev.likes! + 1}));
       }
     } catch (e) {
       toast({
