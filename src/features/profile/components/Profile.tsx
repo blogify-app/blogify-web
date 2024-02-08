@@ -52,10 +52,7 @@ export const Profile: FC<ProfileProps> = ({user}) => {
         });
         setPicture(userPicture);
       } catch (e) {
-        toast({
-          variant: "destructive",
-          message: "Unable to fetch user posts",
-        });
+        // TODO: handle error
       }
     };
 
