@@ -18,11 +18,19 @@ export const CustomCard: FC<UserActivity> = ({post}) => {
       onClick={() => navigate(`/posts/${post.id}`)}
     >
       <Link to={`/posts/${post.id}`}>
-        <img
-          className="h-40"
-          src={post?.thumbnail_url}
-          alt="Content thumbails"
-        />
+        {post.thumbnail_url ? (
+          <img
+            className="h-40"
+            src={post?.thumbnail_url}
+            alt="Content thumbails"
+          />
+        ) : (
+          <div className="flex h-40 w-full items-end bg-gray-400">
+            <span className="font-logo text-9xl tracking-tight text-white">
+              B
+            </span>
+          </div>
+        )}
       </Link>
       <div className="p-5">
         <p className="text-xs text-red-800">
