@@ -32,7 +32,7 @@ export const user1 = (): User => ({
 });
 
 export const whoami1 = (): Whoami => ({
-  ...user1,
+  ...user1(),
   bearer: "bearer",
 });
 
