@@ -20,7 +20,7 @@ export const safe1_rendered = () => {
     "<li>It is <strong>PRETTY</strong></li>\n" +
     "<li>... Why not?</li>\n" +
     "</ul>\n" +
-    '<pre class="language-js" tabindex="0">\n' +
+    '<pre class="language-js">\n' +
     '<code class="language-js">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"C\'mon ... Why not??"</span><span class="token punctuation">)</span>\n' +
     "</code>" +
     "</pre>"
