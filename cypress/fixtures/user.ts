@@ -1,4 +1,11 @@
-import {Sex, User, UserStatus, Whoami} from "../../src/services/api/gen";
+import {
+  Sex,
+  User,
+  UserPicture,
+  UserPictureType,
+  UserStatus,
+  Whoami,
+} from "../../src/services/api/gen";
 
 export const user1 = (): User => ({
   last_name: "worker",
@@ -25,6 +32,12 @@ export const user1 = (): User => ({
 });
 
 export const whoami1 = (): Whoami => ({
-  ...user1,
+  ...user1(),
   bearer: "bearer",
+});
+
+export const userPicture = (): UserPicture => ({
+  user_id: user1()?.id,
+  type: UserPictureType.PROFILE,
+  url: "image_url",
 });

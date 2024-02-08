@@ -7,6 +7,7 @@ import {DummyAuthenticatedPage, LoginPage, SignupPage} from "@/pages/auth";
 import {PostListPage, PostPage, WritePostPage} from "@/pages/post";
 import {Authenticated} from "@/features/auth";
 import "./index.css";
+import {ProfilePage} from "./pages/profile/ProfilePage";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const ROUTER = createBrowserRouter([
@@ -41,6 +42,10 @@ const ROUTER = createBrowserRouter([
         <WritePostPage />
       </Authenticated>
     ),
+  },
+  {
+    path: "/users/:id",
+    element: <ProfilePage />,
   },
 ]);
 

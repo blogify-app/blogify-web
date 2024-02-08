@@ -19,7 +19,7 @@ export const DEFAULT_QUERY: Query<any> = {
  * @template P - Filter record
  */
 export interface DataProvider<R = any, P = Record<string, any>> {
-  getById(id: string, query?: Query<P>): Promise<R>;
+  getById(id: string | undefined, query?: Query<P>): Promise<R>;
   getMany(query: Query<P>): Promise<R[]>;
   crupdateById(id: string, update: R, query?: Query<P>): Promise<R>;
   crupdate(payload: R, query?: Query<P>): Promise<R>;

@@ -1,7 +1,7 @@
 import {User, UserPicture, UserPictureType} from "@/services/api/gen";
 import {DataProvider, DEFAULT_QUERY, Query, userApi} from "@/services/api";
 
-type PictureQuery = Query<{type: UserPictureType}>;
+export type PictureQuery = Query<{type: UserPictureType}>;
 
 export interface UserProvider extends DataProvider<User> {
   putPicture(
@@ -10,7 +10,10 @@ export interface UserProvider extends DataProvider<User> {
     query: PictureQuery
   ): Promise<UserPicture>;
   deletePicture(uid: string, query: PictureQuery): Promise<UserPicture>;
-  getPicture(uid: string, query: PictureQuery): Promise<UserPicture>;
+  getPicture(
+    uid: string | undefined,
+    query: PictureQuery
+  ): Promise<UserPicture>;
 }
 
 export const UserProvider: UserProvider = {
