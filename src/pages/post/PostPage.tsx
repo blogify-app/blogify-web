@@ -32,5 +32,5 @@ export const PostPage: FC = () => {
 
   // TODO: loading .. or redirect
   if (!post) return null;
-  return <Post post={post} reactions={reactions}/>;
+  return <Post post={post} reactions={reactions} />;
 };

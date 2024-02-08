@@ -20,7 +20,7 @@ import blankUserProfile from "@/assets/noun-user-picture.svg";
 
 export interface PostProps {
   post: PostType;
-  reactions: ReactionStat | undefined
+  reactions: ReactionStat | undefined;
 }
 
 export const Post: FC<PostProps> = ({post, reactions}: PostProps) => {
