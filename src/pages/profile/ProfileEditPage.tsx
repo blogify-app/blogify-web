@@ -20,7 +20,6 @@ export const ProfileEditPage: FC = () => {
         setUser(user);
       } catch (_e) {
         // TODO: handle error
-        console.error(_e);
       }
     };
 
@@ -36,7 +35,6 @@ export const ProfileEditPage: FC = () => {
         setPicURL(profilePic.url ?? "");
       } catch (_e) {
         // TODO: handle error
-        console.error(_e);
       }
     };
 
