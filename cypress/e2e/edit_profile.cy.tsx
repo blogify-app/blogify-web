@@ -1,4 +1,4 @@
-import {user1, user1_modified} from "../fixtures/user";
+import {user1} from "../fixtures/user";
 import "cypress-file-upload";
 
 describe("Edit profile", () => {
@@ -28,11 +28,18 @@ describe("Edit profile", () => {
   it("should show image placeholder", () => {
     cy.loginThenRedirect(`/users/edit/${user1().id}`);
 
-    cy.get('img[alt="@shadcn"]').should("be.visible");
+    cy.intercept("GET", `**/users/${user1().id}`, (req) => {
+      req.reply({
+        body: user1(),
+        statusCode: 200,
+        headers: {
+          "content-type": "application/json",
+        },
+      });
+    });
 
-    cy.getByTestid("avatar_image").should("exist");
-
-    cy.get('img[alt="@shadcn"]')
+    cy.getByTestid("avatar_image")
+      .should("exist")
       .should("have.attr", "src")
       .then((src) => {
         expect(src).to.not.equal("data:,");
@@ -42,19 +49,26 @@ describe("Edit profile", () => {
   it("update user infos should success", () => {
     cy.loginThenRedirect(`/users/edit/${user1().id}`);
 
+    cy.intercept("GET", `**/users/${user1().id}`, (req) => {
+      req.reply({
+        body: user1(),
+        statusCode: 200,
+        headers: {
+          "content-type": "application/json",
+        },
+      });
+    });
+
     cy.getByTestid("first_name_input")
-      .type("Blogify modified", {delay: 50})
+      .type(" modified", {delay: 50})
       .should("have.value", "Blogify modified");
 
     cy.get("[data-testid='submit_button']").click();
 
     cy.intercept("PUT", `**/users/${user1().id}`, (req) => {
       req.reply({
-        body: user1_modified(),
+        body: req.body,
         statusCode: 200,
-        headers: {
-          "content-type": "application/json",
-        },
       });
     });
   });
