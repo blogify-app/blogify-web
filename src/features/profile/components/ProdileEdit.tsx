@@ -286,7 +286,7 @@ export const ProfileEdit: FC<ProfileEditProps> = ({
               data-testid="submit_button"
               onClick={form.handleSubmit(onCreate)}
             >
-              Continue
+              Save
             </Button>
           </div>
         </div>
