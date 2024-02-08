@@ -1,10 +1,15 @@
 // TODO: add alias for test fixture
 import {non_existent_id, post1} from "../fixtures/post.ts";
 import {Post} from "@/services/api/gen";
+import {ppicture1} from "../fixtures/pictures.ts";
 
 describe("WritePost", () => {
   it("should display post", () => {
     cy.intercept("GET", `**/posts/${post1().id}`, post1()).as("getPost");
+
+    cy.intercept("PUT", `**/posts/${post1().id}/thumbnail`, ppicture1()).as(
+      "UpdateThumbnail"
+    );
 
     cy.intercept("PUT", `**/posts/${post1().id}`, (req) => {
       const post: Post = req.body;
@@ -13,7 +18,7 @@ describe("WritePost", () => {
       req.reply({
         body: post,
       });
-    }).as("saveEditedPost");
+    }).as("SaveEditedPost");
 
     cy.loginThenRedirect(`/posts/write/${post1().id}`);
 
@@ -26,7 +31,14 @@ describe("WritePost", () => {
     // edit
     cy.getByTestid("post-title").clear().type("Edited post title");
     cy.getByTestid("post-description").clear().type("Added description");
+
+    cy.getByTestid("image-upload").selectFile(
+      "cypress/fixtures/file_mocks/thumbnail.jpg"
+    );
     cy.getByTestid("save-post").click();
+
+    cy.wait("@UpdateThumbnail");
+    cy.wait("@SaveEditedPost");
   });
 
   it("should suggest creating new post when trying to write non-existent", () => {

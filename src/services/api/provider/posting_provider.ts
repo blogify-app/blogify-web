@@ -10,6 +10,7 @@ export interface PostProvider extends DataProvider<Post> {
     userId: string | undefined,
     query: Query<{}>
   ): Promise<Post[]>;
+  putThumbnail(pid: string, file: File): Promise<PostPicture>;
   uploadPicture(
     picId: string,
     file: File,
@@ -75,6 +76,10 @@ export const PostProvider: PostProvider = {
 
   async getPictures(pid: string): Promise<PostPicture[]> {
     return (await postingApi().getAllPostPictureById(pid)).data;
+  },
+
+  async putThumbnail(pid: string, file: File): Promise<PostPicture> {
+    return (await postingApi().putPostThumbnail(pid, file)).data;
   },
 
   crupdate(_payload: Post): Promise<Post> {
