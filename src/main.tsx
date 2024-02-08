@@ -51,9 +51,9 @@ const ROUTER = createBrowserRouter([
   {
     path: "/users/edit/:id",
     element: (
-        <Authenticated>
-          <ProfileEditPage />
-        </Authenticated>
+      <Authenticated>
+        <ProfileEditPage />
+      </Authenticated>
     ),
   },
 ]);
