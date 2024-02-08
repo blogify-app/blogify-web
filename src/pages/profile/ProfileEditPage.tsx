@@ -6,7 +6,7 @@ import {DEFAULT_QUERY, UserProvider} from "@/services/api";
 import {User, UserPictureType} from "@/services/api/gen";
 
 export const ProfileEditPage: FC = () => {
-  const [user, setUser] = useState<User>({});
+  const [user, setUser] = useState<User | null>(null);
   const [picURL, setPicURL] = useState("");
   const params = useParams();
   const id = params.id;
@@ -16,6 +16,7 @@ export const ProfileEditPage: FC = () => {
       if (!id) return;
       try {
         const user = await UserProvider.getById(id);
+        console.log("User: " + user?.first_name);
         setUser(user);
       } catch (_e) {
         // TODO: handle error
@@ -51,7 +52,7 @@ export const ProfileEditPage: FC = () => {
         className="mx-[2.8rem] h-full pt-[3.8rem] md:mx-[11rem]"
         data-testid="profile_edit_layout"
       >
-        <ProfileEdit currentUser={user} profilePic={picURL} />
+        {<ProfileEdit currentUser={user} profilePic={picURL} />}
       </div>
     </Layout>
   );

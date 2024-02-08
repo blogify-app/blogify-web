@@ -31,6 +31,7 @@ import {cn} from "@/lib/utils.ts";
 import {User, UserPictureType} from "@/services/api/gen";
 import {profileEditSchema} from "@/features/profile/schema";
 import {DEFAULT_QUERY, UserProvider} from "@/services/api";
+import {useToast} from "@/components/shadcn-ui/use-toast";
 
 interface ProfileEditProps {
   currentUser: User;
@@ -41,9 +42,8 @@ export const ProfileEdit: FC<ProfileEditProps> = ({
   currentUser,
   profilePic,
 }: ProfileEditProps) => {
-  const [imageSrc, setImageSrc] = useState<string | undefined>(
-    profilePic ?? placeholder
-  );
+  const toast = useToast();
+  const [imageSrc, setImageSrc] = useState<string>(profilePic ?? placeholder);
   const [currentBirthDate, setCurrentBirthDate] = useState(
     currentUser?.birth_date ? new Date(currentUser.birth_date) : new Date()
   );
@@ -87,9 +87,19 @@ export const ProfileEdit: FC<ProfileEditProps> = ({
         about: userInfos?.about,
         sex: userInfos?.sex,
       });
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      toast({
+        variant: "outline",
+        message: "Operation Succesclears",
+      });
     } catch (e) {
-      // TODO: handle error
-      console.error(e);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      toast({
+        variant: "destructive",
+        message: "Unable to update user informations",
+      });
     }
   };
 
