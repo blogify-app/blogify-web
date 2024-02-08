@@ -20,12 +20,12 @@ export const CustomCard: FC<UserActivity> = ({post}) => {
       <Link to={`/posts/${post.id}`}>
         {post.thumbnail_url ? (
           <img
-            className="h-40"
+            className="h-44 w-full rounded-t-md"
             src={post?.thumbnail_url}
             alt="Content thumbails"
           />
         ) : (
-          <div className="flex h-40 w-full items-end bg-gray-400">
+          <div className="flex h-44 w-full items-end rounded-t-md bg-gray-400">
             <span className="font-logo text-9xl tracking-tight text-white">
               B
             </span>
