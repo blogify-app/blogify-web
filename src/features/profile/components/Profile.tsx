@@ -54,14 +54,20 @@ export const Profile: FC<ProfileProps> = ({user}) => {
       } catch (e) {
         toast({
           variant: "destructive",
-          message: "Unable to fetch user profile",
+          message: "Unable to fetch user profile picture",
         });
       }
     };
-
     void getUserPic();
     void getUserPosts();
   }, [uid]);
+
+  const notImplemented = () => {
+    toast({
+      variant: "default",
+      message: "Cheers to the features waiting to be unlocked! 🚀 #ComingSoon",
+    });
+  };
 
   return (
     <div>
@@ -78,28 +84,28 @@ export const Profile: FC<ProfileProps> = ({user}) => {
             <div className="mr-4 h-full text-3xl font-bold">
               {user.first_name} {user.last_name}
             </div>
-            {
-              isSelf &&   <Button
-              data-testid="customize-channel"
-              className="my-1 mr-2 rounded-[15px] hover:bg-gray-600"
-              onClick={() => navigate(`/users/edit/${user?.id}`)}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                className="h-6 w-6"
+            {isSelf && (
+              <Button
+                data-testid="customize-channel"
+                className="my-1 mr-2 rounded-[15px] hover:bg-gray-600"
+                onClick={() => navigate(`/users/edit/${user?.id}`)}
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                />
-              </svg>
-            </Button>
-            }
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  className="h-6 w-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                  />
+                </svg>
+              </Button>
+            )}
             <Button
               data-testid="customize-channel"
               className="my-1 rounded-[15px] hover:bg-gray-600"
@@ -175,13 +181,13 @@ export const Profile: FC<ProfileProps> = ({user}) => {
         </div>
       </div>
 
-      <InlineMenu />
+      <InlineMenu action={notImplemented} />
 
       <hr className="mx-6" />
 
       <div className="grid h-auto grid-cols-8 gap-4 p-10">
         {posts.map((post) => (
-          <CustomCard key={post.id} user={user} post={post} />
+          <CustomCard key={post.id} post={post} isSelf={isSelf} />
         ))}
       </div>
     </div>
