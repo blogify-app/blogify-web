@@ -1,10 +1,11 @@
 import {FC} from "react";
+import {NOOP_FN} from "@/lib/noop.ts";
 
 type InlineMenuProps = {
-  action: Function;
+  action?: () => void;
 };
 
-export const InlineMenu: FC<InlineMenuProps> = ({action}) => {
+export const InlineMenu: FC<InlineMenuProps> = ({action = NOOP_FN}) => {
   return (
     <div className="px-24">
       <ul className="flex justify-between p-2 text-sm font-bold">

@@ -31,21 +31,15 @@ export const Profile: FC<ProfileProps> = ({pic, user, posts}) => {
           />
         </div>
         <div>
-          <h1 data-testid="display-name" className="text-3xl font-bold">
-            {user?.first_name || ""} {user?.last_name}
-          </h1>
+          <div className="text-3xl font-bold">
+            {user.first_name} {user.last_name}
+          </div>
 
-          <p data-testid="username" className="text-light text-sm">
-            {"@" + user?.username}
-          </p>
+          <p className="text-light text-sm">{"@" + user?.username}</p>
 
-          <p data-testid="bio" className="text-light text-xs text-gray-500">
-            {user?.bio}
-          </p>
+          <p className="text-light text-xs text-gray-500">{user?.bio}</p>
 
-          <p data-testid="about" className="text-light text-xs text-gray-500">
-            {user?.about}
-          </p>
+          <p className="text-light text-xs text-gray-500">{user?.about}</p>
           <p className="text-light text-sm">Find out more about this channel</p>
 
           <div className="flex justify-between">
@@ -94,7 +88,7 @@ export const Profile: FC<ProfileProps> = ({pic, user, posts}) => {
         </div>
       </div>
 
-      <InlineMenu action={() => {}} />
+      <InlineMenu />
 
       <hr className="mx-6" />
 
