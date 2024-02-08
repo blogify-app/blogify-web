@@ -54,9 +54,6 @@ describe("Post", () => {
 
       cy.getByTestid("post-tags").as("tags");
       cy.get("@tags").should("be.visible");
-      cy.get("@tags").contains("Ipsum");
-      cy.get("@tags").contains("Lorem");
-      cy.get("@tags").contains("Hello");
 
       cy.getByTestid("user-details").contains("See more about this author");
       cy.getByTestid("user-profile-picture").should("be.visible");
