@@ -1,5 +1,5 @@
 import {FC, useEffect, useState} from "react";
-import {Layout, AnonymousHeader} from "@/layout";
+import {Layout} from "@/layout";
 import {ProfileEdit} from "@/features/profile";
 import {useParams} from "react-router-dom";
 import {DEFAULT_QUERY, UserProvider} from "@/services/api";
@@ -47,7 +47,7 @@ export const ProfileEditPage: FC = () => {
   if (!user) return null;
 
   return (
-    <Layout header={<AnonymousHeader page="sign_up" />}>
+    <Layout>
       <div
         className="mx-[2.8rem] h-full pt-[3.8rem] md:mx-[11rem]"
         data-testid="profile_edit_layout"
