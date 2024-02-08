@@ -1,14 +1,16 @@
 import {FC} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {Post} from "@/services/api/gen";
+import {formatDate} from "@/common/utils";
+import {Icons} from "@/components/common/icons";
 
-type UserActivity = {
+type UserPostCardProps = {
   isSelf: boolean;
   post: Post;
 };
 
 // TODO: ban from common and rename!!!
-export const CustomCard: FC<UserActivity> = ({post, isSelf}) => {
+export const UserPostCard: FC<UserPostCardProps> = ({post, isSelf}) => {
   const navigate = useNavigate();
 
   return (
@@ -39,26 +41,14 @@ export const CustomCard: FC<UserActivity> = ({post, isSelf}) => {
               {post?.author?.first_name + " " + post?.author?.last_name}
             </span>
             {" - "}
-            <span>{post?.creation_datetime?.toString().slice(0, 10)}</span>
+            <span>
+              {formatDate(post?.creation_datetime?.toString() as string)}
+            </span>
           </div>
           {isSelf && (
             <div>
               <Link to={`/posts/write/${post?.id}`}>
-                <svg
-                  className="h-4 w-4 text-gray-800 dark:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m14.3 4.8 2.9 2.9M7 7H4a1 1 0 0 0-1 1v10c0 .6.4 1 1 1h11c.6 0 1-.4 1-1v-4.5m2.4-10a2 2 0 0 1 0 3l-6.8 6.8L8 14l.7-3.6 6.9-6.8a2 2 0 0 1 2.8 0Z"
-                  />
-                </svg>
+                <Icons.editPost />
               </Link>
             </div>
           )}
