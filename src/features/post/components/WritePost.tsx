@@ -2,6 +2,7 @@ import {FC, useEffect, useRef, useState} from "react";
 import {Editor} from "tinymce";
 import {nanoid} from "nanoid";
 import {Button} from "@/components/common/button.tsx";
+import {ImageUpload} from "@/components/common/image-upload.tsx";
 import {DescriptionInput, TitleInput} from "@/features/post";
 import {RichTextEditor} from "@/features/wisiwig";
 import {Post, PostPicture} from "@/services/api/gen";
@@ -21,8 +22,11 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
   const [editor, setEditor] = useState<Editor | null>(null);
   const [pictures, setPictures] = useState<PostPicture[]>([]);
 
+  const thumbnailFileRef = useRef<File | null>(null);
   const titleInputRef = useRef<HTMLInputElement>(null);
   const descriptionInputRef = useRef<HTMLTextAreaElement>(null);
+
+  const shouldUpdateRemoteThumbnail = useRef(false);
 
   useEffect(() => {
     const fetchPictures = async () => {
@@ -58,6 +62,31 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
     }
   };
 
+  const updateRemoteThumbnail = async () => {
+    // FIXME: rename to thumbnail_id instead
+    post.thumbnail_url ||= nanoid();
+    try {
+      const picture = await PostProvider.uploadPicture(
+        post.thumbnail_url!,
+        thumbnailFileRef.current!,
+        {
+          ...DEFAULT_QUERY,
+          params: {
+            pid: post.id!,
+          },
+        }
+      );
+      post.thumbnail_url = picture.url;
+      console.warn("up_post", post);
+      shouldUpdateRemoteThumbnail.current = false;
+    } catch (e) {
+      toast({
+        variant: "destructive",
+        message: "Unable to upload post thumbnail",
+      });
+    }
+  };
+
   /**
    * TODO: implement periodically caching to avoid loss
    */
@@ -67,9 +96,12 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
     // shouldn't update post content itself
     const content = transformHtmlContent(post.content ?? "", pictures);
     try {
-      await queue(() =>
-        PostProvider.crupdateById(post.id!, {...post, content})
-      );
+      await queue(async () => {
+        if (shouldUpdateRemoteThumbnail.current) {
+          await updateRemoteThumbnail();
+        }
+        await PostProvider.crupdateById(post.id!, {...post, content});
+      });
     } catch (e) {
       // TODO: handle error
     }
@@ -79,40 +111,51 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
     <div className="mx-auto my-0 flex h-full w-[75rem] justify-center">
       {/* paper */}
       <div className="h-full w-[50rem] space-y-2">
-        <div className="flex h-[3.75rem] items-center justify-between gap-3 font-medium">
-          <span className="text-2xl">Write</span>
-          <TitleInput
-            data-testid="post-title"
-            ref={titleInputRef}
-            defaultValue={post.title}
-          />
-          {!isExistent ? (
-            <div className="flex">
-              <span className="text-muted-foreground">
-                The post you're trying to edit does not exist
-              </span>
+        <ImageUpload
+          className="h-auto w-full cursor-pointer border-2 border-transparent bg-gray-300 text-xl font-bold text-gray-700 hover:border-gray-400"
+          uploadText="Upload post thumbnail"
+          defaultUri={post.thumbnail_url}
+          onUpload={(image) => {
+            // use ref cuz what we need is to bind the image with it then upload, ImageUpload already handles preview
+            thumbnailFileRef.current = image;
+            shouldUpdateRemoteThumbnail.current = true;
+          }}
+        />
+
+        <div className="flex flex-col space-y-2">
+          <div className="flex h-[3.75rem] items-center justify-between gap-3 font-medium">
+            <span className="text-2xl">Write</span>
+            <TitleInput
+              data-testid="post-title"
+              ref={titleInputRef}
+              defaultValue={post.title}
+            />
+            {!isExistent ? (
+              <div className="flex">
+                <span className="text-muted-foreground">
+                  The post you're trying to edit does not exist
+                </span>
+                <Button
+                  data-testid="create-new-post"
+                  className="inline-block"
+                  onClick={createNewPost}
+                  isLoading={isLoading}
+                >
+                  create new
+                </Button>
+              </div>
+            ) : (
               <Button
-                data-testid="create-new-post"
-                className="inline-block"
-                onClick={createNewPost}
+                data-testid="save-post"
+                disabled={!editor || isLoading}
+                onClick={save}
                 isLoading={isLoading}
               >
-                create new
+                Save
               </Button>
-            </div>
-          ) : (
-            <Button
-              data-testid="save-post"
-              disabled={!editor || isLoading}
-              onClick={save}
-              isLoading={isLoading}
-            >
-              Save
-            </Button>
-          )}
-        </div>
+            )}
+          </div>
 
-        <div>
           <DescriptionInput
             data-testid="post-description"
             name="description"
