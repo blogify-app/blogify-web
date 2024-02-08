@@ -7,7 +7,7 @@ import {User, UserPictureType} from "@/services/api/gen";
 
 export const ProfileEditPage: FC = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [picURL, setPicURL] = useState("");
+  const [picURL, setPicURL] = useState<string>();
   const params = useParams();
   const id = params.id;
 

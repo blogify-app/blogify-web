@@ -32,10 +32,11 @@ import {User, UserPictureType} from "@/services/api/gen";
 import {profileEditSchema} from "@/features/profile/schema";
 import {DEFAULT_QUERY, UserProvider} from "@/services/api";
 import {useToast} from "@/hooks";
+import {useNavigate} from "react-router-dom";
 
 interface ProfileEditProps {
   currentUser: User;
-  profilePic: string;
+  profilePic: string | undefined;
 }
 
 export const ProfileEdit: FC<ProfileEditProps> = ({
@@ -43,6 +44,7 @@ export const ProfileEdit: FC<ProfileEditProps> = ({
   profilePic,
 }: ProfileEditProps) => {
   const toast = useToast();
+  const navigate = useNavigate();
   const [imageSrc, setImageSrc] = useState<string>(profilePic ?? placeholder);
   const [currentBirthDate, setCurrentBirthDate] = useState(
     currentUser?.birth_date ? new Date(currentUser.birth_date) : new Date()
@@ -95,10 +97,7 @@ export const ProfileEdit: FC<ProfileEditProps> = ({
         categories: currentUser?.categories,
         is_followed: currentUser?.is_followed,
       });
-      toast({
-        variant: "default",
-        message: "Operation Succesclears",
-      });
+      navigate(`/users/${currentUser?.id}`);
     } catch (e) {
       toast({
         variant: "destructive",
