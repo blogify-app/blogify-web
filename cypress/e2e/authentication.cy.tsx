@@ -5,7 +5,7 @@ import {
 } from "../fixtures/firebase.mock.ts";
 import {whoami1} from "../fixtures/user.ts";
 
-describe("Authentication", () => {
+describe.only("Authentication", () => {
   it("should redirect when not logged in on protected route", () => {
     cy.visit("/authenticated");
 
@@ -28,6 +28,16 @@ describe("Authentication", () => {
     cy.get("@buttons").contains("Sign up").click();
     // displays sign in btn in /signup page
     cy.get("@buttons").contains("Sign in");
+  });
+
+  it.only("shoud show navigation header when authenticated", () => {
+    cy.loginThenRedirect("/posts");
+
+    cy.get("a").contains("BLOGIFY");
+
+    cy.contains("Home");
+    cy.contains("Profile");
+    cy.contains("Posts");
   });
 
   describe("Validation", () => {
