@@ -11,20 +11,23 @@ import {useAuthStore} from "@/features/auth";
 import {
   Comment as CommentType,
   Post as PostType,
+  ReactionStat,
   ReactionType,
 } from "@/services/api/gen";
 import {CommentProvider, PostProvider} from "@/services/api";
 import {useLoading, useToast} from "@/hooks";
 import blankUserProfile from "@/assets/noun-user-picture.svg";
+import {Button} from "@/components/common/button";
 
 export interface PostProps {
   post: PostType;
 }
 
 export const Post: FC<PostProps> = ({post}: PostProps) => {
-  const {queue} = useLoading("reacting_post");
+  const {queue, isLoading} = useLoading("reacting_post");
   const [comments, setComments] = useState<CommentType[]>([]);
   const [isRefresh, setIsRefresh] = useState(false);
+  const [reactions, setReactions] = useState<ReactionStat>(post.reactions!);
   const toast = useToast();
   const store = useAuthStore();
 
@@ -33,7 +36,12 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
   const reactToPost = async (pid: string, reactionType: ReactionType) => {
     try {
       await queue(() => PostProvider.reactToPostById(pid, reactionType));
-      window.location.replace(`/posts/${post.id}`);
+      if (reactionType === ReactionType.DISLIKE) {
+        setReactions((prev) => ({...prev, dislikes: prev.dislikes! + 1}));
+      }
+      if (reactionType === ReactionType.LIKE) {
+        setReactions((prev) => ({...prev, likes: prev.likes! + 1}));
+      }
     } catch (e) {
       toast({
         message: "You should connect or have an account",
@@ -134,7 +142,8 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
               <Reader>{post.content!}</Reader>
             </div>
             <div className="flex items-stretch justify-self-center">
-              <button
+              <Button
+                isLoading={isLoading}
                 data-testid="like"
                 className="mx-5 flex items-stretch justify-self-center"
                 onClick={() =>
@@ -143,10 +152,11 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
               >
                 <Icons.like data-testid="like-svg" />
                 <label data-testid="like-reaction" className="ml-2">
-                  {post.reactions?.likes}
+                  {reactions.likes}
                 </label>
-              </button>
-              <button
+              </Button>
+              <Button
+                isLoading={isLoading}
                 data-testid="dislike"
                 className="mx-5 flex items-stretch justify-self-center"
                 onClick={() =>
@@ -155,9 +165,9 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
               >
                 <Icons.dislike data-testid="dislike-svg" />
                 <label data-testid="dislike-reaction" className="ml-2">
-                  {post.reactions?.dislikes}
+                  {reactions.dislikes}
                 </label>
-              </button>
+              </Button>
             </div>
             <div data-testid="post-tags" className="mx-10 flex w-full py-10">
               <span className="mr-2">Tags : </span>
