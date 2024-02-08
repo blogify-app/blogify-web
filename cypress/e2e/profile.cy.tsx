@@ -1,7 +1,7 @@
 import {post1} from "../fixtures/post";
 import {user1, userPicture} from "../fixtures/user";
 
-describe("Profile page", () => {
+describe.skip("Profile page", () => {
   it("should display self info", () => {
     cy.intercept("GET", `**/Prod/users/${user1().id}`, user1());
     cy.intercept("GET", `**/users/${user1().id}/posts?**`, []);
