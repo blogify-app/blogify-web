@@ -6,13 +6,12 @@ import {Button} from "@/components/common/button.tsx";
 import {ImageUpload} from "@/components/common/image-upload.tsx";
 import {DescriptionInput, TitleInput} from "@/features/post";
 import {RichTextEditor} from "@/features/wisiwig";
-import {Post, PostPicture} from "@/services/api/gen";
+import {Category, Post, PostPicture} from "@/services/api/gen";
 import {DEFAULT_QUERY, PostProvider} from "@/services/api";
 import {transformHtmlContent} from "@/features/post/lib";
 import {useLoading, useToast} from "@/hooks";
 import {CategoryProvider} from "@/services/api/provider/category_provider";
 import {CategoryOption} from "@/features/post/types";
-import {dataToOption} from "@/features/post/utils";
 
 export interface WritePostProps {
   post: Post;
@@ -25,7 +24,7 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
 
   const [editor, setEditor] = useState<Editor | null>(null);
   const [pictures, setPictures] = useState<PostPicture[]>([]);
-  const [categories, setCategories] = useState<CategoryOption[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const thumbnailFileRef = useRef<File | null>(null);
   const titleInputRef = useRef<HTMLInputElement>(null);
@@ -55,7 +54,10 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
     const fetchCategories = async () => {
       try {
         const categories = await CategoryProvider.getMany();
-        const options = dataToOption(categories);
+        const options = categories.map((option) => ({
+          value: option.id,
+          label: option.label,
+        }));
         setCategories(options);
       } catch (e) {
         console.error(e);
@@ -128,8 +130,14 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
     }
   }, [updateRemoteThumbnail, syncPost, post, toast]);
 
-  const handleChange = (selectedOptions: CategoryOption[]) => {
-    selectedCategoriesRef.current = dataToOption(selectedOptions);
+  // type any due to not iterable types of selectedOptions for ts
+  const handleChange = (selectedOptions: any) => {
+    selectedCategoriesRef.current = selectedOptions.map(
+      (category: CategoryOption) => ({
+        id: category.value,
+        label: category.label,
+      })
+    );
   };
 
   return (

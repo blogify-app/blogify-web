@@ -1,7 +1,4 @@
 // theory : https://stackoverflow.com/questions/4216752/anyone-having-any-leads-on-a-reading-time-algorithm
-import {CategoryOption} from "@/features/post/types";
-import {Category} from "@/services/api/gen";
-
 export const calculateReadDuration = (text = "") => {
   // Get the total word count
   const wordCount = text.split(" ").length;
@@ -15,18 +12,4 @@ export const calculateReadDuration = (text = "") => {
     minutes += 1;
   }
   return {minutes, seconds};
-};
-
-export const optionToData = (options: CategoryOption[]): Category[] => {
-  return options.map((option) => ({
-    id: option.value,
-    label: option.label,
-  }));
-};
-
-export const dataToOption = (categories: Category[]): CategoryOption[] => {
-  return categories.map((category) => ({
-    value: category.id,
-    label: category.label,
-  }));
 };
