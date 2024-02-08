@@ -66,15 +66,9 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
     // FIXME: rename to thumbnail_id instead
     post.thumbnail_url ||= nanoid();
     try {
-      const picture = await PostProvider.uploadPicture(
-        post.thumbnail_url!,
-        thumbnailFileRef.current!,
-        {
-          ...DEFAULT_QUERY,
-          params: {
-            pid: post.id!,
-          },
-        }
+      const picture = await PostProvider.putThumbnail(
+        post.id!,
+        thumbnailFileRef.current!
       );
       post.thumbnail_url = picture.url;
       shouldUpdateRemoteThumbnail.current = false;
