@@ -31,7 +31,7 @@ import {cn} from "@/lib/utils.ts";
 import {User, UserPictureType} from "@/services/api/gen";
 import {profileEditSchema} from "@/features/profile/schema";
 import {DEFAULT_QUERY, UserProvider} from "@/services/api";
-import {useToast} from "@/components/shadcn-ui/use-toast";
+import {useToast} from "@/hooks";
 
 interface ProfileEditProps {
   currentUser: User;
@@ -95,15 +95,11 @@ export const ProfileEdit: FC<ProfileEditProps> = ({
         categories: currentUser?.categories,
         is_followed: currentUser?.is_followed,
       });
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
       toast({
-        variant: "outline",
+        variant: "default",
         message: "Operation Succesclears",
       });
     } catch (e) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
       toast({
         variant: "destructive",
         message: "Unable to update user informations",
