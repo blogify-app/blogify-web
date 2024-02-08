@@ -52,10 +52,10 @@ describe("Post", () => {
       cy.getByTestid("post-banner").should("be.visible");
       cy.getByTestid("post-content").should("be.visible");
 
-      cy.getByTestid("post-tags").as("tags");
-      cy.get("@tags").should("be.visible");
+      cy.getByTestid("post-tags").should("be.visible");
 
       cy.getByTestid("user-details").contains("See more about this author");
+
       cy.getByTestid("user-profile-picture").should("be.visible");
     });
 
