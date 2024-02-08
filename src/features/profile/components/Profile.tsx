@@ -8,13 +8,13 @@ import {useAuthStore} from "@/features/auth";
 import {Post, User, UserPicture} from "@/services/api/gen";
 import defaultPic from "@/assets/noun-user-picture.svg";
 
-export interface UserProps {
+export interface ProfileProps {
   pic: UserPicture | undefined;
   user: User;
   posts: Post[];
 }
 
-export const Profile: FC<UserProps> = ({pic, user, posts}) => {
+export const Profile: FC<ProfileProps> = ({pic, user, posts}) => {
   const authStore = useAuthStore();
   const navigate = useNavigate();
 
@@ -31,25 +31,19 @@ export const Profile: FC<UserProps> = ({pic, user, posts}) => {
           />
         </div>
         <div>
-          <h1 data-testid="user-fullname" className="text-3xl font-bold">
+          <h1 data-testid="display-name" className="text-3xl font-bold">
             {user?.first_name || ""} {user?.last_name}
           </h1>
 
-          <p data-testid="user-name" className="text-light text-sm">
+          <p data-testid="username" className="text-light text-sm">
             {"@" + user?.username}
           </p>
 
-          <p
-            data-testid="user-bio"
-            className="text-light text-xs text-gray-500"
-          >
+          <p data-testid="bio" className="text-light text-xs text-gray-500">
             {user?.bio}
           </p>
 
-          <p
-            data-testid="user-about"
-            className="text-light text-xs text-gray-500"
-          >
+          <p data-testid="about" className="text-light text-xs text-gray-500">
             {user?.about}
           </p>
           <p className="text-light text-sm">Find out more about this channel</p>

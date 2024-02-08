@@ -7,21 +7,17 @@ describe("Profile page", () => {
 
     // self
     cy.intercept("GET", `**/users/${user1().id}`, user1());
-    cy.intercept("GET", `**/users/${user1().id}/posts?page=1&page_size=50`, [
-      post1(),
-    ]);
+    cy.intercept("GET", `**/users/${user1().id}/posts?**`, []);
     cy.intercept(
       "GET",
       `**/users/${user1()?.id}/pictures?type=PROFILE`,
       userPicture()
     );
 
-    cy.getByTestid("user-fullname").contains("Blogify worker");
-    cy.getByTestid("user-name").contains("John Doe");
-    cy.getByTestid("user-bio").contains("Lorem Bio");
-    cy.getByTestid("user-about").contains(
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Molestias totam recusandae a reiciendis quas ducimus at tempora neque quasi eveniet, magni deleniti sapiente voluptas tenetur labore ad quod vero dignissimos?"
-    );
+    cy.contains(`${user1().first_name} ${user1().last_name}`);
+    cy.getByTestid("username").contains(user1().username!);
+    cy.getByTestid("bio").contains(user1().bio!);
+    cy.getByTestid("about").contains(user1().about!);
 
     cy.getByTestid("customize-channel").should("be.visible");
     cy.getByTestid("create-post").click();
@@ -36,28 +32,23 @@ describe("Profile page", () => {
   it("should display other user info", () => {
     cy.visit(`/users/${user1().id}`);
 
-    cy.intercept("GET", `**/users/${user1()?.id}`, user1());
-    cy.intercept("GET", `**/users/${user1()?.id}/posts?page=1&page_size=50`, [
-      post1(),
-    ]);
+    cy.intercept("GET", `**/users/${user1().id}`, user1());
+    cy.intercept("GET", `**/users/${user1().id}/posts?**`, [post1()]);
     cy.intercept(
       "GET",
       `**/users/${user1()?.id}/pictures?type=PROFILE`,
       userPicture()
     );
 
-    cy.getByTestid("user-fullname").contains("Blogify worker");
-    cy.getByTestid("user-name").contains("John Doe");
-    cy.getByTestid("user-bio").contains("Lorem Bio");
-    cy.getByTestid("user-about").contains(
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Molestias totam recusandae a reiciendis quas ducimus at tempora neque quasi eveniet, magni deleniti sapiente voluptas tenetur labore ad quod vero dignissimos?"
-    );
+    cy.contains(`${user1().first_name} ${user1().last_name}`);
+    cy.getByTestid("username").contains(user1().username!);
+    cy.getByTestid("bio").contains(user1().bio!);
+    cy.getByTestid("about").contains(user1().about!);
 
-    cy.getByTestid("post-title").contains(
-      "Lorem ipsum dolor sit amet consectetur"
-    );
-    cy.getByTestid("post-description").contains("Lorem Lorem Description");
-    cy.getByTestid("author-info").contains("Blogify worker");
+    cy.getByTestid("custom-card").as("PostCard");
+    cy.get("@PostCard").contains(user1().last_name!);
+    cy.get("@PostCard").contains("Lorem ipsum dolor sit amet consectetur");
+    cy.get("@PostCard").contains("Lorem Lorem Description");
 
     cy.should("not.contain.text", "Manage contents");
     cy.should("not.contain.text", "Customize channel");
