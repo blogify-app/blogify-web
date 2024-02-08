@@ -39,6 +39,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         type="file"
       />
       <label
+        data-testid="image-upload"
         htmlFor="ImageUploadInput"
         className={cn("flex items-center justify-center", className)}
       >
