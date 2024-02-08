@@ -1,4 +1,4 @@
-import {FC, useEffect, useRef, useState} from "react";
+import {FC, useCallback, useEffect, useRef, useState} from "react";
 import {Editor} from "tinymce";
 import {nanoid} from "nanoid";
 import {Button} from "@/components/common/button.tsx";
@@ -46,11 +46,11 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
   }, [isExistent, post]);
 
   // bind title/content to the post object
-  const syncPost = () => {
+  const syncPost = useCallback(() => {
     post.title = titleInputRef.current?.value || "";
     post.description = descriptionInputRef.current?.value || "";
     post.content = editor?.getContent() || "";
-  };
+  }, [post, editor]);
 
   const createNewPost = async () => {
     try {
@@ -62,7 +62,7 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
     }
   };
 
-  const updateRemoteThumbnail = async () => {
+  const updateRemoteThumbnail = useCallback(async () => {
     // FIXME: rename to thumbnail_id instead
     post.thumbnail_url ||= nanoid();
     try {
@@ -77,7 +77,6 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
         }
       );
       post.thumbnail_url = picture.url;
-      console.warn("up_post", post);
       shouldUpdateRemoteThumbnail.current = false;
     } catch (e) {
       toast({
@@ -85,12 +84,12 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
         message: "Unable to upload post thumbnail",
       });
     }
-  };
+  }, [post.thumbnail_url, post.id, toast]);
 
   /**
    * TODO: implement periodically caching to avoid loss
    */
-  const save = async () => {
+  const save = useCallback(async () => {
     syncPost();
     post.updated_at = new Date();
     // shouldn't update post content itself
@@ -104,8 +103,12 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
       });
     } catch (e) {
       // TODO: handle error
+      toast({
+        variant: "destructive",
+        message: "Unable to save post state",
+      });
     }
-  };
+  }, [updateRemoteThumbnail, syncPost, post, toast]);
 
   return (
     <div className="mx-auto my-0 flex h-full w-[75rem] justify-center">
