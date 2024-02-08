@@ -60,7 +60,7 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
       }
     };
     void fetch();
-  }, [post, isRefresh]);
+  }, [post, isRefresh, reactToPost]);
 
   const {author} = post;
 
