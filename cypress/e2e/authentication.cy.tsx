@@ -5,7 +5,7 @@ import {
 } from "../fixtures/firebase.mock.ts";
 import {whoami1} from "../fixtures/user.ts";
 
-describe.only("Authentication", () => {
+describe("Authentication", () => {
   it("should redirect when not logged in on protected route", () => {
     cy.visit("/authenticated");
 
@@ -30,7 +30,7 @@ describe.only("Authentication", () => {
     cy.get("@buttons").contains("Sign in");
   });
 
-  it.only("shoud show navigation header when authenticated", () => {
+  it("shoud show navigation header when authenticated", () => {
     cy.loginThenRedirect("/posts");
 
     cy.get("a").contains("BLOGIFY");
