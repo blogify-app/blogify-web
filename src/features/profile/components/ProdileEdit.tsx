@@ -82,10 +82,18 @@ export const ProfileEdit: FC<ProfileEditProps> = ({
         id: userInfos?.id,
         last_name: userInfos?.last_name,
         first_name: userInfos?.first_name,
+        username: userInfos?.username,
         birth_date: currentBirthDate.toISOString(),
         bio: userInfos?.bio,
         about: userInfos?.about,
         sex: userInfos?.sex,
+        email: currentUser?.email,
+        photo_url: currentUser?.photo_url,
+        profile_banner_url: currentUser?.profile_banner_url,
+        status: currentUser?.status,
+        entrance_datetime: currentUser?.entrance_datetime,
+        categories: currentUser?.categories,
+        is_followed: currentUser?.is_followed,
       });
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
