@@ -54,7 +54,7 @@ export const Profile: FC<ProfileProps> = ({user}) => {
       } catch (e) {
         toast({
           variant: "destructive",
-          message: "Unable to fetch user posts",
+          message: "Unable to fetch user profile",
         });
       }
     };
@@ -78,7 +78,8 @@ export const Profile: FC<ProfileProps> = ({user}) => {
             <div className="mr-4 h-full text-3xl font-bold">
               {user.first_name} {user.last_name}
             </div>
-            <Button
+            {
+              isSelf &&   <Button
               data-testid="customize-channel"
               className="my-1 mr-2 rounded-[15px] hover:bg-gray-600"
               onClick={() => navigate(`/users/edit/${user?.id}`)}
@@ -98,6 +99,7 @@ export const Profile: FC<ProfileProps> = ({user}) => {
                 />
               </svg>
             </Button>
+            }
             <Button
               data-testid="customize-channel"
               className="my-1 rounded-[15px] hover:bg-gray-600"
