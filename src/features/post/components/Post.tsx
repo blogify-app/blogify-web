@@ -11,6 +11,7 @@ import {useAuthStore} from "@/features/auth";
 import {
   Comment as CommentType,
   Post as PostType,
+  ReactionStat,
   ReactionType,
 } from "@/services/api/gen";
 import {CommentProvider, PostProvider} from "@/services/api";
@@ -19,9 +20,10 @@ import blankUserProfile from "@/assets/noun-user-picture.svg";
 
 export interface PostProps {
   post: PostType;
+  reactions: ReactionStat | undefined
 }
 
-export const Post: FC<PostProps> = ({post}: PostProps) => {
+export const Post: FC<PostProps> = ({post, reactions}: PostProps) => {
   const {queue} = useLoading("reacting_post");
   const [comments, setComments] = useState<CommentType[]>([]);
   const [isRefresh, setIsRefresh] = useState(false);
@@ -142,7 +144,7 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
               >
                 <Icons.like data-testid="like-svg" />
                 <label data-testid="like-reaction" className="ml-2">
-                  {post.reactions?.likes}
+                  {reactions?.likes}
                 </label>
               </button>
               <button
@@ -154,7 +156,7 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
               >
                 <Icons.dislike data-testid="dislike-svg" />
                 <label data-testid="dislike-reaction" className="ml-2">
-                  {post.reactions?.dislikes}
+                  {reactions?.dislikes}
                 </label>
               </button>
             </div>

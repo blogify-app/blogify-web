@@ -1,12 +1,13 @@
 import {FC, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {Post} from "@/features/post";
-import {Post as PostType} from "@/services/api/gen";
+import {Post as PostType, ReactionStat} from "@/services/api/gen";
 import {PostProvider} from "@/services/api";
 import {useToast} from "@/hooks";
 
 export const PostPage: FC = () => {
   const [post, setPost] = useState<PostType | null>(null);
+  const [reactions, setReactions] = useState<ReactionStat | undefined>();
 
   const params = useParams();
   const toast = useToast();
@@ -18,6 +19,7 @@ export const PostPage: FC = () => {
       try {
         const post = await PostProvider.getById(id);
         setPost(post);
+        setReactions(post.reactions);
       } catch (_e) {
         toast({
           message: "Could not get the post content.",
@@ -30,5 +32,5 @@ export const PostPage: FC = () => {
 
   // TODO: loading .. or redirect
   if (!post) return null;
-  return <Post post={post} />;
+  return <Post post={post} reactions={reactions}/>;
 };
