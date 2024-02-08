@@ -28,9 +28,9 @@ import {
   RadioGroupItem,
 } from "@/components/shadcn-ui/radio-group.tsx";
 import {cn} from "@/lib/utils.ts";
-import {User} from "@/services/api/gen";
+import {User, UserPictureType} from "@/services/api/gen";
 import {profileEditSchema} from "@/features/profile/schema";
-import {UserProvider} from "@/services/api";
+import {DEFAULT_QUERY, UserProvider} from "@/services/api";
 
 interface ProfileEditProps {
   currentUser: User;
@@ -68,10 +68,9 @@ export const ProfileEdit: FC<ProfileEditProps> = ({
       const imageUrl = URL.createObjectURL(file);
       setImageSrc(imageUrl);
       await UserProvider.putPicture(currentUser?.id ?? "", file, {
-        page: 1,
-        pageSize: 1,
+        ...DEFAULT_QUERY,
         params: {
-          type: "PROFILE",
+          type: UserPictureType.PROFILE,
         },
       });
     }

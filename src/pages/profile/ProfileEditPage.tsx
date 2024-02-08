@@ -2,8 +2,8 @@ import {FC, useEffect, useState} from "react";
 import {Layout, AnonymousHeader} from "@/layout";
 import {ProfileEdit} from "@/features/profile";
 import {useParams} from "react-router-dom";
-import {UserProvider} from "@/services/api";
-import {User} from "@/services/api/gen";
+import {DEFAULT_QUERY, UserProvider} from "@/services/api";
+import {User, UserPictureType} from "@/services/api/gen";
 
 export const ProfileEditPage: FC = () => {
   const [user, setUser] = useState<User>({});
@@ -27,10 +27,9 @@ export const ProfileEditPage: FC = () => {
       if (!id) return;
       try {
         const profilePic = await UserProvider.getPicture(id, {
-          page: 1,
-          pageSize: 1,
+          ...DEFAULT_QUERY,
           params: {
-            type: "PROFILE",
+            type: UserPictureType.PROFILE,
           },
         });
         setPicURL(profilePic.url ?? "");
