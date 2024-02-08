@@ -172,9 +172,9 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
             <div data-testid="post-tags" className="mx-10 flex w-full py-10">
               <span className="mr-2">Tags : </span>
               <div className="flex justify-evenly">
-                <Badge className="mx-1">Lorem</Badge>
-                <Badge className="mx-1">Ipsum</Badge>
-                <Badge className="mx-1">Hello</Badge>
+                {post.categories?.map((category) => (
+                <Badge className="mx-1">{category.label}</Badge>
+                ))}
               </div>
             </div>
             <div className="mx-10">
