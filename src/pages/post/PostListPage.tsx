@@ -1,5 +1,5 @@
 import {FC, useEffect, useState} from "react";
-import {AnonymousHeader, Layout} from "@/layout";
+import {Layout, NavBar} from "@/layout";
 import {useToast} from "@/hooks";
 import {PostCard} from "@/features/post";
 import {PostProvider} from "@/services/api";
@@ -32,7 +32,7 @@ export const PostListPage: FC = () => {
   }, [currentPage]);
 
   return (
-    <Layout header={<AnonymousHeader />}>
+    <Layout header={<NavBar />}>
       <div className="container mb-5">
         <h1 className="px-1 py-5 text-xl font-semibold">Recent blog posts</h1>
         <div className="mb-7 grid grid-cols-2 gap-4">

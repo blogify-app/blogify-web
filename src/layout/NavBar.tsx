@@ -1,6 +1,7 @@
-import {FC} from "react";
+import {FC, memo} from "react";
 import {Link} from "react-router-dom";
 import {Icon} from "@iconify/react";
+import {useAuthStore} from "@/features/auth";
 import {Button} from "@/components/shadcn-ui/button";
 import {
   Avatar,
@@ -15,13 +16,57 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/shadcn-ui/navigation-menu";
 
-// TODO: test this
-// TODO: move else where, e.g: layout dir
-export const NavBar: FC = () => {
+export interface AnonymousHeaderProps {
+  page?: "sign_up" | "sign_in";
+}
+
+const AnonymousHeader: FC<AnonymousHeaderProps> = ({page}) => {
+  return (
+    <div className="mx-auto my-0 flex h-full w-[95%] items-center justify-between bg-white">
+      <div className="logo w-30 h-15 col-span-1">
+        <a
+          href="#"
+          data-testid="blogify-logo"
+          className="text-4xl font-bold tracking-tight"
+        >
+          BLOGIFY
+        </a>
+      </div>
+      <div data-testid="auth-button" className="space-x-3">
+        {page === "sign_up" && (
+          <Button variant="outline" size="lg" className="h-9" asChild>
+            <Link to="/login">Sign in</Link>
+          </Button>
+        )}
+        {page === "sign_in" && (
+          <Button size="lg" className="h-9" asChild>
+            <Link to="/signup">Sign up</Link>
+          </Button>
+        )}
+
+        {!page && (
+          <>
+            <Button variant="outline" size="lg" className="h-9" asChild>
+              <Link to="/login">Login</Link>
+            </Button>
+
+            <Button size="lg" className="h-9" asChild>
+              <Link to="/signup">Sign up</Link>
+            </Button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const AuthenticatedHeader: FC = () => {
+  const {user} = useAuthStore();
+
   return (
     <div
       className="grid h-full w-full grid-cols-10 items-center gap-3 bg-white px-5"
-      data-testid="Navbar"
+      data-testid="authenticated-header"
     >
       <div className="logo w-30 h-15 col-span-1">
         <Link
@@ -56,8 +101,7 @@ export const NavBar: FC = () => {
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem className="mx-4 w-40">
-              {/* TODO: change this to the profile link */}
-              <Link to="/">
+              <Link to={`/users/${user?.id}`}>
                 <NavigationMenuLink
                   data-testid="profile-menu"
                   className={navigationMenuTriggerStyle()}
@@ -70,8 +114,7 @@ export const NavBar: FC = () => {
         </NavigationMenu>
       </div>
       <div className="col-span-1 flex justify-evenly align-middle">
-        {/* TODO: change this to the profile link */}
-        <Link to="/">
+        <Link to={`/users/${user?.id}`}>
           <Avatar>
             <AvatarImage data-testid="avatar" src="random_link" />
             <AvatarFallback data-testid="avatar">
@@ -90,3 +133,11 @@ export const NavBar: FC = () => {
     </div>
   );
 };
+
+const NavBarComponent: FC<AnonymousHeaderProps> = ({page}) => {
+  const {user} = useAuthStore();
+
+  return user ? <AuthenticatedHeader /> : <AnonymousHeader page={page} />;
+};
+
+export const NavBar = memo(NavBarComponent);

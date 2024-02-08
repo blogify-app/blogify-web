@@ -30,6 +30,16 @@ describe("Authentication", () => {
     cy.get("@buttons").contains("Sign in");
   });
 
+  it("shoud show navigation header when authenticated", () => {
+    cy.loginThenRedirect("/posts");
+
+    cy.get("a").contains("BLOGIFY");
+
+    cy.contains("Home");
+    cy.contains("Profile");
+    cy.contains("Posts");
+  });
+
   describe("Validation", () => {
     it("should validate login form", () => {
       cy.visit("/login");
