@@ -33,7 +33,6 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
   const reactToPost = async (pid: string, reactionType: ReactionType) => {
     try {
       await queue(() => PostProvider.reactToPostById(pid, reactionType));
-      window.location.replace(`/posts/${post.id}`);
     } catch (e) {
       toast({
         message: "You should connect or have an account",
