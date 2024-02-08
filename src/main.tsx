@@ -8,6 +8,7 @@ import {PostListPage, PostPage, WritePostPage} from "@/pages/post";
 import {Authenticated} from "@/features/auth";
 import "./index.css";
 import {ProfilePage} from "./pages/profile/ProfilePage";
+import {ProfileEditPage} from "@/pages/profile";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const ROUTER = createBrowserRouter([
@@ -46,6 +47,14 @@ const ROUTER = createBrowserRouter([
   {
     path: "/users/:id",
     element: <ProfilePage />,
+  },
+  {
+    path: "/users/edit/:id",
+    element: (
+      <Authenticated>
+        <ProfileEditPage />
+      </Authenticated>
+    ),
   },
 ]);
 
