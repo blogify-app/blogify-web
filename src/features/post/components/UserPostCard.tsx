@@ -1,14 +1,16 @@
 import {FC} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import {Post, User} from "@/services/api/gen";
+import {Post} from "@/services/api/gen";
+import {formatDate} from "@/common/utils";
+import {Icons} from "@/components/common/icons";
 
-type UserActivity = {
-  user: User | undefined;
+type UserPostCardProps = {
+  isSelf: boolean;
   post: Post;
 };
 
 // TODO: ban from common and rename!!!
-export const CustomCard: FC<UserActivity> = ({post}) => {
+export const UserPostCard: FC<UserPostCardProps> = ({post, isSelf}) => {
   const navigate = useNavigate();
 
   return (
@@ -33,12 +35,23 @@ export const CustomCard: FC<UserActivity> = ({post}) => {
         )}
       </Link>
       <div className="p-5">
-        <p className="text-xs text-red-800">
-          <span>
-            {post?.author?.first_name + " " + post?.author?.last_name}
-          </span>
-          {" - "}
-          <span>{post?.creation_datetime?.toString().slice(0, 10)}</span>
+        <p className="flex justify-between text-xs text-red-800">
+          <div>
+            <span>
+              {post?.author?.first_name + " " + post?.author?.last_name}
+            </span>
+            {" - "}
+            <span>
+              {formatDate(post?.creation_datetime?.toString() as string)}
+            </span>
+          </div>
+          {isSelf && (
+            <div>
+              <Link to={`/posts/write/${post?.id}`}>
+                <Icons.editPost />
+              </Link>
+            </div>
+          )}
         </p>
         <h5
           data-testid="title"
