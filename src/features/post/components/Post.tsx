@@ -173,7 +173,7 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
               <span className="mr-2">Tags : </span>
               <div className="flex justify-evenly">
                 {post.categories?.map((category, index) => (
-                  <Badge data-testid={`category-${index+1}`} className="mx-1">
+                  <Badge data-testid={`category-${index + 1}`} className="mx-1">
                     {category.label}
                   </Badge>
                 ))}
