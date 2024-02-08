@@ -1,4 +1,5 @@
 import {FC, useCallback, useEffect, useRef, useState} from "react";
+import Select from "react-select";
 import {Editor} from "tinymce";
 import {nanoid} from "nanoid";
 import {Button} from "@/components/common/button.tsx";
@@ -9,6 +10,9 @@ import {Post, PostPicture} from "@/services/api/gen";
 import {DEFAULT_QUERY, PostProvider} from "@/services/api";
 import {transformHtmlContent} from "@/features/post/lib";
 import {useLoading, useToast} from "@/hooks";
+import {CategoryProvider} from "@/services/api/provider/category_provider";
+import {CategoryOption} from "@/features/post/types";
+import {dataToOption} from "@/features/post/utils";
 
 export interface WritePostProps {
   post: Post;
@@ -21,10 +25,12 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
 
   const [editor, setEditor] = useState<Editor | null>(null);
   const [pictures, setPictures] = useState<PostPicture[]>([]);
+  const [categories, setCategories] = useState<CategoryOption[]>([]);
 
   const thumbnailFileRef = useRef<File | null>(null);
   const titleInputRef = useRef<HTMLInputElement>(null);
   const descriptionInputRef = useRef<HTMLTextAreaElement>(null);
+  const selectedCategoriesRef = useRef<CategoryOption[]>([]);
 
   const shouldUpdateRemoteThumbnail = useRef(false);
 
@@ -45,10 +51,28 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
     void fetchPictures();
   }, [isExistent, post]);
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categories = await CategoryProvider.getMany();
+        const options = dataToOption(categories);
+        setCategories(options);
+      } catch (e) {
+        console.error(e);
+        toast({
+          variant: "destructive",
+          message: "unable to get post " + post.id + " pictures",
+        });
+      }
+    };
+    void fetchCategories();
+  }, [post]);
+
   // bind title/content to the post object
   const syncPost = useCallback(() => {
     post.title = titleInputRef.current?.value || "";
     post.description = descriptionInputRef.current?.value || "";
+    post.categories = selectedCategoriesRef.current || [];
     post.content = editor?.getContent() || "";
   }, [post, editor]);
 
@@ -103,6 +127,10 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
       });
     }
   }, [updateRemoteThumbnail, syncPost, post, toast]);
+
+  const handleChange = (selectedOptions: CategoryOption[]) => {
+    selectedCategoriesRef.current = dataToOption(selectedOptions);
+  };
 
   return (
     <div className="mx-auto my-0 flex h-full w-[75rem] justify-center">
@@ -187,6 +215,7 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
           >
             {post.content ?? ""}
           </RichTextEditor>
+          <Select isMulti options={categories} onChange={handleChange} />
         </div>
       </div>
     </div>

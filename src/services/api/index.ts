@@ -5,6 +5,7 @@ import {
   CommentsApi,
   HealthApi,
   SecurityApi,
+  CategoryApi,
 } from "@/services/api/gen";
 import {AuthProvider} from "@/services/security";
 
@@ -17,6 +18,8 @@ export const postingApi = () => new PostingApi(AuthProvider.getAuthConf());
 export const followingApi = () => new FollowingApi(AuthProvider.getAuthConf());
 
 export const commentApi = () => new CommentsApi(AuthProvider.getAuthConf());
+
+export const categoryApi = () => new CategoryApi(AuthProvider.getAuthConf());
 
 export const healthApi = () => new HealthApi();
 
