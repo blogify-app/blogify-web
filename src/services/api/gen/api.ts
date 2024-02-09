@@ -743,6 +743,37 @@ export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus];
 /**
  *
  * @export
+ * @interface UserViewOnePost
+ */
+export interface UserViewOnePost {
+  /**
+   *
+   * @type {string}
+   * @memberof UserViewOnePost
+   */
+  id?: string;
+  /**
+   *
+   * @type {Date}
+   * @memberof UserViewOnePost
+   */
+  creation_datetime?: Date;
+  /**
+   *
+   * @type {User}
+   * @memberof UserViewOnePost
+   */
+  user?: User;
+  /**
+   *
+   * @type {Post}
+   * @memberof UserViewOnePost
+   */
+  post?: Post;
+}
+/**
+ *
+ * @export
  * @interface Whoami
  */
 export interface Whoami {
@@ -983,16 +1014,18 @@ export const CategoryApiFp = function (configuration?: Configuration) {
     > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.crupdateCategories(category, options);
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["CategoryApi.crupdateCategories"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["CategoryApi.crupdateCategories"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -1014,16 +1047,18 @@ export const CategoryApiFp = function (configuration?: Configuration) {
         label,
         options
       );
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["CategoryApi.getCategories"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["CategoryApi.getCategories"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
   };
 };
@@ -1450,16 +1485,18 @@ export const CommentsApiFp = function (configuration?: Configuration) {
           comment,
           options
         );
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["CommentsApi.crupdateCommentById"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["CommentsApi.crupdateCommentById"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -1478,16 +1515,18 @@ export const CommentsApiFp = function (configuration?: Configuration) {
     > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.deleteCommentById(pid, cid, options);
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["CommentsApi.deleteCommentById"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["CommentsApi.deleteCommentById"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -1509,16 +1548,18 @@ export const CommentsApiFp = function (configuration?: Configuration) {
         cid,
         options
       );
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["CommentsApi.getCommentById"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["CommentsApi.getCommentById"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -1544,16 +1585,18 @@ export const CommentsApiFp = function (configuration?: Configuration) {
           pageSize,
           options
         );
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["CommentsApi.getCommentsByPostId"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["CommentsApi.getCommentsByPostId"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -1579,16 +1622,18 @@ export const CommentsApiFp = function (configuration?: Configuration) {
           type,
           options
         );
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["CommentsApi.reactToCommentById"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["CommentsApi.reactToCommentById"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
   };
 };
@@ -2080,16 +2125,18 @@ export const FollowingApiFp = function (configuration?: Configuration) {
         uid,
         options
       );
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["FollowingApi.followUserById"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["FollowingApi.followUserById"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -2118,16 +2165,18 @@ export const FollowingApiFp = function (configuration?: Configuration) {
           namePost,
           options
         );
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["FollowingApi.getFollowedByUserId"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["FollowingApi.getFollowedByUserId"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -2153,16 +2202,18 @@ export const FollowingApiFp = function (configuration?: Configuration) {
           name,
           options
         );
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["FollowingApi.getSelfFollowers"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["FollowingApi.getSelfFollowers"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -2179,16 +2230,18 @@ export const FollowingApiFp = function (configuration?: Configuration) {
     > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.unfollowUserById(uid, options);
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["FollowingApi.unfollowUserById"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["FollowingApi.unfollowUserById"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
   };
 };
@@ -2422,16 +2475,17 @@ export const HealthApiFp = function (configuration?: Configuration) {
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>
     > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.ping(options);
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["HealthApi.ping"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["HealthApi.ping"]?.[localVarOperationServerIndex]
+          ?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
   };
 };
@@ -2940,19 +2994,86 @@ export const PostingApiAxiosParamCreator = function (
     },
     /**
      *
+     * @summary Return a list of posts suggested by an AI.
+     * @param {number} page
+     * @param {number} pageSize
+     * @param {string} [categories] Filters by coma-separated categories.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSuggestedPosts: async (
+      page: number,
+      pageSize: number,
+      categories?: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'page' is not null or undefined
+      assertParamExists("getSuggestedPosts", "page", page);
+      // verify required parameter 'pageSize' is not null or undefined
+      assertParamExists("getSuggestedPosts", "pageSize", pageSize);
+      const localVarPath = `/suggestions/posts`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "GET",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication BearerAuth required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      if (page !== undefined) {
+        localVarQueryParameter["page"] = page;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter["page_size"] = pageSize;
+      }
+
+      if (categories !== undefined) {
+        localVarQueryParameter["categories"] = categories;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
      * @summary Submit post thumbnail.
      * @param {string} pid
-     * @param {File} [file]
+     * @param {File} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     putPostThumbnail: async (
       pid: string,
-      file?: File,
+      body: File,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'pid' is not null or undefined
       assertParamExists("putPostThumbnail", "pid", pid);
+      // verify required parameter 'body' is not null or undefined
+      assertParamExists("putPostThumbnail", "body", body);
       const localVarPath = `/posts/{pid}/thumbnail`.replace(
         `{${"pid"}}`,
         encodeURIComponent(String(pid))
@@ -2971,19 +3092,12 @@ export const PostingApiAxiosParamCreator = function (
       };
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
-      const localVarFormParams = new ((configuration &&
-        configuration.formDataCtor) ||
-        FormData)();
 
       // authentication BearerAuth required
       // http bearer authentication required
       await setBearerAuthToObject(localVarHeaderParameter, configuration);
 
-      if (file !== undefined) {
-        localVarFormParams.append("file", file as any);
-      }
-
-      localVarHeaderParameter["Content-Type"] = "multipart/form-data";
+      localVarHeaderParameter["Content-Type"] = "application/octet-stream";
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
@@ -2993,7 +3107,11 @@ export const PostingApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      localVarRequestOptions.data = localVarFormParams;
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        body,
+        localVarRequestOptions,
+        configuration
+      );
 
       return {
         url: toPathString(localVarUrlObj),
@@ -3150,16 +3268,18 @@ export const PostingApiFp = function (configuration?: Configuration) {
     > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.crupdatePostById(pid, post, options);
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["PostingApi.crupdatePostById"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["PostingApi.crupdatePostById"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -3178,16 +3298,18 @@ export const PostingApiFp = function (configuration?: Configuration) {
         pid,
         options
       );
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["PostingApi.deletePostById"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["PostingApi.deletePostById"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -3210,16 +3332,18 @@ export const PostingApiFp = function (configuration?: Configuration) {
           picId,
           options
         );
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["PostingApi.deletePostPictureById"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["PostingApi.deletePostPictureById"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -3239,16 +3363,18 @@ export const PostingApiFp = function (configuration?: Configuration) {
     > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.getAllPostPictureById(pid, options);
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["PostingApi.getAllPostPictureById"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["PostingApi.getAllPostPictureById"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -3267,16 +3393,18 @@ export const PostingApiFp = function (configuration?: Configuration) {
         pid,
         options
       );
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["PostingApi.getPostById"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["PostingApi.getPostById"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -3295,16 +3423,18 @@ export const PostingApiFp = function (configuration?: Configuration) {
     > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.getPostPictureById(pid, picId, options);
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["PostingApi.getPostPictureById"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["PostingApi.getPostPictureById"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -3329,16 +3459,18 @@ export const PostingApiFp = function (configuration?: Configuration) {
         categories,
         options
       );
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["PostingApi.getPosts"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["PostingApi.getPosts"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -3364,44 +3496,85 @@ export const PostingApiFp = function (configuration?: Configuration) {
           pageSize,
           options
         );
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["PostingApi.getPostsByUserId"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["PostingApi.getPostsByUserId"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
+    },
+    /**
+     *
+     * @summary Return a list of posts suggested by an AI.
+     * @param {number} page
+     * @param {number} pageSize
+     * @param {string} [categories] Filters by coma-separated categories.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getSuggestedPosts(
+      page: number,
+      pageSize: number,
+      categories?: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Post>>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getSuggestedPosts(
+          page,
+          pageSize,
+          categories,
+          options
+        );
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["PostingApi.getSuggestedPosts"]?.[
+          localVarOperationServerIndex
+        ]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
      * @summary Submit post thumbnail.
      * @param {string} pid
-     * @param {File} [file]
+     * @param {File} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async putPostThumbnail(
       pid: string,
-      file?: File,
+      body: File,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Post>
     > {
       const localVarAxiosArgs =
-        await localVarAxiosParamCreator.putPostThumbnail(pid, file, options);
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["PostingApi.putPostThumbnail"]?.[index]?.url;
+        await localVarAxiosParamCreator.putPostThumbnail(pid, body, options);
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["PostingApi.putPostThumbnail"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -3423,16 +3596,18 @@ export const PostingApiFp = function (configuration?: Configuration) {
         type,
         options
       );
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["PostingApi.reactToPostById"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["PostingApi.reactToPostById"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -3458,16 +3633,18 @@ export const PostingApiFp = function (configuration?: Configuration) {
           file,
           options
         );
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["PostingApi.uploadPostPicture"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["PostingApi.uploadPostPicture"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
   };
 };
@@ -3613,19 +3790,38 @@ export const PostingApiFactory = function (
     },
     /**
      *
+     * @summary Return a list of posts suggested by an AI.
+     * @param {number} page
+     * @param {number} pageSize
+     * @param {string} [categories] Filters by coma-separated categories.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSuggestedPosts(
+      page: number,
+      pageSize: number,
+      categories?: string,
+      options?: any
+    ): AxiosPromise<Array<Post>> {
+      return localVarFp
+        .getSuggestedPosts(page, pageSize, categories, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary Submit post thumbnail.
      * @param {string} pid
-     * @param {File} [file]
+     * @param {File} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     putPostThumbnail(
       pid: string,
-      file?: File,
+      body: File,
       options?: any
     ): AxiosPromise<Post> {
       return localVarFp
-        .putPostThumbnail(pid, file, options)
+        .putPostThumbnail(pid, body, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -3817,20 +4013,41 @@ export class PostingApi extends BaseAPI {
 
   /**
    *
+   * @summary Return a list of posts suggested by an AI.
+   * @param {number} page
+   * @param {number} pageSize
+   * @param {string} [categories] Filters by coma-separated categories.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PostingApi
+   */
+  public getSuggestedPosts(
+    page: number,
+    pageSize: number,
+    categories?: string,
+    options?: AxiosRequestConfig
+  ) {
+    return PostingApiFp(this.configuration)
+      .getSuggestedPosts(page, pageSize, categories, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
    * @summary Submit post thumbnail.
    * @param {string} pid
-   * @param {File} [file]
+   * @param {File} body
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PostingApi
    */
   public putPostThumbnail(
     pid: string,
-    file?: File,
+    body: File,
     options?: AxiosRequestConfig
   ) {
     return PostingApiFp(this.configuration)
-      .putPostThumbnail(pid, file, options)
+      .putPostThumbnail(pid, body, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -4063,16 +4280,17 @@ export const SecurityApiFp = function (configuration?: Configuration) {
         authenticationPayload,
         options
       );
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["SecurityApi.signIn"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["SecurityApi.signIn"]?.[localVarOperationServerIndex]
+          ?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -4091,16 +4309,17 @@ export const SecurityApiFp = function (configuration?: Configuration) {
         signUp,
         options
       );
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["SecurityApi.signUp"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["SecurityApi.signUp"]?.[localVarOperationServerIndex]
+          ?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -4114,16 +4333,17 @@ export const SecurityApiFp = function (configuration?: Configuration) {
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Whoami>
     > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.whoami(options);
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["SecurityApi.whoami"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["SecurityApi.whoami"]?.[localVarOperationServerIndex]
+          ?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
   };
 };
@@ -4537,20 +4757,22 @@ export const UserApiAxiosParamCreator = function (
      * @summary Submit user picture of the type profile banner or profile picture
      * @param {string} uid
      * @param {UserPictureType} type
-     * @param {File} [file]
+     * @param {File} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     putUserPicture: async (
       uid: string,
       type: UserPictureType,
-      file?: File,
+      body: File,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'uid' is not null or undefined
       assertParamExists("putUserPicture", "uid", uid);
       // verify required parameter 'type' is not null or undefined
       assertParamExists("putUserPicture", "type", type);
+      // verify required parameter 'body' is not null or undefined
+      assertParamExists("putUserPicture", "body", body);
       const localVarPath = `/users/{uid}/pictures`.replace(
         `{${"uid"}}`,
         encodeURIComponent(String(uid))
@@ -4569,9 +4791,6 @@ export const UserApiAxiosParamCreator = function (
       };
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
-      const localVarFormParams = new ((configuration &&
-        configuration.formDataCtor) ||
-        FormData)();
 
       // authentication BearerAuth required
       // http bearer authentication required
@@ -4581,11 +4800,7 @@ export const UserApiAxiosParamCreator = function (
         localVarQueryParameter["type"] = type;
       }
 
-      if (file !== undefined) {
-        localVarFormParams.append("file", file as any);
-      }
-
-      localVarHeaderParameter["Content-Type"] = "multipart/form-data";
+      localVarHeaderParameter["Content-Type"] = "application/octet-stream";
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
@@ -4595,7 +4810,64 @@ export const UserApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      localVarRequestOptions.data = localVarFormParams;
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        body,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Save a user viewing a post.
+     * @param {string} uid
+     * @param {string} pid
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    userViewPost: async (
+      uid: string,
+      pid: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'uid' is not null or undefined
+      assertParamExists("userViewPost", "uid", uid);
+      // verify required parameter 'pid' is not null or undefined
+      assertParamExists("userViewPost", "pid", pid);
+      const localVarPath = `/users/{uid}/view/posts/{pid}`
+        .replace(`{${"uid"}}`, encodeURIComponent(String(uid)))
+        .replace(`{${"pid"}}`, encodeURIComponent(String(pid)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "POST",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication BearerAuth required
+      // http bearer authentication required
+      await setBearerAuthToObject(localVarHeaderParameter, configuration);
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
 
       return {
         url: toPathString(localVarUrlObj),
@@ -4629,16 +4901,18 @@ export const UserApiFp = function (configuration?: Configuration) {
     > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.crupdateUserById(id, user, options);
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["UserApi.crupdateUserById"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["UserApi.crupdateUserById"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -4657,16 +4931,18 @@ export const UserApiFp = function (configuration?: Configuration) {
     > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.deleteUserPicture(uid, type, options);
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["UserApi.deleteUserPicture"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["UserApi.deleteUserPicture"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -4685,16 +4961,18 @@ export const UserApiFp = function (configuration?: Configuration) {
         id,
         options
       );
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["UserApi.getUserById"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["UserApi.getUserById"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -4716,16 +4994,18 @@ export const UserApiFp = function (configuration?: Configuration) {
         type,
         options
       );
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["UserApi.getUserPicture"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["UserApi.getUserPicture"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
@@ -4750,30 +5030,31 @@ export const UserApiFp = function (configuration?: Configuration) {
         name,
         options
       );
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["UserApi.getUsers"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["UserApi.getUsers"]?.[localVarOperationServerIndex]
+          ?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
     },
     /**
      *
      * @summary Submit user picture of the type profile banner or profile picture
      * @param {string} uid
      * @param {UserPictureType} type
-     * @param {File} [file]
+     * @param {File} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async putUserPicture(
       uid: string,
       type: UserPictureType,
-      file?: File,
+      body: File,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserPicture>
@@ -4781,19 +5062,57 @@ export const UserApiFp = function (configuration?: Configuration) {
       const localVarAxiosArgs = await localVarAxiosParamCreator.putUserPicture(
         uid,
         type,
-        file,
+        body,
         options
       );
-      const index = configuration?.serverIndex ?? 0;
-      const operationBasePath =
-        operationServerMap["UserApi.putUserPicture"]?.[index]?.url;
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["UserApi.putUserPicture"]?.[
+          localVarOperationServerIndex
+        ]?.url;
       return (axios, basePath) =>
         createRequestFunction(
           localVarAxiosArgs,
           globalAxios,
           BASE_PATH,
           configuration
-        )(axios, operationBasePath || basePath);
+        )(axios, localVarOperationServerBasePath || basePath);
+    },
+    /**
+     *
+     * @summary Save a user viewing a post.
+     * @param {string} uid
+     * @param {string} pid
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async userViewPost(
+      uid: string,
+      pid: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<UserViewOnePost>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.userViewPost(
+        uid,
+        pid,
+        options
+      );
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap["UserApi.userViewPost"]?.[
+          localVarOperationServerIndex
+        ]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration
+        )(axios, localVarOperationServerBasePath || basePath);
     },
   };
 };
@@ -4896,18 +5215,35 @@ export const UserApiFactory = function (
      * @summary Submit user picture of the type profile banner or profile picture
      * @param {string} uid
      * @param {UserPictureType} type
-     * @param {File} [file]
+     * @param {File} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     putUserPicture(
       uid: string,
       type: UserPictureType,
-      file?: File,
+      body: File,
       options?: any
     ): AxiosPromise<UserPicture> {
       return localVarFp
-        .putUserPicture(uid, type, file, options)
+        .putUserPicture(uid, type, body, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary Save a user viewing a post.
+     * @param {string} uid
+     * @param {string} pid
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    userViewPost(
+      uid: string,
+      pid: string,
+      options?: any
+    ): AxiosPromise<UserViewOnePost> {
+      return localVarFp
+        .userViewPost(uid, pid, options)
         .then((request) => request(axios, basePath));
     },
   };
@@ -5017,7 +5353,7 @@ export class UserApi extends BaseAPI {
    * @summary Submit user picture of the type profile banner or profile picture
    * @param {string} uid
    * @param {UserPictureType} type
-   * @param {File} [file]
+   * @param {File} body
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof UserApi
@@ -5025,11 +5361,26 @@ export class UserApi extends BaseAPI {
   public putUserPicture(
     uid: string,
     type: UserPictureType,
-    file?: File,
+    body: File,
     options?: AxiosRequestConfig
   ) {
     return UserApiFp(this.configuration)
-      .putUserPicture(uid, type, file, options)
+      .putUserPicture(uid, type, body, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Save a user viewing a post.
+   * @param {string} uid
+   * @param {string} pid
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof UserApi
+   */
+  public userViewPost(uid: string, pid: string, options?: AxiosRequestConfig) {
+    return UserApiFp(this.configuration)
+      .userViewPost(uid, pid, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
