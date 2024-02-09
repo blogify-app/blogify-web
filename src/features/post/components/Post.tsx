@@ -4,7 +4,7 @@ import {Icon} from "@iconify/react";
 import {Layout} from "@/layout";
 import {Icons} from "@/components/common/icons";
 import {Reader} from "@/features/wisiwig";
-import {calculateReadDuration} from "@/features/post/utils";
+import {calculateReadDuration, getRelativeDate} from "@/features/post/utils";
 import {AddComment, Comment} from "@/features/post";
 import {useAuthStore} from "@/features/auth";
 import {
@@ -92,31 +92,30 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
       <div className="flex w-full justify-center">
         <div
           data-testid="post-details"
-          className="grid w-[31.25rem] grid-cols-3"
+          className="grid w-[31.25rem] grid-cols-8"
         >
-          <div className="flex items-center justify-center">
+          <div className="col-span-3 flex items-center justify-center">
             <Icon icon="material-symbols-light:face-6" className="text-2xl" />
             <span className="mx-1">
               by <strong>{author?.username}</strong>
             </span>
           </div>
-          <div className="flex items-center justify-center">
+          <div className="col-span-2 flex items-center justify-center">
             <Icon
               icon="material-symbols-light:nest-clock-farsight-analog-outline"
               className="text-2xl"
             />
-            {/* TODO: relative datetime (like: 1 week ago) for later */}
             <span className="mx-1">
               {calculateReadDuration(post.content).minutes} min read
             </span>
           </div>
-          <div className="flex items-center justify-center">
+          <div className="col-span-3 flex items-center justify-center">
             <Icon
               icon="material-symbols-light:calendar-month-outline"
               className="text-2xl"
             />
             <span className="mx-1">
-              {new Date(post.creation_datetime!).toLocaleDateString()}
+              {getRelativeDate(post.creation_datetime!)}
             </span>
           </div>
         </div>
