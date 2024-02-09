@@ -156,8 +156,8 @@ describe("Authentication", () => {
       cy.loginThenRedirect();
 
       // visit protected route
-      cy.visit(`/posts/write/${post1()}`);
-      cy.routePathnameEq(`/posts/write/${post1()}`);
+      cy.visit(`/posts/write/${post1().id}`);
+      cy.routePathnameEq(`/posts/write/${post1().id}`);
 
       // logout
       cy.getByTestid("logout-button").click();
@@ -165,7 +165,7 @@ describe("Authentication", () => {
       cy.routePathnameEq("/login");
 
       // visit protected route
-      cy.visit(`/posts/write/${post1()}`);
+      cy.visit(`/posts/write/${post1().id}`);
       // Redirected
       cy.routePathnameEq("/login");
     });
