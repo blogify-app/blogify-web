@@ -8,6 +8,7 @@ import {Button} from "@/components/common/button";
 import {Textarea} from "@/components/shadcn-ui/textarea";
 import {CommentProvider, UserProvider} from "@/services/api";
 import {CommentStatus, Comment as CommentType} from "@/services/api/gen";
+import {getRelativeDate} from "../utils.ts";
 
 export interface CommentProps {
   comment: CommentType;
@@ -25,10 +26,13 @@ export const Comment: FC<CommentProps> = ({comment}: CommentProps) => {
   if (!user) return null;
 
   return (
-    <div id="comment-container" className="grid grid-cols-6 ">
-      <div id="comment-content" className="col-span-5 my-4">
-        <div id="comment-header" className="grid grid-cols-5">
-          <div className="col-span-3 flex items-center">
+    <div
+      id="comment-container"
+      className="my-2 grid grid-cols-5 rounded-md bg-slate-50 p-1"
+    >
+      <div id="comment-content" className="col-span-5 mx-5 my-4 w-full">
+        <div id="comment-header" className="grid w-full grid-cols-5">
+          <div className="col-span-2 flex items-center">
             <Avatar>
               <AvatarImage
                 data-testid="avatar"
@@ -45,17 +49,18 @@ export const Comment: FC<CommentProps> = ({comment}: CommentProps) => {
             <p className="mx-3 font-bold" data-testid="comment-author-username">
               {user.username || `${user.first_name} ${user.last_name}`}
             </p>
+          </div>
+          <div className="col-span-2"></div>
+          <div className="col-span-1 flex items-center">
             {creation_datetime && (
               <p
-                className="mx-4 text-slate-500"
+                className="text-right text-slate-500"
                 data-testid="comment-creation-date"
               >
-                {new Date(creation_datetime).toLocaleDateString()}
+                {getRelativeDate(new Date(creation_datetime))}
               </p>
             )}
           </div>
-          <div className="col-span-1"></div>
-          <div className="col-span-1 flex flex-col items-center"></div>
         </div>
         {content && (
           <div data-testid="comment-content" className=" my-5 text-slate-500">
@@ -105,7 +110,7 @@ export const AddComment: FC<AddCommentProps> = ({
 
   return (
     <form onSubmit={handleSubmit(addComment)}>
-      <div className="grid grid-cols-10 space-x-6">
+      <div className="my-5 grid grid-cols-9">
         <Controller
           name="comment"
           control={control}
@@ -120,7 +125,11 @@ export const AddComment: FC<AddCommentProps> = ({
           )}
         />
         <div className="col-span-2 flex items-center">
-          <Button type="submit" data-testid="add-comment-button">
+          <Button
+            type="submit"
+            data-testid="add-comment-button"
+            className="m-auto w-3/5"
+          >
             <Icon icon="material-symbols-light:add" className="mr-2 text-2xl" />
             Add
           </Button>

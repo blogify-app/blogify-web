@@ -1,3 +1,5 @@
+import {formatDistance} from "date-fns";
+
 // theory : https://stackoverflow.com/questions/4216752/anyone-having-any-leads-on-a-reading-time-algorithm
 export const calculateReadDuration = (text = "") => {
   // Get the total word count
@@ -12,4 +14,8 @@ export const calculateReadDuration = (text = "") => {
     minutes += 1;
   }
   return {minutes, seconds};
+};
+
+export const getRelativeDate = (date: Date) => {
+  return formatDistance(date, Date.now(), {addSuffix: true});
 };
