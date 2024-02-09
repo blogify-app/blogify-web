@@ -57,3 +57,11 @@ Cypress.Commands.add("loginThenRedirect", (to) => {
 
   to && cy.visit(to);
 });
+
+Cypress.Commands.add("routePathnameEq", (to) => {
+  cy.window()
+    .its("location")
+    .should(({pathname}) => {
+      expect(pathname).to.eq(to);
+    });
+});

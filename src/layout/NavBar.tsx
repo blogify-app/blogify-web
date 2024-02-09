@@ -152,6 +152,7 @@ const AuthenticatedHeader: FC = () => {
         <Tooltip>
           <TooltipTrigger>
             <Button
+              data-testid="logout-button"
               className="flex justify-evenly align-middle"
               isLoading={isLoading}
               onClick={_logout}
