@@ -1,4 +1,4 @@
-import {ChangeEvent, FC, useState} from "react";
+import {ChangeEvent, FC, useEffect, useRef, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {format} from "date-fns";
@@ -28,11 +28,14 @@ import {
   RadioGroupItem,
 } from "@/components/shadcn-ui/radio-group.tsx";
 import {cn} from "@/lib/utils.ts";
-import {User, UserPictureType} from "@/services/api/gen";
+import {Category, User, UserPictureType} from "@/services/api/gen";
 import {profileEditSchema} from "@/features/profile/schema";
 import {DEFAULT_QUERY, UserProvider} from "@/services/api";
 import {useToast} from "@/hooks";
 import {useNavigate} from "react-router-dom";
+import Select from "react-select";
+import {CategoryProvider} from "@/services/api/provider/category_provider";
+import {CategoryOption} from "@/features/post/types";
 
 interface ProfileEditProps {
   currentUser: User;
@@ -49,6 +52,28 @@ export const ProfileEdit: FC<ProfileEditProps> = ({
   const [currentBirthDate, setCurrentBirthDate] = useState(
     currentUser?.birth_date ? new Date(currentUser.birth_date) : new Date()
   );
+  const [categories, setCategories] = useState<Category[]>([]);
+  const selectedCategoriesRef = useRef<CategoryOption[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categories = await CategoryProvider.getMany();
+        const options = categories.map((option) => ({
+          value: option.id,
+          label: option.label,
+        }));
+        setCategories(options);
+      } catch (e) {
+        console.error(e);
+        toast({
+          variant: "destructive",
+          message: "unable to get categories",
+        });
+      }
+    };
+    void fetchCategories();
+  }, []);
 
   const form = useForm<User>({
     resolver: zodResolver(profileEditSchema),
@@ -94,7 +119,10 @@ export const ProfileEdit: FC<ProfileEditProps> = ({
         profile_banner_url: currentUser?.profile_banner_url,
         status: currentUser?.status,
         entrance_datetime: currentUser?.entrance_datetime,
-        categories: currentUser?.categories,
+        categories:
+          selectedCategoriesRef.current.length > 0
+            ? selectedCategoriesRef.current
+            : currentUser?.categories,
         is_followed: currentUser?.is_followed,
       });
       navigate(`/users/${currentUser?.id}`);
@@ -104,6 +132,14 @@ export const ProfileEdit: FC<ProfileEditProps> = ({
         message: "Unable to update user informations",
       });
     }
+  };
+
+  // Any is typed here cause option is dynamic
+  const handleChange = (selectedOptions: any) => {
+    selectedCategoriesRef.current = selectedOptions.map((category: any) => ({
+      id: category.value || category.id,
+      label: category.label,
+    }));
   };
 
   return (
@@ -248,22 +284,6 @@ export const ProfileEdit: FC<ProfileEditProps> = ({
             />
           </div>
 
-          <div className="w-4/5">
-            <FormField
-              name="bio"
-              control={form.control}
-              render={({field}) => (
-                <FormItem className="text-md" data-testid="bio_input">
-                  <FormLabel>Bio</FormLabel>
-                  <FormControl className="h-12">
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
           <div className="h-auto w-4/5">
             <FormField
               name="about"
@@ -271,7 +291,7 @@ export const ProfileEdit: FC<ProfileEditProps> = ({
               render={({field}) => (
                 <FormItem className="text-md" data-testid="about_input">
                   <FormLabel>About</FormLabel>
-                  <FormControl className="h-12">
+                  <FormControl className="h-25">
                     <Textarea {...field} />
                   </FormControl>
                   <FormMessage />
@@ -302,6 +322,37 @@ export const ProfileEdit: FC<ProfileEditProps> = ({
           </div>
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Input id="picture" type="file" onChange={handleFileChange} />
+          </div>
+
+          <div className="w-4/5">
+            <FormField
+              name="bio"
+              control={form.control}
+              render={({field}) => (
+                <FormItem className="text-md" data-testid="bio_input">
+                  <FormLabel>Bio</FormLabel>
+                  <FormControl className="h-12">
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="w-4/5">
+            <FormItem className="text-md" data-testid="bio_input">
+              <FormLabel>Categories</FormLabel>
+              <FormControl className="h-12">
+                <Select
+                  isMulti
+                  options={categories}
+                  onChange={handleChange}
+                  defaultValue={currentUser?.categories}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           </div>
         </div>
       </div>
