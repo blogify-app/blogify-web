@@ -135,12 +135,10 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
 
   // type any due to not iterable types of selectedOptions
   const handleChange = (selectedOptions: any) => {
-    selectedCategoriesRef.current = selectedOptions.map(
-      (category: CategoryOption) => ({
-        id: category.value,
-        label: category.label,
-      })
-    );
+    selectedCategoriesRef.current = selectedOptions.map((category: any) => ({
+      id: category.value || category.id,
+      label: category.label,
+    }));
   };
 
   return (
