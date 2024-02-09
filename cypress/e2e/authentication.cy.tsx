@@ -4,6 +4,7 @@ import {
   user_to_signup,
 } from "../fixtures/firebase.mock.ts";
 import {whoami1} from "../fixtures/user.ts";
+import {post1} from "../fixtures/post.ts";
 
 describe("Authentication", () => {
   it("should redirect when not logged in on protected route", () => {
@@ -147,6 +148,26 @@ describe("Authentication", () => {
       cy.getByTestid("continue-signup").click();
 
       cy.contains("Sign up failed");
+    });
+  });
+
+  describe("Logout", () => {
+    it("should remote credentials and block user from accessing protected route when logged out", () => {
+      cy.loginThenRedirect();
+
+      // visit protected route
+      cy.visit(`/posts/write/${post1().id}`);
+      cy.routePathnameEq(`/posts/write/${post1().id}`);
+
+      // logout
+      cy.getByTestid("logout-button").click();
+      // Redirected
+      cy.routePathnameEq("/login");
+
+      // visit protected route
+      cy.visit(`/posts/write/${post1().id}`);
+      // Redirected
+      cy.routePathnameEq("/login");
     });
   });
 });

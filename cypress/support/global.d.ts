@@ -5,6 +5,7 @@ export declare global {
 
       waitForTinyMCELoaded(): Chainable;
       loginThenRedirect(to?: string): Chainable;
+      routePathnameEq(to: string): Chainable;
     }
   }
 }

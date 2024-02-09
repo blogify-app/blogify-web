@@ -2,7 +2,7 @@ import {FC, memo} from "react";
 import {Link} from "react-router-dom";
 import {Icon} from "@iconify/react";
 import {useAuthStore} from "@/features/auth";
-import {Button} from "@/components/shadcn-ui/button";
+import {Button} from "@/components/common/button";
 import {
   Avatar,
   AvatarFallback,
@@ -15,6 +15,13 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/shadcn-ui/navigation-menu";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/shadcn-ui/tooltip.tsx";
+import {logout} from "@/services/security";
+import {useLoading} from "@/hooks";
 
 export interface AnonymousHeaderProps {
   page?: "sign_up" | "sign_in";
@@ -50,7 +57,7 @@ const AnonymousHeader: FC<AnonymousHeaderProps> = ({page}) => {
               <Link to="/login">Login</Link>
             </Button>
 
-            <Button size="lg" className="h-9" asChild>
+            <Button size="lg" className="h-9">
               <Link to="/signup">Sign up</Link>
             </Button>
           </>
@@ -61,7 +68,16 @@ const AnonymousHeader: FC<AnonymousHeaderProps> = ({page}) => {
 };
 
 const AuthenticatedHeader: FC = () => {
-  const {user} = useAuthStore();
+  const {queue, isLoading} = useLoading("logout");
+  const authStore = useAuthStore();
+
+  const _logout = async () => {
+    await queue(async () => {
+      await logout();
+      localStorage.clear();
+      window.location.reload();
+    });
+  };
 
   return (
     <div
@@ -101,7 +117,7 @@ const AuthenticatedHeader: FC = () => {
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem className="mx-4 w-40">
-              <Link to={`/users/${user?.id}`}>
+              <Link to={`/users/${authStore.user?.id}`}>
                 <NavigationMenuLink
                   data-testid="profile-menu"
                   className={navigationMenuTriggerStyle()}
@@ -114,21 +130,44 @@ const AuthenticatedHeader: FC = () => {
         </NavigationMenu>
       </div>
       <div className="col-span-1 flex justify-evenly align-middle">
-        <Link to={`/users/${user?.id}`}>
-          <Avatar>
-            <AvatarImage data-testid="avatar" src="random_link" />
-            <AvatarFallback data-testid="avatar">
-              <Icon icon="material-symbols-light:face-6" className="text-2xl" />
-            </AvatarFallback>
-          </Avatar>
-        </Link>
-        <Button className="flex justify-evenly align-middle">
-          <Icon
-            data-testid="logout-icon-button"
-            icon="material-symbols-light:login"
-            className="text-2xl"
-          />
-        </Button>
+        <Tooltip>
+          <TooltipTrigger>
+            <Link to={`/users/${authStore.user?.id}`}>
+              <Avatar>
+                <AvatarImage data-testid="avatar" src="random_link" />
+                <AvatarFallback data-testid="avatar">
+                  <Icon
+                    icon="material-symbols-light:face-6"
+                    className="text-2xl"
+                  />
+                </AvatarFallback>
+              </Avatar>
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Profile</p>
+          </TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger>
+            <Button
+              data-testid="logout-button"
+              className="flex justify-evenly align-middle"
+              isLoading={isLoading}
+              onClick={_logout}
+            >
+              <Icon
+                data-testid="logout-icon-button"
+                icon="material-symbols-light:login"
+                className="text-2xl"
+              />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Logout</p>
+          </TooltipContent>
+        </Tooltip>
       </div>
     </div>
   );

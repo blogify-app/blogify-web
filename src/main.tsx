@@ -2,13 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {Toaster} from "@/components/shadcn-ui/toaster";
+import {TooltipProvider} from "@/components/shadcn-ui/tooltip.tsx";
 import {HomePage} from "@/pages/home";
 import {DummyAuthenticatedPage, LoginPage, SignupPage} from "@/pages/auth";
 import {PostListPage, PostPage, WritePostPage} from "@/pages/post";
 import {Authenticated} from "@/features/auth";
+import {ProfilePage, ProfileEditPage} from "@/pages/profile";
 import "./index.css";
-import {ProfilePage} from "./pages/profile/ProfilePage";
-import {ProfileEditPage} from "@/pages/profile";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const ROUTER = createBrowserRouter([
@@ -61,6 +61,8 @@ const ROUTER = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Toaster />
-    <RouterProvider router={ROUTER} />
+    <TooltipProvider>
+      <RouterProvider router={ROUTER} />
+    </TooltipProvider>
   </React.StrictMode>
 );
