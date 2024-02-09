@@ -1,14 +1,17 @@
 import {FC, useCallback, useEffect, useRef, useState} from "react";
+import Select from "react-select";
 import {Editor} from "tinymce";
 import {nanoid} from "nanoid";
 import {Button} from "@/components/common/button.tsx";
 import {ImageUpload} from "@/components/common/image-upload.tsx";
 import {DescriptionInput, TitleInput} from "@/features/post";
 import {RichTextEditor} from "@/features/wisiwig";
-import {Post, PostPicture} from "@/services/api/gen";
+import {Category, Post, PostPicture} from "@/services/api/gen";
 import {DEFAULT_QUERY, PostProvider} from "@/services/api";
 import {transformHtmlContent} from "@/features/post/lib";
 import {useLoading, useToast} from "@/hooks";
+import {CategoryProvider} from "@/services/api/provider/category_provider";
+import {CategoryOption} from "@/features/post/types";
 
 export interface WritePostProps {
   post: Post;
@@ -21,10 +24,12 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
 
   const [editor, setEditor] = useState<Editor | null>(null);
   const [pictures, setPictures] = useState<PostPicture[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const thumbnailFileRef = useRef<File | null>(null);
   const titleInputRef = useRef<HTMLInputElement>(null);
   const descriptionInputRef = useRef<HTMLTextAreaElement>(null);
+  const selectedCategoriesRef = useRef<CategoryOption[]>([]);
 
   const shouldUpdateRemoteThumbnail = useRef(false);
 
@@ -45,10 +50,34 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
     void fetchPictures();
   }, [isExistent, post]);
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categories = await CategoryProvider.getMany();
+        const options = categories.map((option) => ({
+          value: option.id,
+          label: option.label,
+        }));
+        setCategories(options);
+      } catch (e) {
+        console.error(e);
+        toast({
+          variant: "destructive",
+          message: "unable to get post " + post.id + " pictures",
+        });
+      }
+    };
+    void fetchCategories();
+  }, [post]);
+
   // bind title/content to the post object
   const syncPost = useCallback(() => {
     post.title = titleInputRef.current?.value || "";
     post.description = descriptionInputRef.current?.value || "";
+    post.categories =
+      selectedCategoriesRef.current.length > 0
+        ? selectedCategoriesRef.current
+        : post.categories;
     post.content = editor?.getContent() || "";
   }, [post, editor]);
 
@@ -103,6 +132,16 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
       });
     }
   }, [updateRemoteThumbnail, syncPost, post, toast]);
+
+  // type any due to not iterable types of selectedOptions
+  const handleChange = (selectedOptions: any) => {
+    selectedCategoriesRef.current = selectedOptions.map(
+      (category: CategoryOption) => ({
+        id: category.value,
+        label: category.label,
+      })
+    );
+  };
 
   return (
     <div className="mx-auto my-0 flex h-full w-[75rem] justify-center">
@@ -187,6 +226,17 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
           >
             {post.content ?? ""}
           </RichTextEditor>
+          <div className="my-5">
+            <label htmlFor="categories" className="pb-5">
+              Categories:
+            </label>
+            <Select
+              isMulti
+              options={categories}
+              onChange={handleChange}
+              defaultValue={post?.categories}
+            />
+          </div>
         </div>
       </div>
     </div>
