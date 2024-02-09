@@ -17,7 +17,7 @@ import {CommentProvider, PostProvider} from "@/services/api";
 import {useLoading, useToast} from "@/hooks";
 import blankUserProfile from "@/assets/noun-user-picture.svg";
 import {Button} from "@/components/common/button";
-import {CategoryBadge} from "./Category";
+import {CategoryBadge} from "./CategoryBadge";
 
 export interface PostProps {
   post: PostType;
