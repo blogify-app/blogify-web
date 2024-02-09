@@ -1,11 +1,12 @@
 import {Comment, Reaction, ReactionType} from "@/services/api/gen";
 import {commentApi, DataProvider, DEFAULT_QUERY, Query} from "@/services/api";
+import {dataProvider} from "@/services/api/provider/middleware";
 
 export interface CommentProvider extends DataProvider<Comment> {
   reactById(cid: string, query: Query): Promise<Reaction>;
 }
 
-export const CommentProvider: CommentProvider = {
+export const CommentProvider: CommentProvider = dataProvider({
   async getById(cid: string, query): Promise<Comment> {
     // TODO: handle optional query
     return (
@@ -59,4 +60,4 @@ export const CommentProvider: CommentProvider = {
   crupdateMany(_toCrupdate: Comment[]): Promise<Comment[]> {
     throw new Error("Function not implemented.");
   },
-};
+});

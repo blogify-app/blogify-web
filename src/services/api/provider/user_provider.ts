@@ -1,5 +1,6 @@
 import {User, UserPicture, UserPictureType} from "@/services/api/gen";
 import {DataProvider, DEFAULT_QUERY, Query, userApi} from "@/services/api";
+import {dataProvider} from "@/services/api/provider/middleware";
 
 export type PictureQuery = Query<{type: UserPictureType}>;
 
@@ -16,7 +17,7 @@ export interface UserProvider extends DataProvider<User> {
   ): Promise<UserPicture>;
 }
 
-export const UserProvider: UserProvider = {
+export const UserProvider: UserProvider = dataProvider({
   async getById(uid: string): Promise<User> {
     return (await userApi().getUserById(uid)).data;
   },
@@ -62,4 +63,4 @@ export const UserProvider: UserProvider = {
   deleteById(_id: string, _query: Query): Promise<User> {
     throw new Error("Function not implemented.");
   },
-};
+});
