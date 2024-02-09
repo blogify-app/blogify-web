@@ -173,14 +173,14 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
               <span className="mr-2">Tags : </span>
               <div className="flex justify-evenly">
                 {post.categories!.map((category, index) => (
-                      <CategoryBadge
-                        key={category.id}
-                        data-testid={`category-${index + 1}`}
-                        className="mx-1"
-                      >
-                        {category.label}
-                      </CategoryBadge>
-                    ))}
+                  <CategoryBadge
+                    key={category.id}
+                    data-testid={`category-${index + 1}`}
+                    className="mx-1"
+                  >
+                    {category.label}
+                  </CategoryBadge>
+                ))}
               </div>
             </div>
             <div className="mx-10">
