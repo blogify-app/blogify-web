@@ -2,6 +2,17 @@ import {comments, createComment1} from "../fixtures/comment";
 import {non_existent_id, post1} from "../fixtures/post";
 
 describe("Post", () => {
+  describe("Category", () => {
+    it("should display the category", () => {
+      cy.visit(`/posts/${post1().id}`);
+
+      cy.intercept("GET", `**/posts/${post1().id}`, post1());
+
+      cy.getByTestid("category-1").should("be.visible");
+      cy.getByTestid("category-2").should("be.visible");
+      cy.getByTestid("category-3").should("be.visible");
+    });
+  });
   describe("Reaction", () => {
     it("should render the reaction correctly", () => {
       cy.visit(`/posts/${post1().id}`);
@@ -41,13 +52,10 @@ describe("Post", () => {
       cy.getByTestid("post-banner").should("be.visible");
       cy.getByTestid("post-content").should("be.visible");
 
-      cy.getByTestid("post-tags").as("tags");
-      cy.get("@tags").should("be.visible");
-      cy.get("@tags").contains("Ipsum");
-      cy.get("@tags").contains("Lorem");
-      cy.get("@tags").contains("Hello");
+      cy.getByTestid("post-tags").should("be.visible");
 
       cy.getByTestid("user-details").contains("See more about this author");
+
       cy.getByTestid("user-profile-picture").should("be.visible");
     });
 

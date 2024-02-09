@@ -3,7 +3,6 @@ import {Link} from "react-router-dom";
 import {Icon} from "@iconify/react";
 import {Layout} from "@/layout";
 import {Icons} from "@/components/common/icons";
-import {Badge} from "@/components/shadcn-ui/badge";
 import {Reader} from "@/features/wisiwig";
 import {calculateReadDuration} from "@/features/post/utils";
 import {AddComment, Comment} from "@/features/post";
@@ -18,6 +17,7 @@ import {CommentProvider, PostProvider} from "@/services/api";
 import {useLoading, useToast} from "@/hooks";
 import blankUserProfile from "@/assets/noun-user-picture.svg";
 import {Button} from "@/components/common/button";
+import {CategoryBadge} from "./Category";
 
 export interface PostProps {
   post: PostType;
@@ -172,9 +172,15 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
             <div data-testid="post-tags" className="mx-10 flex w-full py-10">
               <span className="mr-2">Tags : </span>
               <div className="flex justify-evenly">
-                <Badge className="mx-1">Lorem</Badge>
-                <Badge className="mx-1">Ipsum</Badge>
-                <Badge className="mx-1">Hello</Badge>
+                {post.categories!.map((category, index) => (
+                  <CategoryBadge
+                    key={category.id}
+                    data-testid={`category-${index + 1}`}
+                    className="mx-1"
+                  >
+                    {category.label}
+                  </CategoryBadge>
+                ))}
               </div>
             </div>
             <div className="mx-10">
