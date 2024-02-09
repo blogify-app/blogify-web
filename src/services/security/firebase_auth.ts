@@ -67,13 +67,8 @@ export const logout = async (): Promise<void> => {
  * @see {auth.getIdToken}
  */
 export const refreshIdToken = async (): Promise<void> => {
-  // if (!auth.currentUser) {
-  //   throw new Error("Your token has expired, please reconnect");
-  // }
-
   if (auth.currentUser) {
     const token = await auth.currentUser.getIdToken();
     localStorage.setItem(AUTH_ID_TOKEN, token);
   }
-  console.log("currentUseer", auth.currentUser);
 };
