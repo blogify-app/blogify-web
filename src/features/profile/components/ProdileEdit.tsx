@@ -109,7 +109,7 @@ export const ProfileEdit: FC<ProfileEditProps> = ({
   return (
     <Form {...form}>
       <div className="flex h-full w-full flex-row">
-        <div className="mb-6 flex w-1/2 w-[40rem] flex-col items-center space-y-6">
+        <div className="mb-6 flex w-[40rem] flex-col items-center space-y-6">
           <div className="w-4/5">
             <FormField
               name="first_name"
@@ -290,7 +290,7 @@ export const ProfileEdit: FC<ProfileEditProps> = ({
             </Button>
           </div>
         </div>
-        <div className="mb-6 mt-6 flex h-full w-1/2 w-[40rem] flex-col items-center space-y-4">
+        <div className="mb-6 mt-6 flex h-full w-[40rem] flex-col items-center space-y-4">
           <div className="w-full max-w-sm items-center gap-1.5">
             <Avatar className={"h-500 w-500"}>
               <AvatarImage

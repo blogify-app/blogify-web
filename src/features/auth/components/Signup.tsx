@@ -1,12 +1,12 @@
-import {FC} from "react";
-import {Link, useNavigate} from "react-router-dom";
-import {SubmitHandler, useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {format} from "date-fns";
-import {CalendarIcon} from "lucide-react";
-import {GoogleAuthProvider, GithubAuthProvider} from "firebase/auth";
-import {nanoid} from "nanoid";
-import {Button} from "@/components/common/button.tsx";
+import { FC } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { GoogleAuthProvider, GithubAuthProvider } from "firebase/auth";
+import { nanoid } from "nanoid";
+import { Button } from "@/components/common/button.tsx";
 import {
   Form,
   FormControl,
@@ -16,41 +16,38 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/shadcn-ui/form.tsx";
-import {Calendar} from "@/components/shadcn-ui/calendar.tsx";
-import {Textarea} from "@/components/shadcn-ui/textarea.tsx";
-import {StepperView, useStepperContext} from "@/components/common/stepper.tsx";
+import { Calendar } from "@/components/shadcn-ui/calendar.tsx";
+import { Textarea } from "@/components/shadcn-ui/textarea.tsx";
+import { StepperView, useStepperContext } from "@/components/common/stepper.tsx";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/shadcn-ui/popover.tsx";
-import {Icons} from "@/components/common/icons.tsx";
-import {Input} from "@/components/shadcn-ui/input.tsx";
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from "@/components/shadcn-ui/radio-group.tsx";
+import { Icons } from "@/components/common/icons.tsx";
+import { Input } from "@/components/shadcn-ui/input.tsx";
 import {
   EmailAndPassword,
   emailAndPasswordSchema,
   type Signup as User,
   signupSchema,
 } from "@/features/auth/schema.ts";
-import {RedirectAuthenticated, useAuthStore} from "@/features/auth";
+import { RedirectAuthenticated, useAuthStore } from "@/features/auth";
 import {
   AuthProvider,
   AuthWith,
   getCachedAuth,
   registerWith,
 } from "@/services/security";
-import {cn} from "@/lib/utils.ts";
-import {useLoading, useToast} from "@/hooks";
+import { cn } from "@/lib/utils.ts";
+import { useLoading, useToast } from "@/hooks";
+import { SelectContent, Select, SelectItem, SelectTrigger, SelectValue } from "@/components/shadcn-ui/select";
 
 export const Signup: FC = () => {
   const authStore = useAuthStore();
   const navigate = useNavigate();
   const stepper = useStepperContext();
-  const {queue, isLoading} = useLoading("signup");
+  const { queue, isLoading } = useLoading("signup");
   const toast = useToast();
 
   const stepNext = () => {
@@ -87,7 +84,7 @@ export const Signup: FC = () => {
 
   return (
     <RedirectAuthenticated>
-      <div className="flex flex-col items-center justify-center gap-20">
+      {/*<div className="flex flex-col items-center justify-center gap-20">
         <div className="flex flex-col items-center justify-center gap-[0.125rem]">
           <div className="text-4xl font-medium">Create an account</div>
           <p>
@@ -105,7 +102,8 @@ export const Signup: FC = () => {
         <StepperView step="user-info">
           <SignupUserForm onCreate={createUser} isLoading={isLoading} />
         </StepperView>
-      </div>
+  </div>*/}
+      <SignupUserForm onCreate={createUser} isLoading={isLoading} />
     </RedirectAuthenticated>
   );
 };
@@ -115,7 +113,7 @@ interface SignupWithProps {
   isLoading: boolean;
 }
 
-const SignupWith: FC<SignupWithProps> = ({onSignup, isLoading}) => {
+const SignupWith: FC<SignupWithProps> = ({ onSignup, isLoading }) => {
   const form = useForm<EmailAndPassword>({
     resolver: zodResolver(emailAndPasswordSchema),
   });
@@ -131,7 +129,7 @@ const SignupWith: FC<SignupWithProps> = ({onSignup, isLoading}) => {
             <FormField
               name="email"
               control={form.control}
-              render={({field}) => (
+              render={({ field }) => (
                 <FormItem data-testid="email-field" className="text-md">
                   <FormLabel>Email</FormLabel>
                   <FormControl className="h-12">
@@ -147,7 +145,7 @@ const SignupWith: FC<SignupWithProps> = ({onSignup, isLoading}) => {
             <FormField
               name="password"
               control={form.control}
-              render={({field}) => (
+              render={({ field }) => (
                 <FormItem data-testid="password-field" className="text-md">
                   <FormLabel>Password</FormLabel>
                   <FormControl className="h-12">
@@ -209,7 +207,7 @@ interface SignupUserFormProps {
   isLoading: boolean;
 }
 
-const SignupUserForm: FC<SignupUserFormProps> = ({onCreate, isLoading}) => {
+const SignupUserForm: FC<SignupUserFormProps> = ({ onCreate, isLoading }) => {
   const form = useForm<User>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -230,7 +228,7 @@ const SignupUserForm: FC<SignupUserFormProps> = ({onCreate, isLoading}) => {
           <FormField
             name="first_name"
             control={form.control}
-            render={({field}) => (
+            render={({ field }) => (
               <FormItem className="text-md">
                 <FormLabel>First name</FormLabel>
                 <FormControl className="h-12">
@@ -246,7 +244,7 @@ const SignupUserForm: FC<SignupUserFormProps> = ({onCreate, isLoading}) => {
           <FormField
             name="last_name"
             control={form.control}
-            render={({field}) => (
+            render={({ field }) => (
               <FormItem className="text-md">
                 <FormLabel>Last name</FormLabel>
                 <FormControl className="h-12">
@@ -262,7 +260,7 @@ const SignupUserForm: FC<SignupUserFormProps> = ({onCreate, isLoading}) => {
           <FormField
             name="username"
             control={form.control}
-            render={({field}) => (
+            render={({ field }) => (
               <FormItem className="text-md">
                 <FormLabel>User name</FormLabel>
                 <FormControl className="h-12">
@@ -278,39 +276,22 @@ const SignupUserForm: FC<SignupUserFormProps> = ({onCreate, isLoading}) => {
           <FormField
             control={form.control}
             name="sex"
-            render={({field}) => (
+            render={({ field }) => (
               <FormItem className="space-y-3">
                 <FormLabel>Sex</FormLabel>
-                <FormControl>
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    className="flex flex-col space-y-1"
-                  >
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="M" />
-                      </FormControl>
-                      <FormLabel className="font-normal">Male</FormLabel>
-                    </FormItem>
-
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="F" />
-                      </FormControl>
-                      <FormLabel className="font-normal">Female</FormLabel>
-                    </FormItem>
-
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="OTHER" />
-                      </FormControl>
-                      <FormLabel className="font-normal">
-                        Prefer not to say
-                      </FormLabel>
-                    </FormItem>
-                  </RadioGroup>
-                </FormControl>
+                <Select onValueChange={field.onChange}
+                  defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select your sex" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="M" >Male</SelectItem>
+                    <SelectItem value="F" >Female</SelectItem>
+                    <SelectItem value="OTHER" >Prefer not to say</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
@@ -321,7 +302,7 @@ const SignupUserForm: FC<SignupUserFormProps> = ({onCreate, isLoading}) => {
           <FormField
             name="birth_date"
             control={form.control}
-            render={({field}) => (
+            render={({ field }) => (
               <FormItem className="text-md flex flex-col">
                 <FormLabel>Date of birth</FormLabel>
                 <Popover>
@@ -355,8 +336,8 @@ const SignupUserForm: FC<SignupUserFormProps> = ({onCreate, isLoading}) => {
                     />
                   </PopoverContent>
                 </Popover>
-                <FormDescription>
-                  Your date of birth is used to calculate your age.
+                <FormDescription className="font-thin text-xs text-red-700">
+                  PS: You must be at least 14 years old to sign up.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -368,7 +349,7 @@ const SignupUserForm: FC<SignupUserFormProps> = ({onCreate, isLoading}) => {
           <FormField
             name="bio"
             control={form.control}
-            render={({field}) => (
+            render={({ field }) => (
               <FormItem className="text-md">
                 <FormLabel>Bio</FormLabel>
                 <FormControl className="h-12">
@@ -384,7 +365,7 @@ const SignupUserForm: FC<SignupUserFormProps> = ({onCreate, isLoading}) => {
           <FormField
             name="about"
             control={form.control}
-            render={({field}) => (
+            render={({ field }) => (
               <FormItem className="text-md">
                 <FormLabel>About</FormLabel>
                 <FormControl className="h-12">
