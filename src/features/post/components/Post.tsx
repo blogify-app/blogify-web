@@ -88,7 +88,7 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
     <Layout>
       <div
         data-testid="post-title"
-        className="mb-4 mt-40 flex w-full justify-center p-11 md:mt-20"
+        className="mb-4 mt-40 flex w-full justify-center p-11 text-center md:mt-20"
       >
         <p className="font-optical-sizing-auto normal font-title text-6xl font-bold">
           {post.title}
@@ -130,7 +130,7 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
         <div className="col-span-1 h-[18.75rem]"></div>
         <div className="col-span-6 grid grid-cols-8 gap-5">
           {post.thumbnail_url && (
-            <div data-testid="post-banner" className="col-span-8 h-[35rem]">
+            <div data-testid="post-banner" className="col-span-8 h-auto">
               <img
                 src={post.thumbnail_url}
                 className="rounded-sd h-full w-full object-cover"
