@@ -1,22 +1,28 @@
 import {FC} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {SubmitHandler, useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
 import {format} from "date-fns";
+import Calendar from "react-calendar";
+import {zodResolver} from "@hookform/resolvers/zod";
 import {CalendarIcon} from "lucide-react";
 import {GoogleAuthProvider, GithubAuthProvider} from "firebase/auth";
 import {nanoid} from "nanoid";
 import {Button} from "@/components/common/button.tsx";
 import {
+  SelectContent,
+  Select,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/shadcn-ui/select";
+import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/shadcn-ui/form.tsx";
-import {Calendar} from "@/components/shadcn-ui/calendar.tsx";
 import {Textarea} from "@/components/shadcn-ui/textarea.tsx";
 import {StepperView, useStepperContext} from "@/components/common/stepper.tsx";
 import {
@@ -26,10 +32,6 @@ import {
 } from "@/components/shadcn-ui/popover.tsx";
 import {Icons} from "@/components/common/icons.tsx";
 import {Input} from "@/components/shadcn-ui/input.tsx";
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from "@/components/shadcn-ui/radio-group.tsx";
 import {
   EmailAndPassword,
   emailAndPasswordSchema,
@@ -45,6 +47,7 @@ import {
 } from "@/services/security";
 import {cn} from "@/lib/utils.ts";
 import {useLoading, useToast} from "@/hooks";
+import "react-calendar/dist/Calendar.css";
 
 export const Signup: FC = () => {
   const authStore = useAuthStore();
@@ -234,14 +237,13 @@ const SignupUserForm: FC<SignupUserFormProps> = ({onCreate, isLoading}) => {
               <FormItem className="text-md">
                 <FormLabel>First name</FormLabel>
                 <FormControl className="h-12">
-                  <Input {...field} />
+                  <Input data-testid="first_name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
-
         <div className="w-full">
           <FormField
             name="last_name"
@@ -250,7 +252,7 @@ const SignupUserForm: FC<SignupUserFormProps> = ({onCreate, isLoading}) => {
               <FormItem className="text-md">
                 <FormLabel>Last name</FormLabel>
                 <FormControl className="h-12">
-                  <Input {...field} />
+                  <Input data-testid="last_name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -266,7 +268,7 @@ const SignupUserForm: FC<SignupUserFormProps> = ({onCreate, isLoading}) => {
               <FormItem className="text-md">
                 <FormLabel>User name</FormLabel>
                 <FormControl className="h-12">
-                  <Input {...field} />
+                  <Input data-testid="username" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -281,36 +283,23 @@ const SignupUserForm: FC<SignupUserFormProps> = ({onCreate, isLoading}) => {
             render={({field}) => (
               <FormItem className="space-y-3">
                 <FormLabel>Sex</FormLabel>
-                <FormControl>
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    className="flex flex-col space-y-1"
-                  >
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="M" />
-                      </FormControl>
-                      <FormLabel className="font-normal">Male</FormLabel>
-                    </FormItem>
-
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="F" />
-                      </FormControl>
-                      <FormLabel className="font-normal">Female</FormLabel>
-                    </FormItem>
-
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="OTHER" />
-                      </FormControl>
-                      <FormLabel className="font-normal">
-                        Prefer not to say
-                      </FormLabel>
-                    </FormItem>
-                  </RadioGroup>
-                </FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger data-testid="sex-select">
+                      <SelectValue placeholder="Select your sex" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="M">Male</SelectItem>
+                    <SelectItem value="F" data-testid="female-sex">
+                      Female
+                    </SelectItem>
+                    <SelectItem value="OTHER">Prefer not to say</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
@@ -328,6 +317,7 @@ const SignupUserForm: FC<SignupUserFormProps> = ({onCreate, isLoading}) => {
                   <PopoverTrigger asChild>
                     <FormControl className="w-full">
                       <Button
+                        data-testid="date-picker"
                         variant={"outline"}
                         className={cn(
                           "w-full pl-3 text-left font-normal",
@@ -345,19 +335,14 @@ const SignupUserForm: FC<SignupUserFormProps> = ({onCreate, isLoading}) => {
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) =>
-                        date > new Date() || date < new Date("1900-01-01")
-                      }
-                      initialFocus
+                      onChange={field.onChange}
+                      value={field.value}
+                      locale="en-EN"
+                      minDate={new Date("1900-01-01")}
+                      maxDate={new Date()}
                     />
                   </PopoverContent>
                 </Popover>
-                <FormDescription>
-                  Your date of birth is used to calculate your age.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -372,7 +357,7 @@ const SignupUserForm: FC<SignupUserFormProps> = ({onCreate, isLoading}) => {
               <FormItem className="text-md">
                 <FormLabel>Bio</FormLabel>
                 <FormControl className="h-12">
-                  <Input {...field} />
+                  <Input data-testid="bio" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -388,7 +373,7 @@ const SignupUserForm: FC<SignupUserFormProps> = ({onCreate, isLoading}) => {
               <FormItem className="text-md">
                 <FormLabel>About</FormLabel>
                 <FormControl className="h-12">
-                  <Textarea {...field} />
+                  <Textarea data-testid="about" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -61,6 +61,46 @@ describe("Authentication", () => {
       // TODO: test that it lands on profile page
       cy.getByTestid("continue-login").click();
     });
+
+    it("should validate sign up form", () => {
+      cy.intercept(
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=*",
+        signup_new_user_response()
+      );
+
+      cy.intercept("/signin", whoami1());
+
+      cy.intercept(
+        "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=*",
+        get_account_info_response()
+      );
+
+      // TODO: test for social media oauth
+      cy.visit("/signup");
+
+      // step(1)
+      const {email, password} = user_to_signup();
+      cy.getByTestid("email-field").type(email);
+      cy.getByTestid("password-field").type(password);
+      cy.getByTestid("continue-signup").click();
+
+      // step(2)
+      cy.getByTestid("first_name").type("Joe Willman Doe");
+      cy.getByTestid("last_name").type("Joe Willman Doe");
+      cy.getByTestid("username").type("Joe Willman Doe");
+      cy.getByTestid("sex-select").click();
+      cy.getByTestid("female-sex").click({force: true});
+
+      cy.getByTestid("date-picker").click();
+      // Select a recent birth date
+      cy.get(".react-calendar__month-view__days > :nth-child(3)").click();
+
+      cy.getByTestid("bio").click({force: true}).type("Joe Willman Doe Bio");
+      cy.getByTestid("about").type("About Joe Willman Doe");
+      cy.contains("Continue").click();
+
+      cy.contains("You must be at least 14 years old to sign up.");
+    });
   });
 
   describe("Login", () => {
