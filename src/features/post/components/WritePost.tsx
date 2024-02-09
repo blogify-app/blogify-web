@@ -74,7 +74,10 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
   const syncPost = useCallback(() => {
     post.title = titleInputRef.current?.value || "";
     post.description = descriptionInputRef.current?.value || "";
-    post.categories = selectedCategoriesRef.current || [];
+    post.categories =
+      selectedCategoriesRef.current.length > 0
+        ? selectedCategoriesRef.current
+        : post.categories;
     post.content = editor?.getContent() || "";
   }, [post, editor]);
 
@@ -223,7 +226,17 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
           >
             {post.content ?? ""}
           </RichTextEditor>
-          <Select isMulti options={categories} onChange={handleChange} />
+          <div className="my-5">
+            <label htmlFor="categories" className="pb-5">
+              Categories:
+            </label>
+            <Select
+              isMulti
+              options={categories}
+              onChange={handleChange}
+              defaultValue={post?.categories}
+            />
+          </div>
         </div>
       </div>
     </div>
