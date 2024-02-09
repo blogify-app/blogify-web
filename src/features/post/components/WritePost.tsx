@@ -130,7 +130,7 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
     }
   }, [updateRemoteThumbnail, syncPost, post, toast]);
 
-  // type any due to not iterable types of selectedOptions for ts
+  // type any due to not iterable types of selectedOptions
   const handleChange = (selectedOptions: any) => {
     selectedCategoriesRef.current = selectedOptions.map(
       (category: CategoryOption) => ({
