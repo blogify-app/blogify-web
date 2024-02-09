@@ -17,7 +17,7 @@ import {CommentProvider, PostProvider} from "@/services/api";
 import {useLoading, useToast} from "@/hooks";
 import blankUserProfile from "@/assets/noun-user-picture.svg";
 import {Button} from "@/components/common/button";
-import {Category} from "./Category";
+import {CategoryBadge} from "./Category";
 
 export interface PostProps {
   post: PostType;
@@ -172,17 +172,15 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
             <div data-testid="post-tags" className="mx-10 flex w-full py-10">
               <span className="mr-2">Tags : </span>
               <div className="flex justify-evenly">
-                {post.categories
-                  ? post.categories.map((category, index) => (
-                      <Category
+                {post.categories!.map((category, index) => (
+                      <CategoryBadge
                         key={category.id}
                         data-testid={`category-${index + 1}`}
                         className="mx-1"
                       >
                         {category.label}
-                      </Category>
-                    ))
-                  : null}
+                      </CategoryBadge>
+                    ))}
               </div>
             </div>
             <div className="mx-10">
