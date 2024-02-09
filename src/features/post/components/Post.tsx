@@ -30,18 +30,13 @@ export const Post: FC<PostProps> = ({post}: PostProps) => {
   const [reactions, setReactions] = useState<ReactionStat>(post.reactions!);
   const toast = useToast();
   const store = useAuthStore();
-
   const {user} = store;
 
   const reactToPost = async (pid: string, reactionType: ReactionType) => {
     try {
       await queue(() => PostProvider.reactToPostById(pid, reactionType));
-      if (reactionType === ReactionType.DISLIKE) {
-        setReactions((prev) => ({...prev, dislikes: prev.dislikes! + 1}));
-      }
-      if (reactionType === ReactionType.LIKE) {
-        setReactions((prev) => ({...prev, likes: prev.likes! + 1}));
-      }
+      const postReactionUpdated = await queue(() => PostProvider.getById(pid));
+      setReactions(postReactionUpdated.reactions!);
     } catch (e) {
       toast({
         message: "You should connect or have an account",
