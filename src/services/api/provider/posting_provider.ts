@@ -1,5 +1,6 @@
 import {Post, PostPicture, Reaction, ReactionType} from "@/services/api/gen";
 import {postingApi, DataProvider, DEFAULT_QUERY, Query} from "@/services/api";
+import {dataProvider} from "@/services/api/provider/middleware";
 
 export interface PostProvider extends DataProvider<Post> {
   reactToPostById(pid: string, type: ReactionType): Promise<Reaction>;
@@ -22,7 +23,7 @@ export interface PostProvider extends DataProvider<Post> {
   ): Promise<PostPicture>;
 }
 
-export const PostProvider: PostProvider = {
+export const PostProvider: PostProvider = dataProvider({
   async getById(pid: string): Promise<Post> {
     return (await postingApi().getPostById(pid)).data;
   },
@@ -98,4 +99,4 @@ export const PostProvider: PostProvider = {
       await postingApi().getPostsByUserId(userId, query.page, query.pageSize)
     ).data;
   },
-};
+});

@@ -1,5 +1,6 @@
 import {User} from "@/services/api/gen";
 import {followingApi, DataProvider, Query, DEFAULT_QUERY} from "@/services/api";
+import {dataProvider} from "@/services/api/provider/middleware";
 
 export interface FollowingProvider extends DataProvider<User> {
   followUserById(uid: string): Promise<User>;
@@ -8,7 +9,7 @@ export interface FollowingProvider extends DataProvider<User> {
   getSelfFollowers(query: Query): Promise<User[]>;
 }
 
-export const FollowingProvider: FollowingProvider = {
+export const FollowingProvider: FollowingProvider = dataProvider({
   async getSelfFollowers(query = DEFAULT_QUERY): Promise<User[]> {
     return (
       await followingApi().getSelfFollowers(
@@ -64,4 +65,4 @@ export const FollowingProvider: FollowingProvider = {
   crupdateMany(_toCrupdate: User[]): Promise<User[]> {
     throw new Error("Function not implemented.");
   },
-};
+});
