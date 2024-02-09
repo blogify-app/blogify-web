@@ -1,5 +1,5 @@
 import {FC} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {Post} from "@/services/api/gen";
 import {formatDate} from "@/common/utils";
 import {Icons} from "@/components/common/icons";
@@ -11,13 +11,10 @@ type UserPostCardProps = {
 
 // TODO: ban from common and rename!!!
 export const UserPostCard: FC<UserPostCardProps> = ({post, isSelf}) => {
-  const navigate = useNavigate();
-
   return (
     <div
       data-testid="custom-card"
       className="col-span-2 m-6 bg-white shadow dark:border-gray-700 dark:bg-gray-800"
-      onClick={() => navigate(`/posts/${post.id}`)}
     >
       <Link to={`/posts/${post.id}`}>
         {post.thumbnail_url ? (
@@ -53,12 +50,14 @@ export const UserPostCard: FC<UserPostCardProps> = ({post, isSelf}) => {
             </div>
           )}
         </p>
-        <h5
-          data-testid="title"
-          className="text-md mb-2 font-bold tracking-tight text-gray-900 dark:text-white"
-        >
-          {post?.title}
-        </h5>
+        <Link to={`/posts/${post.id}`}>
+          <h5
+            data-testid="title"
+            className="text-md mb-2 font-bold tracking-tight text-gray-900 dark:text-white"
+          >
+            {post?.title}
+          </h5>
+        </Link>
         <p
           data-testid="description"
           className="mb-3 text-xs font-normal text-gray-700 dark:text-gray-400"
