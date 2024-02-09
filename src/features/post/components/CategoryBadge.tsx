@@ -1,4 +1,5 @@
 import {Badge} from "@/components/shadcn-ui/badge";
+import {toHex} from "@/lib/string_to_color";
 import {FC} from "react";
 
 interface CategoryProps extends React.HTMLAttributes<HTMLElement> {
@@ -6,8 +7,14 @@ interface CategoryProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export const CategoryBadge: FC<CategoryProps> = ({
+  className,
   children,
   ...props
 }: CategoryProps) => {
-  return <Badge {...props}>{children}</Badge>;
+  const backgroundColor = toHex(children as string);
+  return (
+    <Badge {...props} className={`bg-${backgroundColor} ${className}`}>
+      {children}
+    </Badge>
+  );
 };
