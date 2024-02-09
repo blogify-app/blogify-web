@@ -9,7 +9,7 @@ import {post1} from "../fixtures/post.ts";
 describe("Authentication", () => {
   it("should redirect when not logged in on protected route", () => {
     cy.visit("/authenticated");
-    
+
     // wait redirection
     cy.wait(100);
 
