@@ -31,8 +31,12 @@ export const usePostAnalysis = () => {
   const view = useCallback(
     async (id: string) => {
       if (auth.user) {
-        // emit view event to AI
-        await UserProvider.viewPost(auth.user.id!, id);
+        try {
+          // emit view event to AI
+          await UserProvider.viewPost(auth.user.id!, id);
+        } catch (_e) {
+          /* EMPTY: tolerable */
+        }
       }
       return navigate(`/posts/${id}`);
     },

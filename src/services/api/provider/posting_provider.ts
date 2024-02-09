@@ -21,6 +21,7 @@ export interface PostProvider extends DataProvider<Post> {
     picId: string,
     query: Query<{pid: string}>
   ): Promise<PostPicture>;
+  getRecommendedPosts(query: Query<{categories?: string}>): Promise<Post[]>;
 }
 
 export const PostProvider: PostProvider = dataProvider({
@@ -31,6 +32,18 @@ export const PostProvider: PostProvider = dataProvider({
   async getMany(query = DEFAULT_QUERY): Promise<Post[]> {
     return (
       await postingApi().getPosts(
+        query.page,
+        query.pageSize,
+        query.params.categories
+      )
+    ).data;
+  },
+
+  async getRecommendedPosts(
+    query: Query<{categories?: string}>
+  ): Promise<Post[]> {
+    return (
+      await postingApi().getSuggestedPosts(
         query.page,
         query.pageSize,
         query.params.categories
