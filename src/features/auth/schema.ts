@@ -1,18 +1,15 @@
 import {z} from "zod";
 
-const checkIfUnder14 = (value: Date) => {
-  const today = new Date();
-  const birthDate = value;
-  const ageDiffMs = today.getTime() - birthDate.getTime();
-  const ageDate = new Date(ageDiffMs);
-  return ageDate.getUTCFullYear() - 1970 >= 14;
+const checkIfAtLeast14 = (birthDate: Date) => {
+  const diff = new Date(new Date().getTime() - birthDate.getTime());
+  return diff.getUTCFullYear() - 1970 >= 14;
 };
 
 export const signupSchema = z.object({
   first_name: z.string().min(5),
   last_name: z.string().min(5),
   username: z.string().min(4),
-  birth_date: z.date().refine((value) => checkIfUnder14(value), {
+  birth_date: z.date().refine((value) => checkIfAtLeast14(value), {
     message: "You must be at least 14 years old to sign up.",
   }),
   sex: z.enum(["M", "F", "OTHER"]),
