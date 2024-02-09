@@ -167,10 +167,9 @@ export const WritePost: FC<WritePostProps> = ({post, isExistent = false}) => {
         >
           <RichTextEditor
             onImageUpload={async (blobInfo) => {
-              const file = new File([blobInfo.blob()], blobInfo.filename(), {
-                type: "image/png",
-              });
               const picId = nanoid();
+              // we don't need lastModified and webkitRelativePath anyway
+              const file = blobInfo.blob() as File;
               const uploaded = await PostProvider.uploadPicture(picId, file, {
                 ...DEFAULT_QUERY,
                 params: {
