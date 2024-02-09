@@ -1,7 +1,7 @@
 import {refreshIdToken} from "@/services/security";
 import {ProviderMiddleware} from "@/services/api/provider/middleware/provider_middleware.ts";
 
-// 59 mins
+// 30mins
 const TOKEN_EXPIRATION_MILLIS = 1_000 * 60 * 30;
 
 export class TokenRefresher implements ProviderMiddleware {
