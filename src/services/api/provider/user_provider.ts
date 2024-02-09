@@ -1,4 +1,9 @@
-import {User, UserPicture, UserPictureType} from "@/services/api/gen";
+import {
+  User,
+  UserPicture,
+  UserPictureType,
+  UserViewOnePost,
+} from "@/services/api/gen";
 import {DataProvider, DEFAULT_QUERY, Query, userApi} from "@/services/api";
 import {dataProvider} from "@/services/api/provider/middleware";
 
@@ -15,6 +20,7 @@ export interface UserProvider extends DataProvider<User> {
     uid: string | undefined,
     query: PictureQuery
   ): Promise<UserPicture>;
+  viewPost(uid: string, pid: string): Promise<UserViewOnePost>;
 }
 
 export const UserProvider: UserProvider = dataProvider({
@@ -50,6 +56,10 @@ export const UserProvider: UserProvider = dataProvider({
 
   async deletePicture(uid: string, query: PictureQuery): Promise<UserPicture> {
     return (await userApi().deleteUserPicture(uid, query.params.type)).data;
+  },
+
+  async viewPost(uid: string, pid: string) {
+    return (await userApi().userViewPost(uid, pid)).data;
   },
 
   crupdate: function (_payload: User): Promise<User> {

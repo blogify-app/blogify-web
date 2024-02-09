@@ -3,6 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {Post} from "@/services/api/gen";
 import {formatDate} from "@/common/utils";
 import defaultThumbnail from "@/assets/images/default-thumbnail.jpg";
+import {usePostAnalysis} from "@/features/post/analysis.tsx";
 
 interface PostCardProps {
   post: Post;
@@ -10,7 +11,7 @@ interface PostCardProps {
 }
 
 export const PostCard: FC<PostCardProps> = ({post, direction}) => {
-  const navigate = useNavigate();
+  const postAnalysis = usePostAnalysis();
 
   if (!post) return null;
 
@@ -31,7 +32,7 @@ export const PostCard: FC<PostCardProps> = ({post, direction}) => {
       <div
         data-testid={`${id}`}
         className="max-h-56 cursor-pointer overflow-hidden"
-        onClick={() => navigate(`/posts/${id}`)}
+        onClick={() => postAnalysis.view(id)}
       >
         {thumbnail_url ? (
           <img
