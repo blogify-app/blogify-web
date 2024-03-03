@@ -1,5 +1,6 @@
 import {FC, useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
+import {Layout} from "@/layout";
 import {Profile} from "@/features/profile";
 import {UserProvider} from "@/services/api";
 import {User} from "@/services/api/gen";
@@ -25,5 +26,9 @@ export const ProfilePage: FC = () => {
 
   if (!user) return null;
 
-  return <Profile user={user} />;
+  return (
+    <Layout>
+      <Profile user={user} />
+    </Layout>
+  );
 };
